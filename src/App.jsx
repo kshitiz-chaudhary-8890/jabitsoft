@@ -1,13 +1,12 @@
 import { Fragment, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Lenis from "lenis";
-import "lenis/dist/lenis.css";
 import ServiceCardCarousel from "./components/ServiceCardCarousel.jsx";
 import ClientResults from "./components/ClientResults.jsx";
 import CompanyStats from "./components/CompanyStats.jsx";
 import RecentWorks from "./components/RecentWorks.jsx";
 import ServiceDirectory from "./components/ServiceDirectory.jsx";
+import ProblemsWeSolve from "./components/sections/ProblemsWeSolve/ProblemsWeSolve";
 import FAQ from "./components/FAQ.jsx";
 import Footer from "./components/Footer.jsx";
 import LatestBlog from "./components/LatestBlog.jsx";
@@ -21,14 +20,22 @@ const media = {
     "https://framerusercontent.com/images/G5E86VA7DStEga3pPtCu3nwW1qE.png?height=512&width=512",
   ],
   heroOne: "https://framerusercontent.com/images/luFfRKwjQbMAmBeknRUvUg7XY.svg?width=82&height=64",
-  heroTwo: "https://framerusercontent.com/images/q6Lt0wxatBudeFMJylqNDhblWfw.png?width=325&height=256",
-  heroThree: "https://framerusercontent.com/images/SEe6jn6sx24EVdMsr0kTyBN4Ok.png?width=324&height=256",
-  heroSoftware: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=400&q=85",
-  heroBusiness: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=500&q=85",
-  heroGlobal: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=500&q=85",
-  showcase: "https://framerusercontent.com/images/dT5S1njJpyHvznBNeTmMAwfBcqQ.png?height=1604&width=2848",
-  testimonial: "https://framerusercontent.com/images/nURHcgFo9S6zVF3j0ly85sSmvE.png?height=920&width=1488",
-  statNoise: "https://framerusercontent.com/images/qDuGmDXhhbdrJsP16G4zNCDX8.png?width=1440&height=1840",
+  heroTwo:
+    "https://framerusercontent.com/images/q6Lt0wxatBudeFMJylqNDhblWfw.png?width=325&height=256",
+  heroThree:
+    "https://framerusercontent.com/images/SEe6jn6sx24EVdMsr0kTyBN4Ok.png?width=324&height=256",
+  heroSoftware:
+    "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=400&q=85",
+  heroBusiness:
+    "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=500&q=85",
+  heroGlobal:
+    "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=500&q=85",
+  showcase:
+    "https://framerusercontent.com/images/dT5S1njJpyHvznBNeTmMAwfBcqQ.png?height=1604&width=2848",
+  testimonial:
+    "https://framerusercontent.com/images/nURHcgFo9S6zVF3j0ly85sSmvE.png?height=920&width=1488",
+  statNoise:
+    "https://framerusercontent.com/images/qDuGmDXhhbdrJsP16G4zNCDX8.png?width=1440&height=1840",
   work: [
     "https://framerusercontent.com/images/x3RMizQqFhQ9G8jF5dqqcbxY8M.png",
     "https://framerusercontent.com/images/MHwFX5PK3mWp7JJNseH8110qdg.png",
@@ -58,7 +65,6 @@ const media = {
     "https://framerusercontent.com/images/bUQhIsAv8wdGMuDZ6cBmNmLqJmc.png?scale-down-to=512&width=1760&height=1320",
   ],
 };
-
 
 const projects = [
   {
@@ -102,33 +108,6 @@ function Arrow({ left = false }) {
       {left ? "←" : "→"}
     </span>
   );
-}
-
-function useSmoothScroll() {
-  useEffect(() => {
-    const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
-    if (reduced || typeof ResizeObserver === "undefined") return undefined;
-
-    gsap.registerPlugin(ScrollTrigger);
-    const lenis = new Lenis({
-      lerp: 0.085,
-      smoothWheel: true,
-      wheelMultiplier: 0.9,
-      anchors: true,
-    });
-    const updateScroll = () => ScrollTrigger.update();
-    const updateFrame = (time) => lenis.raf(time * 1000);
-
-    lenis.on("scroll", updateScroll);
-    gsap.ticker.add(updateFrame);
-    gsap.ticker.lagSmoothing(0);
-
-    return () => {
-      lenis.off("scroll", updateScroll);
-      gsap.ticker.remove(updateFrame);
-      lenis.destroy();
-    };
-  }, []);
 }
 
 function usePageMotion() {
@@ -225,17 +204,25 @@ function useProjectStackMotion() {
         const rotation = index % 2 === 0 ? -2 : 2;
 
         timeline
-          .to(currentCard, {
-            scale: 0.92,
-            rotation,
-            ease: "power2.inOut",
-            duration: 1,
-          }, index)
-          .to(card, {
-            yPercent: 0,
-            ease: "power2.inOut",
-            duration: 1,
-          }, index);
+          .to(
+            currentCard,
+            {
+              scale: 0.92,
+              rotation,
+              ease: "power2.inOut",
+              duration: 1,
+            },
+            index,
+          )
+          .to(
+            card,
+            {
+              yPercent: 0,
+              ease: "power2.inOut",
+              duration: 1,
+            },
+            index,
+          );
       });
     }, section);
 
@@ -267,7 +254,8 @@ function useShowcaseScaleMotion() {
         imageFrame,
         { scale: 1, force3D: true },
         {
-          scale: () => Math.min(1.55, Math.max(1.08, (window.innerWidth - 24) / section.clientWidth)),
+          scale: () =>
+            Math.min(1.55, Math.max(1.08, (window.innerWidth - 24) / section.clientWidth)),
           ease: "none",
           force3D: true,
           scrollTrigger: {
@@ -372,10 +360,7 @@ function HeroAnimatedText({ text }) {
     <Fragment key={`${word}-${wordIndex}`}>
       <span className="hero-reveal-word">
         {Array.from(word).map((char, charIndex) => (
-          <span
-            className="hero-reveal-char"
-            key={`${wordIndex}-${charIndex}`}
-          >
+          <span className="hero-reveal-char" key={`${wordIndex}-${charIndex}`}>
             {char}
           </span>
         ))}
@@ -392,9 +377,7 @@ function Hero() {
     const hero = heroRef.current;
     if (!hero) return undefined;
 
-    const reducedMotion = window.matchMedia?.(
-      "(prefers-reduced-motion: reduce)",
-    )?.matches;
+    const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
 
     const nav = document.querySelector(".site-nav");
     const chars = hero.querySelectorAll(".hero-reveal-char");
@@ -531,12 +514,7 @@ function Hero() {
   }, []);
 
   return (
-    <section
-      className="hero hero-reference"
-      id="top"
-      aria-labelledby="hero-title"
-      ref={heroRef}
-    >
+    <section className="hero hero-reference" id="top" aria-labelledby="hero-title" ref={heroRef}>
       <div className="hero-aurora" aria-hidden="true">
         <div className="hero-aurora__layer" />
       </div>
@@ -545,7 +523,9 @@ function Hero() {
 
       <div className="founder-proof">
         <span className="avatar-stack" aria-hidden="true">
-          {media.founders.map((src) => <img src={src} alt="" key={src} />)}
+          {media.founders.map((src) => (
+            <img src={src} alt="" key={src} />
+          ))}
         </span>
         <span>Trusted by founders.</span>
       </div>
@@ -555,7 +535,9 @@ function Hero() {
         aria-label="Our Engineers Build Reliable Software for Growing Businesses Worldwide"
       >
         <span className="hero-line" aria-hidden="true">
-          <b><HeroAnimatedText text="Our Engineers" /></b>{" "}
+          <b>
+            <HeroAnimatedText text="Our Engineers" />
+          </b>{" "}
           <span className="inline-image hero-image-round">
             <img src={media.heroSoftware} alt="" />
           </span>{" "}
@@ -567,8 +549,12 @@ function Hero() {
           <span className="inline-image hero-image-wide">
             <img src={media.heroBusiness} alt="" />
           </span>{" "}
-          <em><HeroAnimatedText text="Software" /></em>{" "}
-          <b><HeroAnimatedText text="for" /></b>
+          <em>
+            <HeroAnimatedText text="Software" />
+          </em>{" "}
+          <b>
+            <HeroAnimatedText text="for" />
+          </b>
         </span>
 
         <span className="hero-line" aria-hidden="true">
@@ -585,10 +571,7 @@ function Hero() {
         <br className="hero-copy-break" /> that support business growth.
       </p>
 
-      <a
-        className="button button-dark hero-reference-cta"
-        href="#contact"
-      >
+      <a className="button button-dark hero-reference-cta" href="#contact">
         View Plans <Arrow />
       </a>
 
@@ -758,25 +741,44 @@ function Hero() {
 function Showcase() {
   return (
     <>
-      <section className="showcase shell" aria-label="Selected design showcase" data-scroll-scale="gsap">
+      <section
+        className="showcase shell"
+        aria-label="Selected design showcase"
+        data-scroll-scale="gsap"
+      >
         <div className="showcase-inner">
           <img src={media.showcase} alt="A showcase of selected JabitSoft projects" />
         </div>
       </section>
-      <section className="client-logos-section overflow-hidden bg-white py-[50px]" aria-labelledby="client-logos-title">
+      <section
+        className="client-logos-section overflow-hidden bg-white py-[50px]"
+        aria-labelledby="client-logos-title"
+      >
         <header className="section-title centered shell">
           <p className="eyebrow">(Trusted by growing teams)</p>
-          <RevealHeading id="client-logos-title">
-            Brands We Work With
-          </RevealHeading>
+          <RevealHeading id="client-logos-title">Brands We Work With</RevealHeading>
         </header>
-        <div className="client-logos relative flex h-[180px] w-full items-center overflow-hidden bg-white" aria-label="Selected clients">
+        <div
+          className="client-logos relative flex h-[180px] w-full items-center overflow-hidden bg-white"
+          aria-label="Selected clients"
+        >
           <div className="client-logo-track flex w-max items-center">
             {[0, 1].map((group) => (
-              <div className="client-logo-group flex shrink-0 items-center gap-[clamp(64px,8vw,140px)] px-[clamp(32px,4vw,70px)]" aria-hidden={group === 1 ? "true" : undefined} key={group}>
+              <div
+                className="client-logo-group flex shrink-0 items-center gap-[clamp(64px,8vw,140px)] px-[clamp(32px,4vw,70px)]"
+                aria-hidden={group === 1 ? "true" : undefined}
+                key={group}
+              >
                 {media.logos.map((logo, index) => (
-                  <div className="client-logo-item grid h-12 w-[clamp(120px,10vw,170px)] shrink-0 place-items-center" key={`${group}-${index}`}>
-                    <img className="h-7 w-full max-w-[150px] object-contain grayscale opacity-60" src={logo} alt={group === 0 ? `Client logo ${index + 1}` : ""} />
+                  <div
+                    className="client-logo-item grid h-12 w-[clamp(120px,10vw,170px)] shrink-0 place-items-center"
+                    key={`${group}-${index}`}
+                  >
+                    <img
+                      className="h-7 w-full max-w-[150px] object-contain grayscale opacity-60"
+                      src={logo}
+                      alt={group === 0 ? `Client logo ${index + 1}` : ""}
+                    />
                   </div>
                 ))}
               </div>
@@ -797,7 +799,8 @@ function DualMarquee() {
       <span className="ribbon-copy" key={group}>
         {repeatedItems.map((item, index) => (
           <span className="ribbon-item" key={`${group}-${index}`}>
-            {item}<span className="marquee-separator">x</span>
+            {item}
+            <span className="marquee-separator">x</span>
           </span>
         ))}
       </span>
@@ -808,7 +811,9 @@ function DualMarquee() {
     <div className="ribbon-layer" aria-hidden="true">
       <div className="ribbon ribbon-black">
         <div className="ribbon-text-mask">
-          <div className="marquee-track-rev">{[0, 1].map((group) => ribbonCopy(blackItems, group))}</div>
+          <div className="marquee-track-rev">
+            {[0, 1].map((group) => ribbonCopy(blackItems, group))}
+          </div>
         </div>
       </div>
       <div className="ribbon ribbon-blue">
@@ -829,11 +834,13 @@ function Intro() {
     { label: "Interface", icon: "🔲" },
     { label: "Strategy", icon: "🧭" },
   ];
-  const renderWords = (text, key) => text.split(" ").map((word, index, words) => (
-    <span className="intro-scroll-word" key={`${key}-${index}`}>
-      {word}{index < words.length - 1 ? " " : ""}
-    </span>
-  ));
+  const renderWords = (text, key) =>
+    text.split(" ").map((word, index, words) => (
+      <span className="intro-scroll-word" key={`${key}-${index}`}>
+        {word}
+        {index < words.length - 1 ? " " : ""}
+      </span>
+    ));
 
   return (
     <section className="intro shell" id="about">
@@ -901,7 +908,6 @@ function Portfolio() {
     </section>
   );
 }
-
 
 const services = [
   {
@@ -1074,7 +1080,9 @@ function Services() {
           return cachedMetrics;
         };
 
-        const invalidateMetrics = () => { cachedMetrics = null; };
+        const invalidateMetrics = () => {
+          cachedMetrics = null;
+        };
 
         const getPanelState = (activeIndex, panelIndex) => {
           const { previewWidth, gap, activeWidth } = getMetrics();
@@ -1087,11 +1095,7 @@ function Services() {
           } else if (panelIndex === activeIndex) {
             x = activeIndex * slot;
           } else {
-            x =
-              activeIndex * slot +
-              activeWidth +
-              gap +
-              (panelIndex - activeIndex - 1) * slot;
+            x = activeIndex * slot + activeWidth + gap + (panelIndex - activeIndex - 1) * slot;
           }
 
           const inactiveCrop = Math.max(0, activeWidth - previewWidth);
@@ -1146,8 +1150,7 @@ function Services() {
           scrollTrigger: {
             trigger: stage,
             start: "top top",
-            end: () =>
-              `+=${window.innerHeight * (panels.length - 1) * 0.95}`,
+            end: () => `+=${window.innerHeight * (panels.length - 1) * 0.95}`,
             scrub: 0.5,
             pin: true,
             pinSpacing: true,
@@ -1167,12 +1170,9 @@ function Services() {
 
           timeline.to(panels, {
             x: (panelIndex) => getPanelState(nextActive, panelIndex).x,
-            clipPath: (panelIndex) =>
-              getPanelState(nextActive, panelIndex).clipPath,
-            opacity: (panelIndex) =>
-              getPanelState(nextActive, panelIndex).opacity,
-            zIndex: (panelIndex) =>
-              getPanelState(nextActive, panelIndex).zIndex,
+            clipPath: (panelIndex) => getPanelState(nextActive, panelIndex).clipPath,
+            opacity: (panelIndex) => getPanelState(nextActive, panelIndex).opacity,
+            zIndex: (panelIndex) => getPanelState(nextActive, panelIndex).zIndex,
             duration: 1,
             ease: "power3.inOut",
             force3D: true,
@@ -1334,7 +1334,6 @@ function Services() {
   );
 }
 
-
 function Founder() {
   return (
     <section className="founder-section" aria-labelledby="founder-title">
@@ -1345,14 +1344,19 @@ function Founder() {
       <div className="founder-stage shell">
         <div className="founder-portrait">
           <img className="founder-img" src={media.founder} alt="Founder of JabitSoft" />
-          <img className="founder-seal" src={media.founderSeal} alt="Award-winning designer since 2020" />
+          <img
+            className="founder-seal"
+            src={media.founderSeal}
+            alt="Award-winning designer since 2020"
+          />
         </div>
         <div className="founder-copy">
           <p className="founder-role">The Founder</p>
           <p>
             Franklin is a software architect focused on building robust, scalable systems. He leads
-            engineering teams and startups to deliver standout platforms and seamless digital experiences. Based in London, he balances
-            technical depth with clarity — and enjoys experimenting with distributed systems and cloud-native architectures in his spare time.
+            engineering teams and startups to deliver standout platforms and seamless digital
+            experiences. Based in London, he balances technical depth with clarity — and enjoys
+            experimenting with distributed systems and cloud-native architectures in his spare time.
           </p>
           <dl className="founder-history">
             <div>
@@ -1391,27 +1395,31 @@ function TemplateWidget() {
   return (
     <aside className="template-widget" aria-label="Template badge">
       <div className="template-preview-card">
-        <img src={media.templates[templateIndex]} alt="New template preview" className="template-card-img" />
+        <img
+          src={media.templates[templateIndex]}
+          alt="New template preview"
+          className="template-card-img"
+        />
         <span className="template-badge-label">NEW TEMPLATES</span>
       </div>
     </aside>
   );
 }
 
-export default function App() {
-  useSmoothScroll();
+export default function App({ renderHeader = true, renderFooter = true }) {
   usePageMotion();
   useProjectStackMotion();
   useShowcaseScaleMotion();
   useIntroTextMotion();
   return (
     <>
-      <Header />
+      {renderHeader ? <Header /> : null}
       <main id="main-content">
         <Hero />
         <Showcase />
         <DualMarquee />
         <Intro />
+        <ProblemsWeSolve />
         <ServiceDirectory />
         <ServiceCardCarousel />
         <RecentWorks />
@@ -1421,7 +1429,7 @@ export default function App() {
         <FAQ />
         <LatestBlog />
       </main>
-      <Footer />
+      {renderFooter ? <Footer /> : null}
     </>
   );
 }

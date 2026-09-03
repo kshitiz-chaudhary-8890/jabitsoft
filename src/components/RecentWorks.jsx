@@ -173,63 +173,61 @@ export default function RecentWorks() {
 
     mm.add("(min-width: 681px)", () => {
       const ctx = gsap.context(() => {
-        gsap.set(cards, {
-          yPercent: (index) => (index === 0 ? 0 : 104),
-          scale: 1,
-          rotation: 0,
-          autoAlpha: 1,
-          zIndex: (index) => index + 1,
-          transformOrigin: "50% 50%",
-          force3D: true,
-          willChange: "transform",
+        // Skiper17-style sticky-card setup:
+        // first card is visible, remaining cards wait below the viewport.
+        cards.forEach((card, index) => {
+          gsap.set(card, {
+            yPercent: index === 0 ? 0 : 100,
+            scale: 1,
+            rotation: 0,
+            autoAlpha: 1,
+            zIndex: index + 1,
+            transformOrigin: "50% 50%",
+            force3D: true,
+            willChange: "transform",
+          });
         });
 
         const timeline = gsap.timeline({
           scrollTrigger: {
             trigger: stage,
             start: "top top",
-            end: () =>
-              `+=${window.innerHeight * (cards.length - 1) * 0.72}`,
-            scrub: 0.55,
+            end: () => `+=${window.innerHeight * (cards.length - 1)}`,
             pin: true,
             pinSpacing: true,
-            anticipatePin: 1.2,
+            scrub: 0.5,
+            anticipatePin: 1,
             invalidateOnRefresh: true,
-            fastScrollEnd: true,
           },
         });
 
-        // Small hold so the first card sits cleanly in the viewport
-        // before the next project begins moving over it.
-        timeline.to({}, { duration: 0.22 });
-
-        cards.slice(1).forEach((card, index) => {
+        // Match the Skiper17 interaction:
+        // current card shrinks + rotates while the next card slides upward.
+        for (let index = 0; index < cards.length - 1; index += 1) {
           const currentCard = cards[index];
-          const rotation = index % 2 === 0 ? -0.8 : 0.8;
+          const nextCard = cards[index + 1];
 
           timeline
             .to(
               currentCard,
               {
-                scale: 0.965,
-                rotation,
-                ease: "none",
+                scale: 0.7,
+                rotation: 5,
                 duration: 1,
+                ease: "none",
               },
-              index + 0.22,
+              index,
             )
             .to(
-              card,
+              nextCard,
               {
                 yPercent: 0,
-                ease: "none",
                 duration: 1,
+                ease: "none",
               },
-              index + 0.22,
+              index,
             );
-        });
-
-        timeline.to({}, { duration: 0.22 });
+        }
 
         const refreshFrame = requestAnimationFrame(() => {
           ScrollTrigger.sort();

@@ -1,0 +1,49 @@
+:root {
+  color-scheme: light;
+
+  --paper: #ffffff;
+  --paper-card: #fafafa;
+  --paper-light: #ffffff;
+  --ink: #131313;
+  --ink-secondary: #5c5c5c;
+  --ink-muted: #888888;
+  --brand-accent: #00aaff;
+  --brand-accent-hover: #0088cc;
+  --brand-accent-light: #e6f6ff;
+  --dark-surface: #111111;
+  --dark-card: #181818;
+  --line-light: rgb(0 0 0 / 8%);
+  --line-dark: rgb(255 255 255 / 12%);
+
+  --radius-sm: 10px;
+  --radius-md: 18px;
+  --radius-lg: 28px;
+  --radius-pill: 9999px;
+
+  --container-default: 1200px;
+  --container-wide: 1360px;
+  --container-gutter: 24px;
+  --container-gutter-compact: 16px;
+
+  --shell: min(1200px, calc(100vw - 48px));
+  --shell-wide: min(1360px, calc(100vw - 32px));
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-expressive: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@theme inline {
+  --color-background: var(--paper);
+  --color-foreground: var(--ink);
+  --color-muted: var(--ink-muted);
+  --color-accent: var(--brand-accent);
+  --color-accent-hover: var(--brand-accent-hover);
+  --font-sans: var(--font-inter), var(--font-dm-sans), sans-serif;
+  --font-display: var(--font-plus-jakarta-sans), var(--font-inter), sans-serif;
+  --font-script: var(--font-caveat), cursive;
+}
+
+@media (max-width: 479px) {
+  :root {
+    --container-gutter: var(--container-gutter-compact);
+  }
+}
