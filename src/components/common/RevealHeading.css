@@ -1,0 +1,23 @@
+.reveal-heading__visual {
+  display: contents;
+}
+
+.reveal-heading__word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.reveal-heading__char {
+  display: inline-block;
+  opacity: 0;
+  transform: translate3d(0, 30px, 0);
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-heading__char {
+    opacity: 1;
+    transform: none;
+    will-change: auto;
+  }
+}
