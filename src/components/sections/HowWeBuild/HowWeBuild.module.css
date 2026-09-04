@@ -1,0 +1,1084 @@
+/* ================================================================
+   HowWeBuild.module.css
+   JabitSoft - How We Build
+   Light editorial process layout, no internal card system
+   ================================================================ */
+
+.section {
+  --blue: #3b8eff;
+  --blue-soft: rgba(59, 142, 255, 0.1);
+  --blue-faint: rgba(59, 142, 255, 0.055);
+  --ink: #131313;
+  --body: #555a62;
+  --muted: #8d929a;
+  --line: #e7e9ed;
+  --line-strong: #d8dbe1;
+  position: relative;
+  z-index: 2;
+  overflow: clip;
+  padding: clamp(88px, 8vw, 138px) 0 clamp(52px, 5vw, 80px);
+  color: var(--ink);
+  background: #fff;
+}
+
+.shell {
+  width: min(100% - 48px, 1440px);
+  margin: 0 auto;
+}
+
+/* Header */
+
+.header {
+  position: relative;
+  z-index: 3;
+  width: min(860px, calc(100% - 48px));
+  margin: 0 auto clamp(52px, 5vw, 72px);
+  text-align: center;
+}
+
+.eyebrow {
+  margin: 0 0 12px;
+  font-family:
+    Inter,
+    "DM Sans",
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 23px;
+  color: rgb(92, 92, 92);
+}
+
+.header h2 {
+  display: block;
+  width: auto;
+  max-width: none;
+  margin: 0;
+  font-family: "Plus Jakarta Sans", Inter, sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 50px;
+  line-height: 54px;
+  letter-spacing: normal;
+  color: rgb(19, 19, 19);
+}
+
+.header h2 :global(.reveal-heading__visual) {
+  display: inline !important;
+  width: auto !important;
+  margin: 0 !important;
+}
+
+.header h2 :global(.reveal-heading__word),
+.header h2 :global(.reveal-heading__char) {
+  display: inline-block !important;
+  width: auto !important;
+  margin: 0 !important;
+}
+
+.intro {
+  max-width: 650px;
+  margin: 14px auto 0;
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.7;
+  color: #676b72;
+}
+
+/* Numbered process navigation */
+
+.progressTrack {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  width: min(100%, 1120px);
+  margin: 0 auto clamp(34px, 3.4vw, 48px);
+  padding: 0 10px;
+  user-select: none;
+}
+
+.progressBase,
+.progressIndicator {
+  position: absolute;
+  top: 22px;
+  height: 2px;
+  pointer-events: none;
+}
+
+.progressBase {
+  left: calc(10% + 10px);
+  right: calc(10% + 10px);
+  background: #e4e7eb;
+}
+
+.progressIndicator {
+  left: 0;
+  width: 0;
+  z-index: 1;
+  border-radius: 999px;
+  background: var(--blue);
+  transform-origin: left center;
+  will-change: transform, width;
+}
+
+.progressStep {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  min-width: 0;
+  min-height: 74px;
+  padding: 0 6px;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  align-items: center;
+  flex-direction: column;
+  font: inherit;
+  outline: none;
+}
+
+.progressMarker {
+  position: relative;
+  display: grid;
+  width: 46px;
+  height: 46px;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  background: #fff;
+  place-items: center;
+  transition:
+    border-color 220ms ease,
+    background 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.progressMarker::after {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border: 1px solid transparent;
+  border-radius: inherit;
+  transition: border-color 220ms ease;
+}
+
+.progressNumber {
+  position: relative;
+  z-index: 1;
+  font-family: "Plus Jakarta Sans", Inter, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: #9ba0a8;
+  transition: color 220ms ease;
+}
+
+.progressName {
+  display: block;
+  max-width: 100%;
+  margin-top: 10px;
+  overflow: hidden;
+  font-family: Inter, sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.055em;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #a0a4ab;
+  transition:
+    color 220ms ease,
+    transform 220ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .progressStep:hover .progressMarker {
+    border-color: rgba(59, 142, 255, 0.55);
+    background: #fbfdff;
+  }
+
+  .progressStep:hover .progressMarker::after {
+    border-color: rgba(59, 142, 255, 0.18);
+  }
+
+  .progressStep:hover .progressNumber,
+  .progressStep:hover .progressName {
+    color: #4a74ad;
+  }
+}
+
+.progressStepActive .progressMarker {
+  border-color: var(--blue);
+  background: var(--blue);
+  box-shadow: 0 0 0 7px rgba(59, 142, 255, 0.09);
+}
+
+.progressStepActive .progressMarker::after {
+  border-color: rgba(255, 255, 255, 0.38);
+}
+
+.progressStepActive .progressNumber {
+  color: #fff;
+}
+
+.progressStepActive .progressName {
+  color: var(--ink);
+  transform: translateY(1px);
+}
+
+.progressStep:focus-visible .progressMarker {
+  outline: 2px solid var(--blue);
+  outline-offset: 4px;
+}
+
+/* Main stage composition */
+
+.stageArea {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-areas:
+    "intro diagram"
+    "details diagram"
+    "outcome diagram";
+  column-gap: clamp(52px, 6vw, 96px);
+  row-gap: clamp(18px, 1.6vw, 24px);
+  align-items: start;
+  padding: clamp(24px, 2.4vw, 32px) 0 clamp(28px, 2.8vw, 44px);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.stageIntro {
+  grid-area: intro;
+  align-self: end;
+  min-width: 0;
+}
+
+.stageHeader {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: clamp(18px, 2.2vw, 30px);
+  align-items: start;
+}
+
+.stageNumber {
+  display: block;
+  margin-top: 2px;
+  color: #000;
+  font-family: "Plus Jakarta Sans", Inter, sans-serif;
+  font-size: clamp(64px, 6.5vw, 96px);
+  font-weight: 700;
+  line-height: 0.82;
+  letter-spacing: -0.065em;
+  user-select: none;
+}
+
+.stageMeta {
+  min-width: 0;
+  padding-top: 2px;
+}
+
+.stageCategory {
+  display: block;
+  margin-bottom: 9px;
+  color: var(--blue);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.stageTitle {
+  max-width: 620px;
+  margin: 0;
+  color: var(--ink);
+  font-family: "Plus Jakarta Sans", Inter, sans-serif;
+  font-size: clamp(40px, 4vw, 58px);
+  font-weight: 550;
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+}
+
+.stageDescription {
+  max-width: 610px;
+  margin: clamp(24px, 2.4vw, 34px) 0 0;
+  color: var(--body);
+  font-family: Inter, sans-serif;
+  font-size: clamp(15px, 1.1vw, 17px);
+  font-weight: 400;
+  line-height: 1.72;
+}
+
+/* Editorial details, deliberately not cards */
+
+.stageDetails {
+  grid-area: details;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(28px, 4vw, 54px);
+  padding: clamp(18px, 1.8vw, 24px) 0 clamp(12px, 1.1vw, 16px);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.detailGroup {
+  min-width: 0;
+}
+
+.infoLabel,
+.outcomeLabel {
+  display: block;
+  color: #9da2aa;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.detailList {
+  display: grid;
+  gap: 8px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.detailList li {
+  position: relative;
+  margin: 0;
+  padding-left: 14px;
+  color: #3f434a;
+  font-family: Inter, sans-serif;
+  font-size: 13.5px;
+  font-weight: 450;
+  line-height: 1.45;
+}
+
+.detailList li::before {
+  content: "";
+  position: absolute;
+  top: 0.66em;
+  left: 0;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(59, 142, 255, 0.58);
+}
+
+.stageOutcome {
+  grid-area: outcome;
+  display: grid;
+  grid-template-columns: 4px minmax(0, 1fr);
+  gap: 18px;
+  align-items: stretch;
+  max-width: 640px;
+  padding-top: 2px;
+}
+
+.outcomeRule {
+  width: 4px;
+  min-height: 62px;
+  border-radius: 999px;
+  background: linear-gradient(to bottom, var(--blue), rgba(59, 142, 255, 0.16));
+}
+
+.outcomeLabel {
+  margin-bottom: 7px;
+}
+
+.outcomeText {
+  display: block;
+  max-width: 590px;
+  color: var(--ink);
+  font-family: "Plus Jakarta Sans", Inter, sans-serif;
+  font-size: clamp(16px, 1.35vw, 19px);
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: -0.015em;
+}
+
+/* Diagram column */
+
+.stageDiagram {
+  position: relative;
+  grid-area: diagram;
+  display: flex;
+  align-self: stretch;
+  min-width: 0;
+  min-height: clamp(470px, 40vw, 590px);
+  align-items: center;
+  justify-content: center;
+  isolation: isolate;
+}
+
+.visualHalo {
+  position: absolute;
+  z-index: -2;
+  width: min(84%, 520px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(59, 142, 255, 0.075) 0%,
+    rgba(59, 142, 255, 0.035) 42%,
+    rgba(59, 142, 255, 0) 72%
+  );
+  pointer-events: none;
+}
+
+.visualIndex {
+  display: none;
+}
+
+.diagram {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: min(100%, 590px);
+  height: auto;
+  overflow: visible;
+}
+
+/* SVG visual language */
+
+.diagramGuides {
+  fill: none;
+  stroke: #edf0f3;
+  stroke-width: 1;
+}
+
+.diagramGuides circle {
+  stroke-dasharray: 3 8;
+}
+
+.diagramConnector,
+.diagramConnectorSoft {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.diagramConnector {
+  stroke: var(--blue);
+  stroke-width: 2;
+}
+
+.diagramConnectorSoft {
+  stroke: #a9c9f6;
+  stroke-width: 1.5;
+}
+
+.diagramNode circle,
+.diagramModule rect {
+  fill: rgba(255, 255, 255, 0.94);
+  stroke: #cfd4da;
+  stroke-width: 1.4;
+}
+
+.diagramNode text,
+.diagramModule text {
+  fill: #5e636b;
+  font-family: Inter, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.diagramCore circle,
+.diagramCore rect,
+.buildCore rect,
+.scaleCore circle {
+  fill: rgba(59, 142, 255, 0.075);
+  stroke: var(--blue);
+  stroke-width: 1.8;
+}
+
+.diagramCore .coreInner,
+.scaleCore .coreInner {
+  fill: rgba(255, 255, 255, 0.76);
+  stroke: rgba(59, 142, 255, 0.28);
+  stroke-width: 1.2;
+}
+
+.diagramCore text,
+.scaleCore text {
+  fill: var(--ink);
+  font-family: Inter, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.diagramCore .coreDetail {
+  fill: none;
+  stroke: rgba(59, 142, 255, 0.42);
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+
+.diagramOutput rect {
+  fill: #fff;
+  stroke: var(--blue);
+  stroke-width: 1.7;
+}
+
+.diagramOutput text {
+  fill: var(--ink);
+  font-family: Inter, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.buildCore circle {
+  fill: var(--blue);
+  opacity: 0.62;
+}
+
+.buildCore path {
+  fill: none;
+  stroke: #cbd8e8;
+  stroke-width: 7;
+  stroke-linecap: round;
+}
+
+.launchLight {
+  fill: var(--blue) !important;
+  stroke: none !important;
+}
+
+.scaleCore path {
+  fill: none;
+  stroke: var(--blue);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Responsive */
+
+@media (min-width: 821px) and (max-height: 850px) {
+  .section {
+    padding: 68px 0 52px;
+  }
+
+  .header {
+    margin-bottom: 40px;
+  }
+
+  .progressTrack {
+    margin-bottom: 22px;
+  }
+
+  .stageArea {
+    padding: 28px 0 28px;
+    row-gap: 16px;
+  }
+
+  .stageDescription {
+    margin-top: 18px;
+  }
+
+  .stageDetails {
+    padding: 14px 0 8px;
+  }
+
+  .detailList {
+    gap: 6px;
+  }
+
+  .stageDiagram {
+    min-height: 380px;
+  }
+
+  .diagram {
+    width: min(100%, 500px);
+  }
+}
+
+@media (max-width: 1200px) and (max-height: 850px) {
+  .section {
+    padding: 60px 0 48px;
+  }
+
+  .header {
+    margin-bottom: 36px;
+  }
+
+  .stageArea {
+    padding: 18px 0 24px;
+    row-gap: 14px;
+  }
+
+  .stageDescription {
+    margin-top: 16px;
+  }
+
+  .stageDetails {
+    padding: 12px 0 8px;
+  }
+
+  .stageDiagram {
+    min-height: 400px;
+  }
+}
+
+@media (max-width: 1280px) {
+  .stageArea {
+    column-gap: clamp(42px, 5vw, 68px);
+  }
+
+  .stageDiagram {
+    min-height: 460px;
+  }
+
+  .diagram {
+    width: min(100%, 530px);
+  }
+}
+
+@media (max-width: 1080px) {
+  .progressTrack {
+    width: min(100%, 940px);
+  }
+
+  .progressMarker {
+    width: 42px;
+    height: 42px;
+  }
+
+  .progressBase,
+  .progressIndicator {
+    top: 20px;
+  }
+
+  .stageArea {
+    column-gap: 34px;
+    padding: 28px 0 34px;
+  }
+
+  .stageHeader {
+    grid-template-columns: 72px minmax(0, 1fr);
+    gap: 18px;
+  }
+
+  .stageNumber {
+    font-size: 72px;
+  }
+
+  .stageTitle {
+    font-size: clamp(38px, 4.6vw, 50px);
+  }
+
+  .stageDescription {
+    font-size: 15px;
+  }
+
+  .stageDetails {
+    gap: 24px;
+  }
+
+  .stageDiagram {
+    min-height: 400px;
+  }
+
+  .diagram {
+    width: min(100%, 470px);
+  }
+}
+
+@media (max-width: 1024px) {
+  .stageHeader {
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  .stageNumber {
+    font-size: 64px;
+  }
+
+  .stageTitle {
+    font-size: clamp(34px, 4.2vw, 46px);
+  }
+}
+
+@media (max-width: 820px) {
+  .section {
+    padding: 72px 0 60px;
+  }
+
+  .shell {
+    width: min(100% - 32px, 1440px);
+  }
+
+  .header {
+    margin-bottom: 40px;
+  }
+
+  .progressTrack {
+    margin-bottom: 22px;
+    padding-inline: 2px;
+  }
+
+  .progressBase {
+    left: 10%;
+    right: 10%;
+  }
+
+  .progressMarker {
+    width: 40px;
+    height: 40px;
+  }
+
+  .progressBase,
+  .progressIndicator {
+    top: 19px;
+  }
+
+  .progressName {
+    font-size: 9px;
+    letter-spacing: 0.04em;
+  }
+
+  .stageArea {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "intro"
+      "diagram"
+      "details"
+      "outcome";
+    row-gap: 22px;
+    padding: 26px 0 34px;
+  }
+
+  .stageIntro,
+  .stageDetails,
+  .stageOutcome {
+    width: min(100%, 680px);
+    margin-inline: auto;
+  }
+
+  .stageDiagram {
+    width: min(100%, 680px);
+    min-height: 360px;
+    margin: 0 auto;
+  }
+
+  .diagram {
+    width: min(100%, 540px);
+  }
+
+  .stageDetails {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .detailGroup + .detailGroup {
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+  }
+}
+
+@media (max-width: 680px) {
+  .section {
+    padding: 62px 0 56px;
+  }
+
+  .shell {
+    width: min(100% - 24px, 1440px);
+  }
+
+  .header {
+    margin-bottom: 36px;
+  }
+
+  .header h2 {
+    font-size: 42px;
+    line-height: 46px;
+  }
+
+  .intro {
+    padding-inline: 8px;
+    font-size: 13.5px;
+  }
+
+  .progressTrack {
+    margin-bottom: 12px;
+  }
+
+  .progressStep {
+    min-height: 62px;
+    padding-inline: 2px;
+  }
+
+  .progressMarker {
+    width: 36px;
+    height: 36px;
+  }
+
+  .progressBase,
+  .progressIndicator {
+    top: 17px;
+  }
+
+  .progressNumber {
+    font-size: 10px;
+  }
+
+  .progressName {
+    display: none;
+  }
+
+  .stageArea {
+    padding: 28px 0 28px;
+    row-gap: 18px;
+  }
+
+  .stageHeader {
+    grid-template-columns: 54px minmax(0, 1fr);
+    gap: 14px;
+  }
+
+  .stageNumber {
+    font-size: 54px;
+  }
+
+  .stageCategory {
+    margin-bottom: 7px;
+    font-size: 10px;
+  }
+
+  .stageTitle {
+    font-size: clamp(32px, 8vw, 42px);
+  }
+
+  .stageDescription {
+    margin-top: 20px;
+    font-size: 14px;
+    line-height: 1.68;
+  }
+
+  .stageDiagram {
+    min-height: 310px;
+  }
+
+  .diagram {
+    width: min(100%, 500px);
+  }
+
+  .stageDetails {
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    padding: 16px 0 10px;
+  }
+
+  .detailList {
+    gap: 7px;
+  }
+
+  .detailList li {
+    font-size: 12.5px;
+  }
+
+  .stageOutcome {
+    gap: 14px;
+  }
+
+  .outcomeText {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .section {
+    padding: 56px 0 48px;
+  }
+
+  .header h2 {
+    font-size: 36px;
+    line-height: 40px;
+  }
+
+  .eyebrow {
+    font-size: 14px;
+  }
+
+  .intro {
+    font-size: 13px;
+    line-height: 1.65;
+  }
+
+  .progressTrack {
+    width: 100%;
+    padding-inline: 0;
+  }
+
+  .progressBase {
+    left: 10%;
+    right: 10%;
+  }
+
+  .progressMarker {
+    width: 34px;
+    height: 34px;
+  }
+
+  .progressBase,
+  .progressIndicator {
+    top: 16px;
+  }
+
+  .progressStepActive .progressMarker {
+    box-shadow: 0 0 0 5px rgba(59, 142, 255, 0.085);
+  }
+
+  .stageArea {
+    padding: 24px 0 24px;
+    row-gap: 18px;
+  }
+
+  .stageHeader {
+    grid-template-columns: 48px minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .stageNumber {
+    font-size: 48px;
+  }
+
+  .stageTitle {
+    font-size: clamp(30px, 9vw, 38px);
+  }
+
+  .stageDescription {
+    font-size: 13.5px;
+  }
+
+  .stageDiagram {
+    min-height: 270px;
+  }
+
+  .visualHalo {
+    width: 92%;
+  }
+
+  .stageDetails {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .detailGroup + .detailGroup {
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+  }
+
+  .detailList {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 14px;
+    row-gap: 8px;
+  }
+
+  .detailList li {
+    font-size: 12.5px;
+  }
+
+  .outcomeRule {
+    min-height: 54px;
+  }
+
+  .outcomeText {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 360px) {
+  .section {
+    padding: 48px 0 40px;
+  }
+
+  .shell {
+    width: min(100% - 20px, 1440px);
+  }
+
+  .header h2 {
+    font-size: 32px;
+    line-height: 36px;
+  }
+
+  .header {
+    margin-bottom: 30px;
+  }
+
+  .progressMarker {
+    width: 31px;
+    height: 31px;
+  }
+
+  .progressBase,
+  .progressIndicator {
+    top: 14.5px;
+  }
+
+  .progressNumber {
+    font-size: 9px;
+  }
+
+  .stageArea {
+    padding: 18px 0 22px;
+  }
+
+  .stageHeader {
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .stageNumber {
+    font-size: 43px;
+  }
+
+  .stageTitle {
+    font-size: 30px;
+  }
+
+  .stageDescription {
+    font-size: 13px;
+  }
+
+  .stageDiagram {
+    min-height: 238px;
+  }
+
+  .detailList {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .progressStep,
+  .progressMarker,
+  .progressMarker::after,
+  .progressNumber,
+  .progressName,
+  .progressIndicator {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .section [data-hb-reveal],
+  .section [data-stage-copy],
+  .stageDiagram,
+  .stageDiagram [data-anim] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

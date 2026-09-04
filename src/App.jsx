@@ -7,6 +7,7 @@ import CompanyStats from "./components/CompanyStats.jsx";
 import RecentWorks from "./components/RecentWorks.jsx";
 import ServiceDirectory from "./components/ServiceDirectory.jsx";
 import ProblemsWeSolve from "./components/sections/ProblemsWeSolve/ProblemsWeSolve";
+import HowWeBuild from "./components/sections/HowWeBuild/HowWeBuild";
 import FAQ from "./components/FAQ.jsx";
 import Footer from "./components/Footer.jsx";
 import LatestBlog from "./components/LatestBlog.jsx";
@@ -1423,6 +1424,7 @@ export default function App({ renderHeader = true, renderFooter = true }) {
         <ServiceDirectory />
         <ServiceCardCarousel />
         <RecentWorks />
+        <HowWeBuild />
         <CompanyStats />
         <ClientResults />
         <Founder />
