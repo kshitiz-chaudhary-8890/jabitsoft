@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const posts = [
   {
@@ -108,6 +110,83 @@ export default function LatestBlog() {
     return () => observer.disconnect();
   }, []);
 
+  useLayoutEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return undefined;
+
+    const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+    if (reduced) return undefined;
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    const ctx = gsap.context(() => {
+      const headingFill = section.querySelector(".section-heading-fill");
+      if (headingFill) {
+        gsap.fromTo(
+          headingFill,
+          { backgroundSize: "100% 100%, 0% 100%" },
+          {
+            backgroundSize: "100% 100%, 100% 100%",
+            ease: "none",
+            scrollTrigger: {
+              trigger: headingFill,
+              start: "top 92%",
+              end: "top 38%",
+              scrub: 0.7,
+              invalidateOnRefresh: true,
+            },
+          }
+        );
+      }
+
+      const mediaWraps = gsap.utils.toArray(
+        ".latest-blog__image-media",
+        section,
+      );
+
+      const parallaxMedia = (strength) => {
+        mediaWraps.forEach((media) => {
+          gsap.fromTo(
+            media,
+            {
+              scale: 1 + 0.15 * strength,
+              yPercent: 12 * strength,
+              clipPath: "inset(12% 0 12% 0)",
+            },
+            {
+              scale: 1,
+              yPercent: 0,
+              clipPath: "inset(0% 0 0% 0)",
+              ease: "none",
+              scrollTrigger: {
+                trigger: media,
+                start: "top 96%",
+                end: "top 52%",
+                scrub: 1,
+                invalidateOnRefresh: true,
+              },
+            }
+          );
+        });
+      };
+
+      const mm = gsap.matchMedia();
+      mm.add("(min-width: 1024px) and (prefers-reduced-motion: no-preference)", () =>
+        parallaxMedia(1),
+      );
+      mm.add(
+        "(min-width: 640px) and (max-width: 1023.98px) and (prefers-reduced-motion: no-preference)",
+        () => parallaxMedia(0.75),
+      );
+      mm.add(
+        "(max-width: 639.98px) and (prefers-reduced-motion: no-preference)",
+        () => parallaxMedia(0.5),
+      );
+    }, section);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
     <>
       <section
@@ -120,8 +199,10 @@ export default function LatestBlog() {
           <header className="latest-blog__header">
             <div className="latest-blog__heading">
               <p className="latest-blog__eyebrow">(Latest Blog)</p>
-              <h2 id="latest-blog-title">
-                Ideas for building better digital products.
+              <h2 id="latest-blog-title" data-reveal-heading>
+                <span className="section-heading-fill">
+                  Ideas for building better digital products.
+                </span>
               </h2>
             </div>
 
@@ -147,10 +228,12 @@ export default function LatestBlog() {
               <article
                 className="latest-blog__card"
                 key={post.title}
-                style={{ "--blog-delay": `${index * 90}ms` }}
+                style={{ "--blog-delay": `${index * 120}ms` }}
               >
                 <a className="latest-blog__image-wrap" href="#blog">
-                  <img src={post.image} alt="" loading="lazy" />
+                  <div className="latest-blog__image-media">
+                    <img src={post.image} alt="" loading="lazy" />
+                  </div>
                   <span className="latest-blog__category">{post.category}</span>
 
                   <span className="latest-blog__card-arrow">
@@ -306,10 +389,10 @@ export default function LatestBlog() {
         .latest-blog__card {
           min-width: 0;
           opacity: 0;
-          transform: translate3d(0, 46px, 0);
+          transform: translate3d(0, 70px, 0);
           transition:
-            opacity 600ms cubic-bezier(0.16, 1, 0.3, 1) var(--blog-delay),
-            transform 820ms cubic-bezier(0.16, 1, 0.3, 1) var(--blog-delay);
+            opacity 700ms cubic-bezier(0.16, 1, 0.3, 1) var(--blog-delay),
+            transform 1s cubic-bezier(0.16, 1, 0.3, 1) var(--blog-delay);
         }
 
         .latest-blog--visible .latest-blog__card {
@@ -325,6 +408,14 @@ export default function LatestBlog() {
           overflow: hidden;
           border-radius: 26px;
           background: #e8e8e8;
+        }
+
+        .latest-blog__image-media {
+          position: absolute;
+          inset: 0;
+          overflow: hidden;
+          border-radius: inherit;
+          will-change: transform;
         }
 
         .latest-blog__image-wrap img {

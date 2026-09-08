@@ -70,12 +70,12 @@ export default function FAQ() {
     const ctx = gsap.context(() => {
       gsap.set(headerRef.current, {
         autoAlpha: 0,
-        y: 36,
+        y: 60,
       });
 
       gsap.set(itemRefs.current, {
         autoAlpha: 0,
-        y: 34,
+        y: 56,
       });
 
       const tl = gsap.timeline({
@@ -89,19 +89,38 @@ export default function FAQ() {
       tl.to(headerRef.current, {
         autoAlpha: 1,
         y: 0,
-        duration: 0.72,
+        duration: 0.9,
         ease: "power3.out",
       }).to(
         itemRefs.current,
         {
           autoAlpha: 1,
           y: 0,
-          duration: 0.62,
-          stagger: 0.08,
+          duration: 0.8,
+          stagger: 0.1,
           ease: "power3.out",
         },
         "-=0.38",
       );
+
+      const headingFill = section.querySelector(".section-heading-fill");
+      if (headingFill) {
+        gsap.fromTo(
+          headingFill,
+          { backgroundSize: "100% 100%, 0% 100%" },
+          {
+            backgroundSize: "100% 100%, 100% 100%",
+            ease: "none",
+            scrollTrigger: {
+              trigger: headingFill,
+              start: "top 92%",
+              end: "top 38%",
+              scrub: 0.7,
+              invalidateOnRefresh: true,
+            },
+          }
+        );
+      }
     }, section);
 
     return () => ctx.revert();
@@ -191,7 +210,11 @@ export default function FAQ() {
           <header ref={headerRef} className="faq-ref__header">
             <p className="faq-ref__eyebrow">(JabitSoft FAQs)</p>
 
-            <h2 id="faq-ref-title">Software Questions, Answered</h2>
+            <h2 id="faq-ref-title" data-reveal-heading>
+              <span className="section-heading-fill">
+                Software Questions, Answered
+              </span>
+            </h2>
 
             <p className="faq-ref__subhead">
               Learn how we approach software projects, delivery, existing products,

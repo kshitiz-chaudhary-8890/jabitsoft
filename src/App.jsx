@@ -4,7 +4,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Hero from "./components/Hero.jsx";
 import ClientMarquee from "./components/ClientMarquee.jsx";
 import DualMarquee from "./components/DualMarquee.jsx";
-import Intro from "./components/Intro.jsx";
+import Intro from "./components/sections/Intro/intro";
 import ServiceCardCarousel from "./components/ServiceCardCarousel.jsx";
 import ClientResults from "./components/ClientResults.jsx";
 import CompanyStats from "./components/CompanyStats.jsx";
@@ -123,7 +123,7 @@ function usePageMotion() {
       [".client-logos", "rise", 0],
       [".ribbon-layer", "rise", 0],
       [".intro .script-eyebrow, .service-pills", "rise", 0],
-      [".section-title > :not([data-reveal-heading])", "title-rise", 0],
+      [".section-title > :not([data-reveal-heading]):not(.section-heading-fill)", "title-rise", 0],
       [".testimonial-grid", "rise", 0],
       [".founder-portrait", "slide-left", 0],
       [".founder-copy", "rise", 0],

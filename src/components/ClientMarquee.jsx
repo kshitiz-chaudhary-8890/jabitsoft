@@ -1,6 +1,8 @@
 "use client";
 
-import RevealHeading from "./common/RevealHeading.jsx";
+import { useLayoutEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const logos = [
   "https://framerusercontent.com/images/3cWSgJFsUVvZeOw9LdQmTOSVFhE.svg?width=58&height=32",
@@ -12,8 +14,60 @@ const logos = [
 ];
 
 export default function ClientMarquee() {
+  const sectionRef = useRef(null);
+
+  useLayoutEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return undefined;
+
+    const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+    if (reduced) return undefined;
+
+    gsap.registerPlugin(ScrollTrigger);
+
+const ctx = gsap.context(() => {
+        gsap.from(".trust-showcase__proof", {
+          y: 40,
+          autoAlpha: 0,
+          duration: 0.8,
+          ease: "power3.out",
+          scrollTrigger: { trigger: section, start: "top 80%", once: true },
+        });
+
+        gsap.from(".trust-showcase__header", {
+          y: 60,
+          autoAlpha: 0,
+          duration: 0.9,
+          ease: "power3.out",
+          scrollTrigger: { trigger: section, start: "top 80%", once: true },
+        });
+
+        const headingFill = section.querySelector(".section-heading-fill");
+      if (headingFill) {
+        gsap.fromTo(
+          headingFill,
+          { backgroundSize: "100% 100%, 0% 100%" },
+          {
+            backgroundSize: "100% 100%, 100% 100%",
+            ease: "none",
+            scrollTrigger: {
+              trigger: headingFill,
+              start: "top 92%",
+              end: "top 38%",
+              scrub: 0.7,
+              invalidateOnRefresh: true,
+            },
+          }
+        );
+      }
+    }, section);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
     <section
+      ref={sectionRef}
       className="client-logos-section trust-showcase"
       aria-labelledby="client-logos-title"
     >
@@ -46,14 +100,15 @@ export default function ClientMarquee() {
         </div>
 
         <header className="trust-showcase__header">
-          <RevealHeading
-            as="h2"
+          <h2
             id="client-logos-title"
             className="trust-showcase__title"
-            aria-label="Trusted by teams building what’s next"
+            aria-label="Trusted by teams building what's next"
           >
-            Trusted by teams building what’s next
-          </RevealHeading>
+            <span className="section-heading-fill">
+              Trusted by teams building what&apos;s next
+            </span>
+          </h2>
 
           <p className="trust-showcase__copy">
             We help growing businesses turn complex ideas into reliable digital

@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import RevealHeading from "./common/RevealHeading.jsx";
 
 const stats = [
   {
@@ -38,56 +37,8 @@ const stats = [
   },
 ];
 
-function CountUp({ end, suffix = "", run }) {
-  const [value, setValue] = useState(0);
-
-  useEffect(() => {
-    if (!run) return undefined;
-
-    let frame;
-    let start;
-
-    const tick = (time) => {
-      if (!start) start = time;
-      const progress = Math.min((time - start) / 1200, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setValue(Math.round(end * eased));
-
-      if (progress < 1) frame = requestAnimationFrame(tick);
-    };
-
-    frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
-  }, [end, run]);
-
-  return (
-    <>
-      {value}
-      {suffix}
-    </>
-  );
-}
-
 export default function CompanyStats() {
   const sectionRef = useRef(null);
-  const [runCounts, setRunCounts] = useState(false);
-
-  useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return undefined;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        setRunCounts(true);
-        observer.disconnect();
-      },
-      { threshold: 0.28 },
-    );
-
-    observer.observe(section);
-    return () => observer.disconnect();
-  }, []);
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
@@ -95,27 +46,66 @@ export default function CompanyStats() {
 
     gsap.registerPlugin(ScrollTrigger);
 
-    if (window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches) {
+    const reduced = window.matchMedia?.(
+      "(prefers-reduced-motion: reduce)",
+    )?.matches;
+
+    const metricEls = gsap.utils.toArray(
+      ".company-stats-clean__metric strong",
+      section,
+    );
+
+    if (reduced) {
+      metricEls.forEach((el) => {
+        const end = Number(el.dataset.statValue || 0);
+        const suffix = el.dataset.statSuffix || "";
+        el.textContent = `${end}${suffix}`;
+      });
       return undefined;
     }
 
     const ctx = gsap.context(() => {
       gsap.fromTo(
         "[data-company-stats-reveal]",
-        { autoAlpha: 0, y: 28 },
+        { autoAlpha: 0, y: 130, scale: 0.94 },
         {
           autoAlpha: 1,
           y: 0,
-          duration: 0.72,
-          stagger: 0.09,
-          ease: "power3.out",
+          scale: 1,
+          ease: "none",
+          stagger: 0.6,
           scrollTrigger: {
             trigger: section,
-            start: "top 78%",
-            once: true,
+            start: "top 84%",
+            end: "top 36%",
+            scrub: 1,
+            invalidateOnRefresh: true,
           },
         },
       );
+
+      metricEls.forEach((el) => {
+        const end = Number(el.dataset.statValue || 0);
+        const suffix = el.dataset.statSuffix || "";
+        const proxy = { val: 0 };
+
+        el.textContent = `0${suffix}`;
+
+        gsap.to(proxy, {
+          val: end,
+          ease: "none",
+          onUpdate: () => {
+            el.textContent = `${Math.round(proxy.val)}${suffix}`;
+          },
+          scrollTrigger: {
+            trigger: section,
+            start: "top 84%",
+            end: "top 36%",
+            scrub: 1,
+            invalidateOnRefresh: true,
+          },
+        });
+      });
 
       const cards = gsap.utils.toArray(".company-stats-clean__card", section);
 
@@ -140,6 +130,25 @@ export default function CompanyStats() {
           },
         );
       });
+
+      const headingFill = section.querySelector(".section-heading-fill");
+      if (headingFill) {
+        gsap.fromTo(
+          headingFill,
+          { backgroundSize: "100% 100%, 0% 100%" },
+          {
+            backgroundSize: "100% 100%, 100% 100%",
+            ease: "none",
+            scrollTrigger: {
+              trigger: headingFill,
+              start: "top 92%",
+              end: "top 38%",
+              scrub: 0.7,
+              invalidateOnRefresh: true,
+            },
+          },
+        );
+      }
     }, section);
 
     return () => ctx.revert();
@@ -160,9 +169,11 @@ export default function CompanyStats() {
                 JabitSoft in numbers
               </p>
 
-              <RevealHeading id="company-stats-clean-title">
-                Software built around real business outcomes.
-              </RevealHeading>
+              <h2 id="company-stats-clean-title" data-reveal-heading>
+                <span className="section-heading-fill">
+                  Software built around real business outcomes.
+                </span>
+              </h2>
 
               <p className="company-stats-clean__copy">
                 We combine product thinking, design and engineering to build
@@ -230,12 +241,11 @@ export default function CompanyStats() {
               </div>
 
               <div className="company-stats-clean__metric">
-                <strong>
-                  <CountUp
-                    end={stats[0].value}
-                    suffix={stats[0].suffix}
-                    run={runCounts}
-                  />
+                <strong
+                  data-stat-value={stats[0].value}
+                  data-stat-suffix={stats[0].suffix}
+                >
+                  0{stats[0].suffix}
                 </strong>
                 <h3>{stats[0].title}</h3>
                 <p>{stats[0].description}</p>
@@ -263,12 +273,11 @@ export default function CompanyStats() {
                   </div>
 
                   <div className="company-stats-clean__metric">
-                    <strong>
-                      <CountUp
-                        end={stat.value}
-                        suffix={stat.suffix}
-                        run={runCounts}
-                      />
+                    <strong
+                      data-stat-value={stat.value}
+                      data-stat-suffix={stat.suffix}
+                    >
+                      0{stat.suffix}
                     </strong>
                     <h3>{stat.title}</h3>
                     <p>{stat.description}</p>
@@ -562,6 +571,7 @@ export default function CompanyStats() {
           line-height: 0.94;
           letter-spacing: -0.055em;
           color: #ffffff;
+          font-variant-numeric: tabular-nums;
         }
 
         .company-stats-clean__small-grid .company-stats-clean__metric strong {

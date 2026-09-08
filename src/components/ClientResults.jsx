@@ -184,7 +184,9 @@ export default function ClientResults() {
     const cleanups = [];
 
     const ctx = gsap.context(() => {
-      const heading = gsap.utils.toArray(".cr-heading > *");
+      const headingChildren = gsap.utils.toArray(".cr-heading > *").filter(
+        (el) => el.tagName !== "H2",
+      );
       const cards = gsap.utils.toArray(".cr-card").filter(
         (el) => !el.classList.contains("cr-rail-card"),
       );
@@ -193,18 +195,22 @@ export default function ClientResults() {
       const metricValues = gsap.utils.toArray(".cr-metric strong");
       const image = section.querySelector(".cr-featured-media img");
 
-      gsap.set(heading, { y: 28, opacity: 0 });
+      gsap.set(headingChildren, { y: 44, opacity: 0 });
       gsap.set(cards, {
-        y: 52,
+        y: 70,
         opacity: 0,
-        scale: 0.985,
+        scale: 0.97,
         transformOrigin: "50% 50%",
       });
       gsap.set(stars, { opacity: 0, scale: 0.55, rotation: -12 });
       gsap.set(logos, { opacity: 0, scale: 0.75, rotation: -6 });
-      gsap.set(metricValues, { y: 14, opacity: 0 });
+      gsap.set(metricValues, { y: 28, opacity: 0 });
 
-      if (image) gsap.set(image, { scale: 1.07 });
+      if (image) {
+        const strength =
+          window.innerWidth >= 1024 ? 1 : window.innerWidth >= 640 ? 0.75 : 0.5;
+        gsap.set(image, { scale: 1 + 0.12 * strength });
+      }
 
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -216,11 +222,11 @@ export default function ClientResults() {
         defaults: { ease: "power3.out" },
       });
 
-      tl.to(heading, {
+      tl.to(headingChildren, {
         y: 0,
         opacity: 1,
-        duration: 0.58,
-        stagger: 0.08,
+        duration: 0.7,
+        stagger: 0.09,
       })
         .to(
           cards,
@@ -228,8 +234,8 @@ export default function ClientResults() {
             y: 0,
             opacity: 1,
             scale: 1,
-            duration: 0.72,
-            stagger: 0.08,
+            duration: 0.92,
+            stagger: 0.1,
           },
           "-=0.25",
         )
@@ -290,11 +296,11 @@ export default function ClientResults() {
         // Entrance fade for the whole rail.
         gsap.fromTo(
           rail,
-          { autoAlpha: 0, y: 28 },
+          { autoAlpha: 0, y: 40 },
           {
             autoAlpha: 1,
             y: 0,
-            duration: 0.7,
+            duration: 0.85,
             ease: "power3.out",
             scrollTrigger: {
               trigger: ".cr-rail-wrap",
@@ -350,7 +356,7 @@ export default function ClientResults() {
 
         const marquee = gsap.to(track, {
           x: () => -halfWidth(),
-          duration: () => halfWidth() / 60,
+          duration: () => halfWidth() / 72,
           ease: "none",
           repeat: -1,
           paused: true,
@@ -405,6 +411,25 @@ export default function ClientResults() {
           removeClones();
         });
       }
+
+      const headingFill = section.querySelector(".section-heading-fill");
+      if (headingFill) {
+        gsap.fromTo(
+          headingFill,
+          { backgroundSize: "100% 100%, 0% 100%" },
+          {
+            backgroundSize: "100% 100%, 100% 100%",
+            ease: "none",
+            scrollTrigger: {
+              trigger: headingFill,
+              start: "top 92%",
+              end: "top 38%",
+              scrub: 0.7,
+              invalidateOnRefresh: true,
+            },
+          }
+        );
+      }
     }, section);
 
     return () => {
@@ -424,7 +449,11 @@ export default function ClientResults() {
       <div className="cr-shell">
         <header className="cr-heading">
           <p className="cr-eyebrow">(Client Results)</p>
-          <h2 id="client-results-title">Proof, not promises.</h2>
+          <h2 id="client-results-title" data-reveal-heading>
+            <span className="section-heading-fill">
+              Proof, not promises.
+            </span>
+          </h2>
           <p className="cr-subhead">
             A collection of client feedback across product engineering,
             platforms, cloud, mobile, ERP, AI and digital growth.
@@ -911,7 +940,7 @@ export default function ClientResults() {
 
         .cr-rail-layout {
           display: grid;
-          grid-template-columns: clamp(330px, 24vw, 370px) minmax(0, 1fr);
+          grid-template-columns: 330px minmax(0, 1fr);
           gap: 24px;
           align-items: stretch;
         }
@@ -1186,7 +1215,7 @@ export default function ClientResults() {
           }
 
           .cr-rail-layout {
-            grid-template-columns: 300px minmax(0, 1fr);
+            grid-template-columns: 290px minmax(0, 1fr);
           }
 
           .cr-rail-intro {

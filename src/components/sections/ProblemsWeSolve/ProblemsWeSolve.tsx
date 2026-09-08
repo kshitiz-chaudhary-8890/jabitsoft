@@ -1,9 +1,11 @@
 "use client";
 
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
+  AnimatePresence,
   MotionConfig,
   motion,
+  useInView,
   useMotionValue,
   useReducedMotion,
   useSpring,
@@ -15,7 +17,6 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 import styles from "./ProblemsWeSolve.module.css";
-import RevealHeading from "../../common/RevealHeading.jsx";
 
 const problems = [
   {
@@ -132,131 +133,506 @@ function toList(value: string): string[] {
     .filter(Boolean);
 }
 
-const landscapeMetrics = [
+const landscapeProfiles = [
   {
-    value: "06",
-    title: "Business problems mapped",
-    description: "From manual operations and cloud limits to weak customer journeys and discoverability.",
+    diagnostics: [
+      ["Operational drag", "Repetitive work and disconnected tools slow momentum."],
+      ["Experience friction", "Customers and teams hit barriers across key touchpoints."],
+      ["Growth constraints", "Limited visibility and scalability make it harder to capture what’s next."],
+    ],
+    center: ["Business", "friction"],
+    impact: "Time is lost to repetitive tasks, context switching and error-prone processes.",
+    response: "We automate and streamline workflows, connecting your tools and data.",
+    outcome: "More time for high-value work and a faster, more focused team.",
   },
   {
-    value: "03",
-    title: "Recurring friction signals",
-    description: "Disconnected tools, repeated handoffs, and limited visibility slow teams down most often.",
+    diagnostics: [
+      ["Scaling pressure", "Infrastructure becomes harder to operate as demand grows."],
+      ["Release instability", "Slow or fragile deployments make change harder."],
+      ["Limited visibility", "Performance and reliability issues become harder to trace."],
+    ],
+    center: ["Business", "friction"],
+    impact: "Products become harder to scale when infrastructure, deployments and cloud architecture grow without a clear strategy.",
+    response: "We modernize cloud architecture and create a scalable, easier-to-operate foundation.",
+    outcome: "More reliable releases, clearer visibility and infrastructure that can support growth.",
   },
   {
-    value: "01",
-    title: "Connected delivery roadmap",
-    description: "We turn operational symptoms into a focused software, platform, and growth plan.",
+    diagnostics: [
+      ["Experience friction", "Slow mobile journeys create unnecessary drop-off."],
+      ["Journey confusion", "Important actions take too many steps to complete."],
+      ["Backend disconnect", "Mobile experiences suffer when systems do not work together."],
+    ],
+    center: ["Business", "friction"],
+    impact: "Customers lose momentum when mobile experiences are slow, confusing or inconsistent.",
+    response: "We design and build fast mobile experiences connected cleanly to your backend systems.",
+    outcome: "Smoother journeys, stronger engagement and a mobile product that is easier to use.",
+  },
+  {
+    diagnostics: [
+      ["Operational drag", "Teams repeat the same updates across different systems."],
+      ["Data fragmentation", "Important business information lives in separate places."],
+      ["Limited visibility", "Management lacks one dependable operational view."],
+    ],
+    center: ["Business", "friction"],
+    impact: "Disconnected systems slow teams down and make operational data harder to trust.",
+    response: "We connect workflows, business data and ERP processes into one clearer operating system.",
+    outcome: "Less duplication, better visibility and more consistent day-to-day operations.",
+  },
+  {
+    diagnostics: [
+      ["Low discoverability", "Important searches do not consistently surface the business."],
+      ["Weak intent match", "Traffic does not always align with business goals."],
+      ["Growth constraints", "Content and campaigns lack one measurable direction."],
+    ],
+    center: ["Business", "friction"],
+    impact: "Potential customers cannot choose you if they struggle to find you at the right moment.",
+    response: "We connect technical SEO, content and measurable digital campaigns around real search intent.",
+    outcome: "Stronger visibility, more qualified traffic and clearer digital growth.",
+  },
+  {
+    diagnostics: [
+      ["Website friction", "Slow performance makes simple actions feel harder."],
+      ["Journey confusion", "Visitors struggle to find the information they need."],
+      ["Conversion drag", "The website does not guide users toward meaningful action."],
+    ],
+    center: ["Business", "friction"],
+    impact: "A website underperforms when speed, structure and messaging create friction for visitors.",
+    response: "We improve UX, performance, accessibility and conversion-focused journeys.",
+    outcome: "A faster, clearer website that supports both the brand and real business goals.",
   },
 ] as const;
 
 const landscapeIssues = [
-  ["Disconnected systems", "Data and workflows stay isolated across tools."],
-  ["Manual handoffs", "Routine work depends on people moving information."],
-  ["Limited visibility", "Progress, performance, and decisions are harder to track."],
-  ["Scaling bottlenecks", "Processes and platforms struggle as demand grows."],
+  ["Manual work", "Repeated tasks and handoffs slow teams down."],
+  ["Cloud constraints", "Infrastructure struggles to scale reliably."],
+  ["Mobile friction", "Slow and confusing journeys lose customers."],
+  ["Disconnected operations", "Core business data stays spread across systems."],
+  ["Low discoverability", "The right customers cannot find the business."],
+  ["Website underperformance", "The website does not support meaningful action."],
 ] as const;
 
 function LandscapeIcon({ index }: { index: number }) {
   if (index === 0) {
-    return <path d="M7 8.5 12 5l5 3.5M7 15.5l5 3.5 5-3.5M7 8.5v7M17 8.5v7M12 5v5m0 4v5" />;
+    return (
+      <>
+        <path d="M7 3.5h7l3 3V20.5H7z" />
+        <path d="M14 3.5v3h3M9.5 10h5M9.5 13h5M9.5 16h3.5" />
+      </>
+    );
   }
   if (index === 1) {
-    return <path d="M5 8h12m-3-3 3 3-3 3M19 16H7m3-3-3 3 3 3" />;
+    return <path d="M6.2 18h10.7a3.8 3.8 0 0 0 .4-7.6A5.8 5.8 0 0 0 6.3 8.5 4.8 4.8 0 0 0 6.2 18Z" />;
   }
   if (index === 2) {
     return (
       <>
-        <path d="M3.5 12s3.2-5 8.5-5 8.5 5 8.5 5-3.2 5-8.5 5-8.5-5-8.5-5Z" />
-        <circle cx="12" cy="12" r="2.5" />
+        <rect x="8" y="3" width="8" height="18" rx="2" />
+        <path d="M10.5 6h3M11.2 18h1.6" />
       </>
     );
   }
-  return <path d="M5 18v-5h3v5m3 0V9h3v9m3 0V5h3v13M4 19h17" />;
+  if (index === 3) {
+    return (
+      <>
+        <rect x="9" y="3.5" width="6" height="5" rx="1" />
+        <rect x="4" y="15.5" width="6" height="5" rx="1" />
+        <rect x="14" y="15.5" width="6" height="5" rx="1" />
+        <path d="M12 8.5v3M7 11.5h10M7 11.5v4M17 11.5v4" />
+      </>
+    );
+  }
+  if (index === 4) {
+    return (
+      <>
+        <circle cx="10.5" cy="10.5" r="5.5" />
+        <path d="m14.5 14.5 4 4" />
+      </>
+    );
+  }
+  return (
+    <>
+      <rect x="4" y="5" width="16" height="14" rx="2" />
+      <path d="M4 9h16M8 7h.01M11 7h.01" />
+    </>
+  );
+}
+
+function DiagnosticIcon({ index }: { index: number }) {
+  if (index === 0) {
+    return <><circle cx="12" cy="12" r="3" /><path d="M12 3v2m0 14v2M3 12h2m14 0h2M5.6 5.6 7 7m10 10 1.4 1.4M18.4 5.6 17 7M7 17l-1.4 1.4" /></>;
+  }
+  if (index === 1) {
+    return <><circle cx="9" cy="9" r="3" /><circle cx="16.5" cy="10.5" r="2.5" /><path d="M3.5 19c.4-3.2 2.3-5 5.5-5s5.1 1.8 5.5 5m.5-4.2c3 .2 4.7 1.7 5 4.2" /></>;
+  }
+  return <path d="M5 19v-5m5 5V9m5 10v-8m5 8V5M3 20h19" />;
+}
+
+function DetailIcon({ index }: { index: number }) {
+  if (index === 0) {
+    return <><rect x="6" y="3" width="12" height="18" rx="2" /><path d="M9 8h6m-6 4h6m-6 4h4" /></>;
+  }
+  if (index === 1) {
+    return <path d="M14.6 6.4a4 4 0 0 0-5.1 5.1L3.7 17.3a2.1 2.1 0 0 0 3 3l5.8-5.8a4 4 0 0 0 5.1-5.1l-2.7 2.7-3-3 2.7-2.7Z" />;
+  }
+  return <path d="M5 19v-5m5 5V9m5 10v-8m5 8V5M3 20h19" />;
 }
 
 function ProblemLandscapeOverview({ reducedMotion }: { reducedMotion: boolean }) {
+  const landscapeRef = useRef<HTMLDivElement>(null);
+  const introPlayedRef = useRef(false);
+  const inView = useInView(landscapeRef, { amount: 0.28 });
+  const [activeProblem, setActiveProblem] = useState(0);
+  const [diagramReady, setDiagramReady] = useState(reducedMotion);
+
+  useEffect(() => {
+    if (reducedMotion) {
+      introPlayedRef.current = true;
+      setDiagramReady(true);
+      return undefined;
+    }
+
+    if (!inView || introPlayedRef.current) return undefined;
+
+    setDiagramReady(false);
+    const introTimer = window.setTimeout(() => {
+      introPlayedRef.current = true;
+      setDiagramReady(true);
+    }, 900);
+
+    return () => window.clearTimeout(introTimer);
+  }, [inView, reducedMotion]);
+
+  const active = problems[activeProblem];
+  const activeLandscape = landscapeProfiles[activeProblem];
+
+  const selectProblem = (index: number) => {
+    setActiveProblem((index + problems.length) % problems.length);
+  };
+
+  const nodePoints = [
+    [250, 84],   // Manual work
+    [372, 158],  // Cloud constraints
+    [425, 286],  // Mobile friction
+    [405, 388],  // Disconnected operations
+    [82, 286],   // Low discoverability
+    [128, 158],  // Website underperformance
+  ] as const;
+
+  const corePoint = [250, 350] as const;
+  const mutedFlowPaths = [
+    "M 128 188 C 128 236 158 245 192 273 C 215 292 220 321 220 350",
+    "M 82 316 C 99 347 140 357 184 350",
+    "M 372 188 C 372 236 342 245 309 273 C 286 292 280 321 280 350",
+    "M 425 316 C 405 344 363 352 316 350",
+    "M 405 388 C 367 370 343 360 316 350",
+  ] as const;
+
+  const activeFlowPaths = [
+    "M 250 350 V 114",
+    "M 280 350 C 280 321 286 292 309 273 C 342 245 372 236 372 188",
+    "M 316 350 C 363 352 405 344 425 316",
+    "M 316 350 C 343 360 367 370 405 418",
+    "M 184 350 C 140 357 99 347 82 316",
+    "M 220 350 C 220 321 215 292 192 273 C 158 245 128 236 128 188",
+  ] as const;
+
   return (
     <motion.div
-      className={styles.landscape}
+      ref={landscapeRef}
+      className={styles.landscapeV2}
       initial={reducedMotion ? false : "hidden"}
       whileInView="visible"
-      viewport={{ once: true, amount: 0.25 }}
+      viewport={{ once: true, amount: 0.2 }}
       variants={{
-        hidden: { opacity: 0, y: 28 },
+        hidden: { opacity: 0, y: 24 },
         visible: {
           opacity: 1,
           y: 0,
-          transition: { duration: 0.7, ease: "easeOut", staggerChildren: 0.1 },
+          transition: { duration: 0.65, ease: "easeOut", staggerChildren: 0.08 },
         },
       }}
       aria-labelledby="problem-landscape-title"
     >
-      <div className={styles.landscapeTop}>
-        <div className={styles.landscapeLabel}>
-          <span>01</span>
-          <h2 id="problem-landscape-title">Problem landscape</h2>
-        </div>
-        <div className={styles.landscapeProgress} aria-hidden="true">
-          <span />
-        </div>
-      </div>
+      <header className={styles.landscapeV2Header}>
+        <p>(Problem landscape)</p>
+        <h2 id="problem-landscape-title">Where growth gets stuck.</h2>
+        <span>
+          Good products stall when everyday friction compounds. We help you remove
+          what’s holding you back, so your team can move faster.
+        </span>
 
-      <div className={styles.landscapeGrid}>
-        <div className={styles.landscapeMetrics}>
-          {landscapeMetrics.map((metric, index) => (
-            <motion.article
-              className={styles.landscapeMetric}
-              key={metric.value}
-              variants={{ hidden: { opacity: 0, x: -22 }, visible: { opacity: 1, x: 0 } }}
-              transition={{ duration: 0.55, delay: index * 0.08 }}
+        <div className={styles.landscapeBrand} aria-hidden="true">
+          <b>Jabitsoft</b>
+          <i />
+          <span>Build&nbsp;&nbsp; Scale&nbsp;&nbsp; Together</span>
+        </div>
+      </header>
+
+      <div className={styles.landscapeV2Grid}>
+        <div className={styles.diagnosticList}>
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={active.number}
+              initial={reducedMotion ? false : { opacity: 0, x: -36, filter: "blur(5px)" }}
+              animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+              exit={reducedMotion ? undefined : { opacity: 0, x: 26, filter: "blur(4px)" }}
+              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
             >
-              <strong>{metric.value}</strong>
-              <h3>{metric.title}</h3>
-              <p>{metric.description}</p>
-              <span className={styles.metricTag}>Jabitsoft discovery framework</span>
-            </motion.article>
-          ))}
+              {activeLandscape.diagnostics.map(([heading, copy], index) => (
+                <article className={styles.diagnosticItem} key={heading}>
+                  <span className={styles.diagnosticIcon} aria-hidden="true">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.7"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <DiagnosticIcon index={index} />
+                    </svg>
+                  </span>
+
+                  <div>
+                    <h3>{heading}</h3>
+                    <p>{copy}</p>
+                  </div>
+                </article>
+              ))}
+            </motion.div>
+          </AnimatePresence>
         </div>
 
-        <div className={styles.landscapeVisual} aria-hidden="true">
+        <div className={styles.network}>
+          <svg className={styles.networkLines} viewBox="0 0 500 500" aria-hidden="true">
+            {/* Reference-style upper orbit */}
+            <motion.path
+              d="M 82 316 C 70 244 92 190 128 158 C 162 118 207 92 250 84 C 297 92 338 117 372 158 C 408 198 430 244 425 316"
+              className={styles.networkOrbit}
+              initial={reducedMotion ? false : { pathLength: 0, opacity: 0 }}
+              animate={inView ? { pathLength: 1, opacity: 1 } : { pathLength: 0, opacity: 0 }}
+              transition={{ duration: 0.82, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
+            />
+
+            {/* Soft internal dotted network */}
+            {mutedFlowPaths.map((path, index) => (
+              <motion.path
+                key={`muted-${index}`}
+                d={path}
+                className={styles.networkFlowPath}
+                initial={reducedMotion ? false : { pathLength: 0, opacity: 0 }}
+                animate={inView ? { pathLength: 1, opacity: 1 } : { pathLength: 0, opacity: 0 }}
+                transition={{
+                  duration: 0.52,
+                  delay: 0.48 + index * 0.06,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+              />
+            ))}
+
+            {/* Main top-to-core guide */}
+            <motion.path
+              d="M 250 114 V 350"
+              className={styles.networkCenterGuide}
+              initial={reducedMotion ? false : { pathLength: 0, opacity: 0 }}
+              animate={inView ? { pathLength: 1, opacity: 1 } : { pathLength: 0, opacity: 0 }}
+              transition={{ duration: 0.45, delay: 0.62, ease: "easeInOut" }}
+            />
+
+            {/* Active problem path */}
+            {diagramReady && (
+              <AnimatePresence mode="wait">
+                <motion.path
+                  key={`active-${activeProblem}`}
+                  d={activeFlowPaths[activeProblem]}
+                  className={styles.networkActivePath}
+                  initial={reducedMotion ? false : { pathLength: 0, opacity: 0 }}
+                  animate={{ pathLength: 1, opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.58, ease: [0.22, 1, 0.36, 1] }}
+                />
+              </AnimatePresence>
+            )}
+
+            {/* Small anchor dots, like the reference diagram */}
+            {nodePoints.map(([x, y], index) => (
+              <motion.circle
+                key={`anchor-${index}`}
+                cx={x}
+                cy={y + 30}
+                r={2.7}
+                className={index === activeProblem ? styles.networkAnchorActive : styles.networkAnchor}
+                initial={reducedMotion ? false : { opacity: 0, scale: 0 }}
+                animate={inView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0 }}
+                transition={{ duration: 0.28, delay: 0.58 + index * 0.045 }}
+              />
+            ))}
+
+            {/* Core to right-panel dotted rail */}
+
+          </svg>
+
           <motion.div
-            className={styles.orbitOuter}
-            animate={reducedMotion ? undefined : { rotate: 360 }}
-            transition={{ duration: 36, repeat: Infinity, ease: "linear" }}
+            className={styles.networkCore}
+            initial={reducedMotion ? false : { opacity: 0, scale: 0.72, filter: "blur(7px)" }}
+            animate={
+              inView
+                ? { opacity: 1, scale: 1, filter: "blur(0px)" }
+                : { opacity: 0, scale: 0.72, filter: "blur(7px)" }
+            }
+            transition={{ duration: 0.52, delay: 0.12, ease: [0.34, 1.3, 0.64, 1] }}
           >
-            <i />
-            <i />
-            <i />
+            <span />
+            <div className={styles.networkCoreLabel}>
+              <i className={styles.networkCoreMark} aria-hidden="true" />
+              <small>Business</small>
+              <strong>friction</strong>
+              <em className={styles.networkCoreMeta}>Slower teams · smaller wins</em>
+            </div>
           </motion.div>
-          <div className={styles.orbitCore}>
-            <span className={styles.orbitSweep} />
-            <span className={styles.orbitPulse} />
-            <b>Friction</b>
-          </div>
-        </div>
 
-        <div className={styles.landscapeIssues}>
-          {landscapeIssues.map(([title, description], index) => (
-            <motion.article
-              className={styles.landscapeIssue}
+          {landscapeIssues.map(([title], index) => (
+            <motion.button
+              type="button"
               key={title}
-              variants={{ hidden: { opacity: 0, x: 24 }, visible: { opacity: 1, x: 0 } }}
-              transition={{ duration: 0.5, delay: 0.18 + index * 0.09 }}
+              className={`${styles.networkNode} ${styles[`networkNode${index + 1}`]}${
+                index === activeProblem ? ` ${styles.networkNodeActive}` : ""
+              }`}
+              onClick={() => selectProblem(index)}
+              aria-label={`Show problem ${index + 1}: ${title}`}
+              aria-pressed={index === activeProblem}
+              variants={{
+                hidden: { opacity: 0, scale: 0.8 },
+                visible: { opacity: 1, scale: 1 },
+              }}
+              animate={
+                !inView
+                  ? { scale: 0.78, opacity: 0 }
+                  : index === activeProblem
+                    ? { scale: 1.05, opacity: 1 }
+                    : { scale: 1, opacity: 0.84 }
+              }
+              transition={{
+                duration: 0.4,
+                delay: inView && !diagramReady ? 0.3 + index * 0.07 : 0,
+                ease: [0.34, 1.3, 0.64, 1],
+              }}
             >
-              <span className={styles.issueIcon}>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+              <span>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.7"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
                   <LandscapeIcon index={index} />
                 </svg>
               </span>
-              <span>
-                <strong>{title}</strong>
-                <small>{description}</small>
-              </span>
-            </motion.article>
+              <small>{title}</small>
+            </motion.button>
           ))}
         </div>
+
+        <aside className={styles.activeProblemPanel} aria-live="polite">
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={active.number}
+              initial={reducedMotion ? false : { opacity: 0, x: 34, filter: "blur(5px)" }}
+              animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+              exit={
+                reducedMotion
+                  ? undefined
+                  : {
+                      opacity: 0,
+                      x: -24,
+                      filter: "blur(4px)",
+                      transition: { duration: 0.2 },
+                    }
+              }
+              transition={{
+                duration: 0.4,
+                delay: reducedMotion ? 0 : 0.12,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+            >
+              <p className={styles.activeProblemEyebrow}>Active problem</p>
+              <h3>{active.title}</h3>
+
+              <dl className={styles.activeProblemDetails}>
+                {[
+                  ["Business impact", activeLandscape.impact],
+                  ["Jabitsoft response", activeLandscape.response],
+                  ["Outcome", activeLandscape.outcome],
+                ].map(([label, copy], index) => (
+                  <div key={label}>
+                    <dt>{label}</dt>
+                    <div className={styles.detailRow}>
+                      <span className={styles.detailIcon} aria-hidden="true">
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.7"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <DetailIcon index={index} />
+                        </svg>
+                      </span>
+                      <dd>{copy}</dd>
+                    </div>
+                  </div>
+                ))}
+              </dl>
+            </motion.div>
+          </AnimatePresence>
+        </aside>
       </div>
+
+      <nav className={styles.landscapeSelector} aria-label="Choose a business problem">
+        <span>
+          <b>Jabitsoft</b>
+          <i />
+          Digital products for a brighter tomorrow
+        </span>
+
+        <div className={styles.selectorSteps}>
+          {problems.map((problem, index) => (
+            <button
+              type="button"
+              key={problem.number}
+              className={index === activeProblem ? styles.landscapeSelectorActive : undefined}
+              onClick={() => selectProblem(index)}
+              aria-current={index === activeProblem ? "step" : undefined}
+            >
+              {problem.number}
+            </button>
+          ))}
+        </div>
+
+        <div className={styles.selectorArrows}>
+          <button
+            type="button"
+            onClick={() => selectProblem(activeProblem - 1)}
+            aria-label="Show previous problem"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m14.5 6.5-5.5 5.5 5.5 5.5" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            onClick={() => selectProblem(activeProblem + 1)}
+            aria-label="Show next problem"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m9.5 6.5 5.5 5.5-5.5 5.5" />
+            </svg>
+          </button>
+        </div>
+      </nav>
     </motion.div>
   );
 }
@@ -616,16 +992,18 @@ function VerticalScene({ problem }: { problem: Problem }) {
 
 function SectionHeader() {
   return (
-    <header className={styles.header}>
+    <header className={styles.header} data-ps-header>
       <p className={styles.eyebrow}>(Problems we solve)</p>
-      <RevealHeading
-        as="h2"
+      <h2
         id="problems-title"
         aria-label="We solve the problems that slow growth down."
+        data-reveal-heading
       >
-        We solve the problems that
-        <span> slow growth down.</span>
-      </RevealHeading>
+        <span className="section-heading-fill">
+          We solve the problems that
+          <span> slow growth down.</span>
+        </span>
+      </h2>
       <p className={styles.intro}>
         From disconnected systems and manual operations to scaling, customer experience, and applied
         AI — we turn operational friction into clear software priorities.
@@ -638,6 +1016,7 @@ function SectionHeader() {
 
 export default function ProblemsWeSolve() {
   const reducedMotion = useReducedMotion();
+  const sectionRef = useRef<HTMLElement | null>(null);
   const scrollWrapRef = useRef<HTMLDivElement>(null);
   const pinnedRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
@@ -713,6 +1092,53 @@ export default function ProblemsWeSolve() {
     return () => window.removeEventListener("resize", measure);
   }, [panelCount, distanceMV]);
 
+  // Scroll-based heading fill animation (independent of the pinned narrative).
+  useLayoutEffect(() => {
+    if (reducedMotion) return undefined;
+    const section = sectionRef.current;
+    if (!section) return undefined;
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    const ctx = gsap.context(() => {
+      const psHeader = section.querySelector("[data-ps-header]");
+      if (psHeader) {
+        gsap.from(psHeader, {
+          y: 60,
+          autoAlpha: 0,
+          duration: 0.95,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: psHeader,
+            start: "top 86%",
+            once: true,
+          },
+        });
+      }
+
+      const headingFill = section.querySelector(".section-heading-fill");
+      if (headingFill) {
+        gsap.fromTo(
+          headingFill,
+          { backgroundSize: "100% 100%, 0% 100%" },
+          {
+            backgroundSize: "100% 100%, 100% 100%",
+            ease: "none",
+            scrollTrigger: {
+              trigger: headingFill,
+              start: "top 92%",
+              end: "top 38%",
+              scrub: 0.7,
+              invalidateOnRefresh: true,
+            },
+          }
+        );
+      }
+    }, section);
+
+    return () => ctx.revert();
+  }, [reducedMotion]);
+
   const trackX = useTransform([smoothProgress, distanceMV], (values: number[]) => {
     const [p, d] = values;
     const clamped = Math.max(0, Math.min(1, p));
@@ -758,6 +1184,7 @@ export default function ProblemsWeSolve() {
   return (
     <MotionConfig reducedMotion="user">
       <section
+        ref={sectionRef}
         className={styles.section}
         data-reduced={reducedMotion ? "true" : "false"}
         id="problems"

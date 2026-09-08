@@ -3,6 +3,7 @@
 @import "../styles/tokens.css";
 @import "../styles/animations.css";
 @import "../styles/utilities.css";
+@import "../styles/section-heading-fill.css";
 
 @layer base {
   *,

@@ -62,21 +62,26 @@
 }
 
 .landscapeProgress {
-  position: relative;
   width: 44px;
   height: 44px;
-  border: 8px solid #edf0f4;
-  border-radius: 50%;
+  flex: none;
+  overflow: visible;
+  transform: rotate(-90deg);
 }
 
-.landscapeProgress span {
-  position: absolute;
-  inset: -8px;
-  border: 8px solid transparent;
-  border-top-color: var(--pw-blue);
-  border-right-color: var(--pw-blue);
-  border-radius: inherit;
-  transform: rotate(-24deg);
+.progressTrack,
+.progressValue {
+  fill: none;
+  stroke-width: 7;
+}
+
+.progressTrack {
+  stroke: #edf0f4;
+}
+
+.progressValue {
+  stroke: var(--pw-blue);
+  stroke-linecap: round;
 }
 
 .landscapeGrid {
@@ -218,18 +223,40 @@
   animation: landscapePulse 2.8s ease-in-out infinite;
 }
 
-.orbitCore b {
+.orbitCopy {
   position: absolute;
-  color: var(--pw-blue);
-  font-size: 11px;
+  z-index: 2;
+  width: 58%;
+  text-align: center;
+}
+
+.orbitCopy small,
+.orbitCopy b {
+  display: block;
+}
+
+.orbitCopy small {
+  margin-bottom: 7px;
+  color: #6e7c91;
+  font-size: 8px;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  line-height: 1.35;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+.orbitCopy b {
+  color: var(--pw-blue);
+  font-family: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", sans-serif;
+  font-size: clamp(12px, 1.15vw, 16px);
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
 }
 
 .landscapeIssues {
   display: grid;
-  gap: 22px;
+  gap: 12px;
 }
 
 .landscapeIssue {
@@ -238,6 +265,16 @@
   grid-template-columns: 48px minmax(0, 1fr);
   gap: 14px;
   align-items: center;
+  width: 100%;
+  margin: 0;
+  padding: 9px 10px;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 220ms ease, background-color 220ms ease, box-shadow 220ms ease;
 }
 
 .landscapeIssue::before {
@@ -260,6 +297,23 @@
   background: #eef4ff;
   color: var(--pw-blue);
   box-shadow: 0 0 0 7px rgba(37, 99, 235, 0.035);
+}
+
+.landscapeIssueActive {
+  border-color: rgba(37, 99, 235, 0.12);
+  background: rgba(37, 99, 235, 0.045);
+  box-shadow: 0 12px 30px rgba(37, 99, 235, 0.06);
+}
+
+.landscapeIssueActive .issueIcon {
+  background: var(--pw-blue);
+  color: #ffffff;
+  box-shadow: 0 0 0 7px rgba(37, 99, 235, 0.08);
+}
+
+.landscapeIssue:focus-visible {
+  outline: 2px solid var(--pw-blue);
+  outline-offset: 3px;
 }
 
 .issueIcon svg {
@@ -343,12 +397,6 @@
   .landscapeProgress {
     width: 36px;
     height: 36px;
-    border-width: 7px;
-  }
-
-  .landscapeProgress span {
-    inset: -7px;
-    border-width: 7px;
   }
 
   .landscapeGrid {
@@ -381,8 +429,8 @@
   }
 
   .landscapeIssues {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 26px 18px;
+    grid-template-columns: 1fr;
+    gap: 8px;
   }
 
   .landscapeIssue {
@@ -412,6 +460,1070 @@
 
 @media (prefers-reduced-motion: reduce) {
   .orbitPulse {
+    animation: none;
+  }
+}
+
+/* ----------------------- Problem landscape v2 ----------------------- */
+
+.landscapeV2 {
+  width: min(1560px, calc(100% - 80px));
+  margin: 0 auto;
+  padding: clamp(58px, 5.2vw, 76px) 0 clamp(46px, 4.6vw, 66px);
+}
+
+.landscapeV2Header {
+  position: relative;
+  margin-bottom: clamp(20px, 2.5vw, 34px);
+  padding-right: 360px;
+}
+
+.landscapeV2Header p {
+  margin: 0 0 12px;
+  color: #66738d;
+  font-size: 13px;
+  font-weight: 550;
+}
+
+.landscapeV2Header h2 {
+  margin: 0;
+  color: #0b0d12;
+  font-family: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", sans-serif;
+  font-size: clamp(50px, 3.7vw, 60px);
+  font-weight: 700;
+  line-height: 1.03;
+  letter-spacing: -0.045em;
+}
+
+.landscapeV2Header > span {
+  display: block;
+  max-width: 690px;
+  margin-top: 17px;
+  color: #667793;
+  font-size: clamp(15px, 1.08vw, 17px);
+  line-height: 1.55;
+}
+
+.landscapeBrand {
+  position: absolute;
+  top: 4px;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: #68758d;
+  font-size: 9px;
+  font-style: normal;
+  font-weight: 650;
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.landscapeBrand b {
+  color: #111827;
+  font-size: inherit;
+  font-weight: 800;
+}
+
+.landscapeBrand i {
+  width: 48px;
+  height: 1px;
+  background: #bbc4d2;
+}
+
+.landscapeBrand span {
+  font-style: normal;
+}
+
+.landscapeV2Grid {
+  display: grid;
+  grid-template-columns:
+    minmax(285px, 0.86fr)
+    minmax(520px, 1.52fr)
+    minmax(350px, 1fr);
+  gap: clamp(26px, 2.6vw, 42px);
+  align-items: start;
+}
+
+.diagnosticList {
+  display: grid;
+  padding-top: 84px;
+}
+
+.diagnosticItem {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  gap: 22px;
+  align-items: start;
+  padding: 30px 0;
+  border-bottom: 1px solid #dfe4eb;
+}
+
+.diagnosticItem:first-child {
+  padding-top: 0;
+}
+
+.diagnosticItem:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.diagnosticIcon {
+  display: grid;
+  width: 54px;
+  height: 54px;
+  place-items: center;
+  border: 1px solid #e5e9ef;
+  border-radius: 50%;
+  background: #f6f7f9;
+  color: #111720;
+}
+
+.diagnosticIcon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.diagnosticItem h3 {
+  margin: 2px 0 0;
+  color: #111319;
+  font-family: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", sans-serif;
+  font-size: clamp(19px, 1.35vw, 21px);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.035em;
+}
+
+.diagnosticItem p {
+  max-width: 30ch;
+  margin: 9px 0 0;
+  color: #71809a;
+  font-size: 13px;
+  line-height: 1.48;
+}
+
+.network {
+  position: relative;
+  isolation: isolate;
+  width: min(100%, 600px);
+  aspect-ratio: 1;
+  justify-self: center;
+  margin-top: 2px;
+}
+
+.network::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 25%;
+  bottom: 4%;
+  left: 25%;
+  z-index: -1;
+  border-radius: 50%;
+  background: rgba(37, 99, 235, 0.035);
+  filter: blur(34px);
+  pointer-events: none;
+}
+
+.networkLines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.networkOrbit,
+.networkFlowPath,
+.networkCenterGuide,
+.networkActivePath {
+  fill: none;
+  vector-effect: non-scaling-stroke;
+}
+
+.networkOrbit {
+  stroke: rgba(74, 111, 171, 0.7);
+  stroke-width: 1.05;
+  stroke-dasharray: 2 5.2;
+  stroke-linecap: round;
+}
+
+.networkFlowPath {
+  stroke: #90a9cf;
+  stroke-width: 1.05;
+  stroke-dasharray: 2 5.2;
+  stroke-linecap: round;
+}
+
+.networkCenterGuide {
+  stroke: #c8d6ea;
+  stroke-width: 1;
+  stroke-dasharray: 2 5.4;
+  stroke-linecap: round;
+}
+
+.networkActivePath {
+  stroke: #0b66ff;
+  stroke-width: 2.1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 3px rgba(11, 102, 255, 0.14));
+}
+
+
+.networkAnchor {
+  fill: #7085a7;
+  stroke: #ffffff;
+  stroke-width: 1.4;
+}
+
+.networkAnchorActive {
+  fill: #0b66ff;
+  stroke: #ffffff;
+  stroke-width: 1.4;
+}
+
+
+
+
+.networkCore {
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  display: grid;
+  width: 150px;
+  aspect-ratio: 1;
+  place-content: center;
+  translate: -50% -50%;
+  overflow: hidden;
+  border: 1px solid #dce3ec;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #ffffff 0%, #fbfcfe 100%);
+  color: #0f1117;
+  text-align: center;
+  box-shadow:
+    0 0 0 11px rgba(248, 250, 252, 0.96),
+    0 0 0 12px rgba(219, 226, 235, 0.7),
+    0 12px 28px rgba(39, 53, 76, 0.06);
+}
+
+.networkCore > span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(100% - 22px);
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border: 1px solid #edf1f5;
+  border-radius: 50%;
+  background: transparent;
+}
+
+.networkCoreLabel {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+}
+
+.networkCoreMark {
+  display: block;
+  width: 28px;
+  height: 10px;
+  margin: 0 auto 7px;
+  border-top: 2px solid #1767ff;
+  border-radius: 50%;
+  transform: rotate(-9deg);
+}
+
+.networkCore small,
+.networkCore strong {
+  position: relative;
+  z-index: 1;
+  display: block;
+  color: #0f1117;
+  font-family: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 0.98;
+  letter-spacing: -0.04em;
+}
+
+.networkCore strong {
+  margin-top: 0;
+}
+
+.networkCoreMeta {
+  display: block;
+  max-width: 108px;
+  margin: 12px auto 0;
+  color: #73809a;
+  font-size: 7px;
+  font-style: normal;
+  font-weight: 750;
+  line-height: 1.45;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.networkNode {
+  position: absolute;
+  display: grid;
+  width: 126px;
+  justify-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #202938;
+  font: inherit;
+  cursor: pointer;
+  transform-origin: center;
+  translate: -50% -30px;
+}
+
+.networkNode > span {
+  position: relative;
+  display: grid;
+  width: 58px;
+  height: 58px;
+  place-items: center;
+  overflow: visible;
+  border: 1px solid #d8e0ea;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow:
+    0 0 0 7px rgba(248, 250, 252, 0.96),
+    0 0 0 8px rgba(217, 225, 235, 0.7),
+    0 7px 18px rgba(31, 42, 61, 0.045);
+  transition:
+    color 260ms ease,
+    background-color 260ms ease,
+    border-color 260ms ease,
+    box-shadow 260ms ease;
+}
+
+.networkNode > span::before {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border-radius: inherit;
+  background: radial-gradient(circle at 28% 18%, rgba(255, 255, 255, 0.86), transparent 43%);
+  pointer-events: none;
+}
+
+
+.networkNode svg {
+  position: relative;
+  z-index: 1;
+  width: 24px;
+  height: 24px;
+}
+
+.networkNode small {
+  max-width: 126px;
+  color: #5f6d86;
+  font-size: 10.5px;
+  font-weight: 650;
+  line-height: 1.15;
+  text-align: center;
+  transition: color 260ms ease;
+}
+
+.networkNodeActive > span {
+  border-color: #1667ff;
+  background: linear-gradient(145deg, #2876ff 0%, #0758ef 100%);
+  color: #ffffff;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.42),
+    0 0 0 9px rgba(234, 241, 255, 0.98),
+    0 0 0 10px rgba(11, 102, 255, 0.24),
+    0 12px 27px rgba(22, 103, 255, 0.19);
+}
+
+.networkNodeActive small {
+  color: #0758ef;
+}
+
+.networkNode:focus-visible {
+  outline: 2px solid #1667ff;
+  outline-offset: 5px;
+  border-radius: 10px;
+}
+
+.networkNode1 { top: 15.5%; left: 50%; }
+.networkNode2 { top: 31%; left: 74.5%; }
+.networkNode3 { top: 55.5%; left: 85%; }
+.networkNode4 { top: 76%; left: 81%; }
+.networkNode5 { top: 55.5%; left: 16%; }
+.networkNode6 { top: 31%; left: 25.5%; }
+
+.networkNode1 small {
+  order: -1;
+}
+
+.activeProblemPanel {
+  min-width: 0;
+  min-height: 566px;
+  padding: 14px 0 0 clamp(30px, 2.7vw, 42px);
+  border-left: 1px solid #d8dfe8;
+}
+
+.activeProblemEyebrow {
+  margin: 0 0 26px;
+  color: #0758ef;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+}
+
+.activeProblemPanel h3 {
+  max-width: 13ch;
+  margin: 0;
+  color: #111319;
+  font-family: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", sans-serif;
+  font-size: clamp(31px, 2.4vw, 38px);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.045em;
+}
+
+.activeProblemDetails {
+  display: grid;
+  gap: 0;
+  margin: 28px 0 0;
+  border-top: 1px solid #dfe4eb;
+}
+
+.activeProblemDetails > div {
+  padding: 19px 0 20px;
+  border-bottom: 1px solid #dfe4eb;
+}
+
+.activeProblemDetails dt {
+  margin: 0 0 13px;
+  color: #31415c;
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+}
+
+.detailRow {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr);
+  gap: 18px;
+  align-items: center;
+}
+
+.detailIcon {
+  display: grid;
+  width: 50px;
+  height: 50px;
+  place-items: center;
+  border-radius: 50%;
+  background: #f4f5f7;
+  color: #111827;
+}
+
+.detailIcon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.activeProblemDetails dd {
+  margin: 0;
+  color: #66758f;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.landscapeSelector {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: end;
+  gap: 24px;
+  margin-top: 16px;
+}
+
+.landscapeSelector > span {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  color: #74819a;
+  font-size: 8.5px;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.landscapeSelector > span b {
+  color: #263148;
+  font-size: inherit;
+  font-weight: 800;
+}
+
+.landscapeSelector > span i {
+  width: 46px;
+  height: 1px;
+  background: #bdc7d4;
+}
+
+.selectorSteps,
+.selectorArrows {
+  display: flex;
+  align-items: center;
+}
+
+.selectorSteps {
+  justify-self: center;
+}
+
+.selectorSteps button {
+  position: relative;
+  display: grid;
+  width: 76px;
+  height: 48px;
+  align-items: end;
+  justify-items: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #6d7a92;
+  font: inherit;
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 220ms ease;
+}
+
+.selectorSteps button::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 50%;
+  z-index: 2;
+  width: 9px;
+  height: 9px;
+  translate: -50% 0;
+  border: 1px solid #9dabbf;
+  border-radius: 50%;
+  background: #ffffff;
+}
+
+.selectorSteps button::after {
+  content: "";
+  position: absolute;
+  top: 7px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: #cdd6e2;
+}
+
+.selectorSteps button:first-child::after {
+  left: 50%;
+  width: 50%;
+}
+
+.selectorSteps button:last-child::after {
+  width: 50%;
+}
+
+.selectorSteps .landscapeSelectorActive {
+  color: #293a55;
+}
+
+.selectorSteps .landscapeSelectorActive::before {
+  top: 0;
+  width: 13px;
+  height: 13px;
+  border-color: #1767ff;
+  background: #1767ff;
+}
+
+.selectorArrows {
+  justify-self: end;
+  gap: 10px;
+}
+
+.selectorArrows button {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #f3f4f6;
+  color: #0f1117;
+  cursor: pointer;
+  transition:
+    background 220ms ease,
+    color 220ms ease,
+    transform 220ms ease;
+}
+
+.selectorArrows button:hover {
+  background: #edf3ff;
+  color: #0758ef;
+  transform: translateY(-1px);
+}
+
+.selectorArrows svg {
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+
+/* ----------------------- Responsive: Problem landscape v2 ----------------------- */
+
+@media (max-width: 1280px) {
+  .landscapeV2 {
+    width: min(1180px, calc(100% - 56px));
+  }
+
+  .landscapeV2Header {
+    padding-right: 300px;
+  }
+
+  .landscapeV2Grid {
+    grid-template-columns: minmax(250px, 0.78fr) minmax(0, 1.22fr);
+    gap: 34px;
+    align-items: center;
+  }
+
+  .diagnosticList {
+    padding-top: 42px;
+  }
+
+  .network {
+    width: min(100%, 560px);
+  }
+
+  .activeProblemPanel {
+    grid-column: 1 / -1;
+    min-height: 0;
+    margin-top: 8px;
+    padding: 34px 0 0;
+    border-top: 1px solid #d8dfe8;
+    border-left: 0;
+  }
+
+  .activeProblemPanel h3 {
+    max-width: 20ch;
+  }
+
+  .activeProblemDetails {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .activeProblemDetails > div {
+    padding-right: 20px;
+  }
+
+  .landscapeSelector {
+    grid-template-columns: 1fr auto;
+  }
+
+  .landscapeSelector > span {
+    display: none;
+  }
+}
+
+@media (max-width: 1024px) {
+  .landscapeV2 {
+    width: min(940px, calc(100% - 40px));
+    padding: 64px 0 66px;
+  }
+
+  .landscapeV2Header {
+    padding-right: 0;
+    margin-bottom: 38px;
+  }
+
+  .landscapeBrand {
+    display: none;
+  }
+
+  .landscapeV2Grid {
+    grid-template-columns: 1fr;
+    gap: 34px;
+  }
+
+  .diagnosticList {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    padding-top: 0;
+  }
+
+  .diagnosticList > div {
+    display: contents;
+  }
+
+  .diagnosticItem {
+    grid-template-columns: 46px minmax(0, 1fr);
+    gap: 13px;
+    min-height: 132px;
+    padding: 18px;
+    border: 1px solid #e2e7ee;
+    border-radius: 18px;
+    background: #fbfcfd;
+  }
+
+  .diagnosticItem:first-child,
+  .diagnosticItem:last-child {
+    padding: 18px;
+    border: 1px solid #e2e7ee;
+  }
+
+  .diagnosticIcon {
+    width: 44px;
+    height: 44px;
+  }
+
+  .diagnosticIcon svg {
+    width: 21px;
+    height: 21px;
+  }
+
+  .diagnosticItem h3 {
+    font-size: 16px;
+  }
+
+  .diagnosticItem p {
+    margin-top: 7px;
+    font-size: 11.5px;
+    line-height: 1.42;
+  }
+
+  .network {
+    width: min(100%, 570px);
+    margin-inline: auto;
+  }
+
+  .activeProblemPanel {
+    margin-top: 0;
+    padding-top: 30px;
+  }
+
+  .activeProblemDetails {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .activeProblemDetails > div {
+    padding-right: 18px;
+  }
+
+  .detailRow {
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: 13px;
+  }
+
+  .detailIcon {
+    width: 42px;
+    height: 42px;
+  }
+
+  .activeProblemDetails dd {
+    font-size: 11.5px;
+  }
+
+  .landscapeSelector {
+    margin-top: 26px;
+  }
+
+  .selectorSteps button {
+    width: 62px;
+  }
+}
+
+@media (max-width: 820px) {
+  .landscapeV2 {
+    width: calc(100% - 32px);
+    padding: 58px 0 64px;
+  }
+
+  .landscapeV2Header h2 {
+    font-size: 44px;
+    line-height: 48px;
+  }
+
+  .landscapeV2Header > span {
+    max-width: 610px;
+    font-size: 14px;
+  }
+
+  .diagnosticList {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .diagnosticItem,
+  .diagnosticItem:first-child,
+  .diagnosticItem:last-child {
+    min-height: 0;
+    padding: 16px 18px;
+  }
+
+  .diagnosticItem p {
+    max-width: none;
+  }
+
+  .network {
+    width: min(100%, 540px);
+  }
+
+  .activeProblemPanel h3 {
+    font-size: 34px;
+  }
+
+  .activeProblemDetails {
+    grid-template-columns: 1fr;
+  }
+
+  .activeProblemDetails > div {
+    padding-right: 0;
+  }
+
+  .landscapeSelector {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+
+  .selectorSteps {
+    width: 100%;
+    justify-self: stretch;
+  }
+
+  .selectorSteps button {
+    flex: 1;
+    width: auto;
+    min-width: 0;
+  }
+
+  .selectorArrows {
+    justify-self: end;
+  }
+}
+
+@media (max-width: 600px) {
+  .landscapeV2 {
+    width: calc(100% - 24px);
+    padding: 50px 0 58px;
+  }
+
+  .landscapeV2Header {
+    margin-bottom: 32px;
+  }
+
+  .landscapeV2Header p {
+    margin-bottom: 10px;
+    font-size: 12px;
+  }
+
+  .landscapeV2Header h2 {
+    font-size: clamp(34px, 10vw, 40px);
+    line-height: 1.05;
+  }
+
+  .landscapeV2Header > span {
+    margin-top: 14px;
+    font-size: 13px;
+    line-height: 1.52;
+  }
+
+  .diagnosticItem {
+    grid-template-columns: 42px minmax(0, 1fr);
+    gap: 12px;
+    padding: 14px 15px;
+    border-radius: 15px;
+  }
+
+  .diagnosticItem:first-child,
+  .diagnosticItem:last-child {
+    padding: 14px 15px;
+  }
+
+  .diagnosticIcon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .diagnosticItem h3 {
+    font-size: 15px;
+  }
+
+  .diagnosticItem p {
+    font-size: 11px;
+  }
+
+  .network {
+    width: min(100%, 430px);
+  }
+
+  .networkCore {
+    width: 118px;
+  }
+
+  .networkCore small,
+  .networkCore strong {
+    font-size: 14px;
+  }
+
+  .networkCoreMeta {
+    max-width: 82px;
+    margin-top: 9px;
+    font-size: 5.8px;
+  }
+
+  .networkNode {
+    width: 84px;
+    gap: 6px;
+  }
+
+  .networkNode > span {
+    width: 43px;
+    height: 43px;
+    box-shadow:
+      0 0 0 5px rgba(248, 250, 252, 0.96),
+      0 0 0 6px rgba(217, 225, 235, 0.7),
+      0 6px 14px rgba(31, 42, 61, 0.04);
+  }
+
+  .networkNodeActive > span {
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.42),
+      0 0 0 6px rgba(234, 241, 255, 0.98),
+      0 0 0 7px rgba(11, 102, 255, 0.22),
+      0 9px 20px rgba(11, 102, 255, 0.17);
+  }
+
+  .networkNode svg {
+    width: 19px;
+    height: 19px;
+  }
+
+  .networkNode small {
+    max-width: 84px;
+    font-size: 7.6px;
+    line-height: 1.1;
+  }
+
+  .activeProblemPanel {
+    padding-top: 25px;
+  }
+
+  .activeProblemEyebrow {
+    margin-bottom: 18px;
+  }
+
+  .activeProblemPanel h3 {
+    max-width: 15ch;
+    font-size: 29px;
+  }
+
+  .activeProblemDetails {
+    margin-top: 22px;
+  }
+
+  .activeProblemDetails > div {
+    padding: 16px 0 17px;
+  }
+
+  .detailRow {
+    grid-template-columns: 42px minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .detailIcon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .detailIcon svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .activeProblemDetails dd {
+    font-size: 11px;
+  }
+
+  .selectorSteps button {
+    height: 44px;
+    font-size: 9px;
+  }
+
+  .selectorArrows button {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+@media (max-width: 420px) {
+  .landscapeV2 {
+    width: calc(100% - 20px);
+  }
+
+  .network {
+    width: 100%;
+  }
+
+  .networkCore {
+    width: 104px;
+  }
+
+  .networkCore small,
+  .networkCore strong {
+    font-size: 13px;
+  }
+
+  .networkCoreMeta {
+    display: none;
+  }
+
+  .networkNode {
+    width: 76px;
+  }
+
+  .networkNode > span {
+    width: 39px;
+    height: 39px;
+  }
+
+  .networkNode small {
+    max-width: 76px;
+    font-size: 7px;
+  }
+
+  .networkNode2 { left: 73.5%; }
+  .networkNode3 { left: 83.5%; }
+  .networkNode4 { left: 79.5%; }
+  .networkNode5 { left: 17.5%; }
+  .networkNode6 { left: 26.5%; }
+
+  .activeProblemPanel h3 {
+    font-size: 27px;
+  }
+
+  .selectorSteps button {
+    font-size: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .networkOrbit {
     animation: none;
   }
 }

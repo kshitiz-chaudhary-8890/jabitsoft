@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import RevealHeading from "./common/RevealHeading.jsx";
 
 const projects = [
   {
@@ -209,17 +208,31 @@ export default function RecentWorks() {
         });
 
         // Match the Skiper17 interaction:
-        // current card shrinks + rotates while the next card slides upward.
+        // current card recedes + rotates slightly while the next card slides
+        // upward and its content settles into place.
         for (let index = 0; index < cards.length - 1; index += 1) {
           const currentCard = cards[index];
           const nextCard = cards[index + 1];
+
+          const currentContent = currentCard.querySelector(".rw-card__content");
+          const nextContent = nextCard.querySelector(".rw-card__content");
 
           timeline
             .to(
               currentCard,
               {
-                scale: 0.7,
-                rotation: 5,
+                scale: 0.82,
+                rotation: 2.5,
+                duration: 1,
+                ease: "none",
+              },
+              index,
+            )
+            .to(
+              currentContent,
+              {
+                y: 30,
+                autoAlpha: 0.35,
                 duration: 1,
                 ease: "none",
               },
@@ -234,6 +247,20 @@ export default function RecentWorks() {
               },
               index,
             );
+
+          if (nextContent) {
+            timeline.fromTo(
+              nextContent,
+              { y: 60, autoAlpha: 0 },
+              {
+                y: 0,
+                autoAlpha: 1,
+                duration: 1,
+                ease: "none",
+              },
+              index,
+            );
+          }
         }
 
         const refreshFrame = requestAnimationFrame(() => {
@@ -253,6 +280,78 @@ export default function RecentWorks() {
     };
   }, []);
 
+  useLayoutEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return undefined;
+
+    const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+    if (reduced) return undefined;
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    const ctx = gsap.context(() => {
+      const headingFill = section.querySelector(".section-heading-fill");
+      if (headingFill) {
+        gsap.fromTo(
+          headingFill,
+          { backgroundSize: "100% 100%, 0% 100%" },
+          {
+            backgroundSize: "100% 100%, 100% 100%",
+            ease: "none",
+            scrollTrigger: {
+              trigger: headingFill,
+              start: "top 92%",
+              end: "top 38%",
+              scrub: 0.7,
+              invalidateOnRefresh: true,
+            },
+          }
+        );
+      }
+
+      const frames = gsap.utils.toArray(".rw-visual__image-frame", section);
+
+      const parallaxFrames = (strength) => {
+        frames.forEach((frame) => {
+          const img = frame.querySelector(":scope > img");
+          if (!img) return;
+
+          gsap.fromTo(
+            img,
+            { scale: 1 + 0.14 * strength, yPercent: -7 * strength },
+            {
+              scale: 1 + 0.01 * strength,
+              yPercent: 7 * strength,
+              ease: "none",
+              scrollTrigger: {
+                trigger: frame,
+                start: "top 115%",
+                end: "top 40%",
+                scrub: 1,
+                invalidateOnRefresh: true,
+              },
+            }
+          );
+        });
+      };
+
+      const mm = gsap.matchMedia(reduced ? undefined : section);
+      mm.add("(min-width: 1024px) and (prefers-reduced-motion: no-preference)", () =>
+        parallaxFrames(1),
+      );
+      mm.add(
+        "(min-width: 640px) and (max-width: 1023.98px) and (prefers-reduced-motion: no-preference)",
+        () => parallaxFrames(0.75),
+      );
+      mm.add(
+        "(max-width: 639.98px) and (prefers-reduced-motion: no-preference)",
+        () => parallaxFrames(0.5),
+      );
+    }, section);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
     <>
       <section
@@ -263,7 +362,11 @@ export default function RecentWorks() {
       >
         <header className="section-title centered recent-works__head">
           <p className="recent-works__eyebrow">(Selected software projects)</p>
-          <RevealHeading id="recent-works-title">Recent Works</RevealHeading>
+          <h2 id="recent-works-title" data-reveal-heading>
+            <span className="section-heading-fill">
+              Recent Works
+            </span>
+          </h2>
           <p className="recent-works__subhead">
             A closer look at the platforms, products, and business systems we
             design and engineer for growing teams.

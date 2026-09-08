@@ -4,7 +4,6 @@ import { type KeyboardEvent, useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { AnimatePresence, MotionConfig, motion } from "motion/react";
-import RevealHeading from "../../common/RevealHeading.jsx";
 import styles from "./HowWeBuild.module.css";
 
 const stages = [
@@ -150,14 +149,58 @@ export default function HowWeBuild() {
 
     gsap.registerPlugin(ScrollTrigger);
     const context = gsap.context(() => {
-      gsap.from("[data-build-reveal]", {
-        scrollTrigger: { trigger: section, start: "top 78%", once: true },
-        opacity: 0,
-        y: 24,
-        duration: 0.75,
-        stagger: 0.1,
-        ease: "power3.out",
+      const lineGroups = gsap.utils.toArray<SVGGElement>(
+        [styles.flowLines, styles.pipelineLine, styles.releasePath, styles.loopLine]
+          .map((name) => `.${name}`)
+          .join(", "),
+        section,
+      );
+
+      const tl = gsap.timeline({
+        scrollTrigger: { trigger: section, start: "top 74%", once: true },
+        defaults: { ease: "power3.out" },
       });
+
+      tl.from("[data-build-reveal]", {
+        opacity: 0,
+        y: 70,
+        scale: 0.98,
+        duration: 1.0,
+        stagger: 0.15,
+      });
+
+      if (lineGroups.length) {
+        tl.fromTo(
+          lineGroups,
+          { opacity: 0 },
+          {
+            opacity: 1,
+            duration: 0.8,
+            stagger: 0.1,
+            ease: "power2.out",
+          },
+          "-=0.35",
+        );
+      }
+
+      const headingFill = section.querySelector(".section-heading-fill");
+      if (headingFill) {
+        gsap.fromTo(
+          headingFill,
+          { backgroundSize: "100% 100%, 0% 100%" },
+          {
+            backgroundSize: "100% 100%, 100% 100%",
+            ease: "none",
+            scrollTrigger: {
+              trigger: headingFill,
+              start: "top 92%",
+              end: "top 38%",
+              scrub: 0.7,
+              invalidateOnRefresh: true,
+            },
+          }
+        );
+      }
     }, section);
 
     return () => context.revert();
@@ -174,7 +217,11 @@ export default function HowWeBuild() {
         <div className={styles.shell}>
           <header className={styles.header} data-build-reveal>
             <p className={styles.eyebrow}>(Software development process)</p>
-            <RevealHeading as="h2" id="how-we-build-title">How We Build Reliable Software</RevealHeading>
+            <h2 id="how-we-build-title" data-reveal-heading>
+              <span className="section-heading-fill">
+                How We Build Reliable Software
+              </span>
+            </h2>
             <p className={styles.intro}>
               From product discovery and UX design to software engineering, cloud deployment, and
               ongoing optimisation, we turn complex business needs into reliable digital products.
