@@ -288,7 +288,7 @@ export default function CompanyStats() {
 
         .company-stats-clean {
           width: 100%;
-          padding: 96px 0 118px;
+          padding: 96px 0 56px;
           background: #ffffff;
           color: #131313;
         }
@@ -296,7 +296,7 @@ export default function CompanyStats() {
         .company-stats-clean__shell {
           display: grid;
           grid-template-columns: minmax(320px, 0.78fr) minmax(0, 1.22fr);
-          width: min(1420px, calc(100% - 64px));
+          width: min(1360px, calc(100% - 64px));
           margin: 0 auto;
           gap: clamp(64px, 7vw, 120px);
           align-items: stretch;
@@ -610,11 +610,11 @@ export default function CompanyStats() {
 
         @media (max-width: 680px) {
           .company-stats-clean {
-            padding: 64px 0 82px;
+            padding: 64px 0 40px;
           }
 
           .company-stats-clean__shell {
-            width: calc(100% - 24px);
+            width: calc(100% - 28px);
             gap: 38px;
           }
 

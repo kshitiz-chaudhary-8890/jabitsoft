@@ -132,6 +132,135 @@ function toList(value: string): string[] {
     .filter(Boolean);
 }
 
+const landscapeMetrics = [
+  {
+    value: "06",
+    title: "Business problems mapped",
+    description: "From manual operations and cloud limits to weak customer journeys and discoverability.",
+  },
+  {
+    value: "03",
+    title: "Recurring friction signals",
+    description: "Disconnected tools, repeated handoffs, and limited visibility slow teams down most often.",
+  },
+  {
+    value: "01",
+    title: "Connected delivery roadmap",
+    description: "We turn operational symptoms into a focused software, platform, and growth plan.",
+  },
+] as const;
+
+const landscapeIssues = [
+  ["Disconnected systems", "Data and workflows stay isolated across tools."],
+  ["Manual handoffs", "Routine work depends on people moving information."],
+  ["Limited visibility", "Progress, performance, and decisions are harder to track."],
+  ["Scaling bottlenecks", "Processes and platforms struggle as demand grows."],
+] as const;
+
+function LandscapeIcon({ index }: { index: number }) {
+  if (index === 0) {
+    return <path d="M7 8.5 12 5l5 3.5M7 15.5l5 3.5 5-3.5M7 8.5v7M17 8.5v7M12 5v5m0 4v5" />;
+  }
+  if (index === 1) {
+    return <path d="M5 8h12m-3-3 3 3-3 3M19 16H7m3-3-3 3 3 3" />;
+  }
+  if (index === 2) {
+    return (
+      <>
+        <path d="M3.5 12s3.2-5 8.5-5 8.5 5 8.5 5-3.2 5-8.5 5-8.5-5-8.5-5Z" />
+        <circle cx="12" cy="12" r="2.5" />
+      </>
+    );
+  }
+  return <path d="M5 18v-5h3v5m3 0V9h3v9m3 0V5h3v13M4 19h17" />;
+}
+
+function ProblemLandscapeOverview({ reducedMotion }: { reducedMotion: boolean }) {
+  return (
+    <motion.div
+      className={styles.landscape}
+      initial={reducedMotion ? false : "hidden"}
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.25 }}
+      variants={{
+        hidden: { opacity: 0, y: 28 },
+        visible: {
+          opacity: 1,
+          y: 0,
+          transition: { duration: 0.7, ease: "easeOut", staggerChildren: 0.1 },
+        },
+      }}
+      aria-labelledby="problem-landscape-title"
+    >
+      <div className={styles.landscapeTop}>
+        <div className={styles.landscapeLabel}>
+          <span>01</span>
+          <h2 id="problem-landscape-title">Problem landscape</h2>
+        </div>
+        <div className={styles.landscapeProgress} aria-hidden="true">
+          <span />
+        </div>
+      </div>
+
+      <div className={styles.landscapeGrid}>
+        <div className={styles.landscapeMetrics}>
+          {landscapeMetrics.map((metric, index) => (
+            <motion.article
+              className={styles.landscapeMetric}
+              key={metric.value}
+              variants={{ hidden: { opacity: 0, x: -22 }, visible: { opacity: 1, x: 0 } }}
+              transition={{ duration: 0.55, delay: index * 0.08 }}
+            >
+              <strong>{metric.value}</strong>
+              <h3>{metric.title}</h3>
+              <p>{metric.description}</p>
+              <span className={styles.metricTag}>Jabitsoft discovery framework</span>
+            </motion.article>
+          ))}
+        </div>
+
+        <div className={styles.landscapeVisual} aria-hidden="true">
+          <motion.div
+            className={styles.orbitOuter}
+            animate={reducedMotion ? undefined : { rotate: 360 }}
+            transition={{ duration: 36, repeat: Infinity, ease: "linear" }}
+          >
+            <i />
+            <i />
+            <i />
+          </motion.div>
+          <div className={styles.orbitCore}>
+            <span className={styles.orbitSweep} />
+            <span className={styles.orbitPulse} />
+            <b>Friction</b>
+          </div>
+        </div>
+
+        <div className={styles.landscapeIssues}>
+          {landscapeIssues.map(([title, description], index) => (
+            <motion.article
+              className={styles.landscapeIssue}
+              key={title}
+              variants={{ hidden: { opacity: 0, x: 24 }, visible: { opacity: 1, x: 0 } }}
+              transition={{ duration: 0.5, delay: 0.18 + index * 0.09 }}
+            >
+              <span className={styles.issueIcon}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+                  <LandscapeIcon index={index} />
+                </svg>
+              </span>
+              <span>
+                <strong>{title}</strong>
+                <small>{description}</small>
+              </span>
+            </motion.article>
+          ))}
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
 /* ------------------------- Per-scene glyph (SVG) ------------------------- */
 
 function SceneGlyph({ type }: { type: VisualType }) {
@@ -634,6 +763,7 @@ export default function ProblemsWeSolve() {
         id="problems"
         aria-labelledby="problems-title"
       >
+        <ProblemLandscapeOverview reducedMotion={Boolean(reducedMotion)} />
         <SectionHeader />
 
         {/* Desktop horizontal narrative */}

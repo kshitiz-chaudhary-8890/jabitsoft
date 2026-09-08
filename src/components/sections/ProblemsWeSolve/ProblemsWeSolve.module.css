@@ -12,7 +12,7 @@
 
   position: relative;
   width: 100%;
-  background: #fbfcfe;
+  background: #ffffff;
   color: var(--pw-ink);
   font-family:
     Inter,
@@ -22,12 +22,406 @@
     sans-serif;
 }
 
+/* ----------------------- Problem landscape overview ----------------------- */
+
+.landscape {
+  width: min(1360px, calc(100% - 64px));
+  margin: 0 auto;
+  padding: clamp(76px, 8vw, 112px) 0 clamp(72px, 7vw, 104px);
+}
+
+.landscapeTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: clamp(54px, 6vw, 88px);
+}
+
+.landscapeLabel {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+}
+
+.landscapeLabel > span {
+  color: #9aa3b1;
+  font-family: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", sans-serif;
+  font-size: clamp(36px, 3.6vw, 52px);
+  font-weight: 400;
+  line-height: 1;
+}
+
+.landscapeLabel h2 {
+  margin: 0;
+  color: #131313;
+  font-family: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", sans-serif;
+  font-size: clamp(28px, 2.4vw, 36px);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+}
+
+.landscapeProgress {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border: 8px solid #edf0f4;
+  border-radius: 50%;
+}
+
+.landscapeProgress span {
+  position: absolute;
+  inset: -8px;
+  border: 8px solid transparent;
+  border-top-color: var(--pw-blue);
+  border-right-color: var(--pw-blue);
+  border-radius: inherit;
+  transform: rotate(-24deg);
+}
+
+.landscapeGrid {
+  display: grid;
+  grid-template-columns: minmax(240px, 0.78fr) minmax(380px, 1.35fr) minmax(260px, 0.87fr);
+  gap: clamp(30px, 4vw, 64px);
+  align-items: center;
+}
+
+.landscapeMetrics {
+  display: grid;
+  gap: 34px;
+}
+
+.landscapeMetric {
+  position: relative;
+  padding-right: 14px;
+}
+
+.landscapeMetric::after {
+  content: "";
+  position: absolute;
+  top: 27px;
+  left: calc(100% + 4px);
+  width: clamp(54px, 8vw, 112px);
+  height: 1px;
+  background: linear-gradient(90deg, rgba(37, 99, 235, 0.42), rgba(37, 99, 235, 0.08));
+}
+
+.landscapeMetric > strong {
+  display: block;
+  color: #111827;
+  font-family: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", sans-serif;
+  font-size: clamp(44px, 4vw, 62px);
+  font-weight: 650;
+  line-height: 0.98;
+  letter-spacing: -0.055em;
+}
+
+.landscapeMetric h3 {
+  margin: 10px 0 0;
+  color: #202838;
+  font-size: 14px;
+  font-weight: 650;
+  line-height: 1.35;
+}
+
+.landscapeMetric p {
+  max-width: 30ch;
+  margin: 7px 0 0;
+  color: #687386;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.metricTag {
+  display: inline-flex;
+  margin-top: 10px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  background: #f3f6fa;
+  color: #687386;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.landscapeVisual {
+  position: relative;
+  width: min(100%, 520px);
+  aspect-ratio: 1;
+  justify-self: center;
+}
+
+.orbitOuter,
+.orbitCore {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.orbitOuter {
+  inset: 3%;
+  border: 1px dashed rgba(37, 99, 235, 0.38);
+}
+
+.orbitOuter::before,
+.orbitOuter::after {
+  content: "";
+  position: absolute;
+  border-radius: inherit;
+  border: 1px solid rgba(37, 99, 235, 0.12);
+}
+
+.orbitOuter::before {
+  inset: 10%;
+}
+
+.orbitOuter::after {
+  inset: 22%;
+}
+
+.orbitOuter i {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border: 3px solid #ffffff;
+  border-radius: 50%;
+  background: var(--pw-blue);
+  box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.15);
+}
+
+.orbitOuter i:first-child { top: -6px; left: 50%; }
+.orbitOuter i:nth-child(2) { top: 50%; right: -6px; }
+.orbitOuter i:last-child { bottom: 8%; left: 15%; }
+
+.orbitCore {
+  inset: 14%;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid rgba(37, 99, 235, 0.13);
+  background: repeating-radial-gradient(circle, rgba(37, 99, 235, 0.035) 0 28px, rgba(37, 99, 235, 0.1) 29px 30px);
+}
+
+.orbitSweep {
+  position: absolute;
+  inset: 0 50% 0 0;
+  background: repeating-conic-gradient(from -90deg, rgba(37, 99, 235, 0.68) 0deg 2.3deg, transparent 2.3deg 5.8deg);
+  opacity: 0.72;
+}
+
+.orbitPulse {
+  width: 26%;
+  aspect-ratio: 1;
+  border: 1px solid rgba(37, 99, 235, 0.24);
+  border-radius: 50%;
+  background: rgba(37, 99, 235, 0.1);
+  box-shadow: 0 0 0 24px rgba(37, 99, 235, 0.035);
+  animation: landscapePulse 2.8s ease-in-out infinite;
+}
+
+.orbitCore b {
+  position: absolute;
+  color: var(--pw-blue);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.landscapeIssues {
+  display: grid;
+  gap: 22px;
+}
+
+.landscapeIssue {
+  position: relative;
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  gap: 14px;
+  align-items: center;
+}
+
+.landscapeIssue::before {
+  content: "";
+  position: absolute;
+  right: calc(100% + 14px);
+  width: clamp(34px, 5vw, 72px);
+  height: 1px;
+  background: linear-gradient(90deg, rgba(37, 99, 235, 0.08), rgba(37, 99, 235, 0.42));
+  transform-origin: right center;
+}
+
+.issueIcon {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  border: 1px solid rgba(37, 99, 235, 0.09);
+  border-radius: 50%;
+  background: #eef4ff;
+  color: var(--pw-blue);
+  box-shadow: 0 0 0 7px rgba(37, 99, 235, 0.035);
+}
+
+.issueIcon svg {
+  width: 23px;
+  height: 23px;
+}
+
+.landscapeIssue strong,
+.landscapeIssue small {
+  display: block;
+}
+
+.landscapeIssue strong {
+  color: #161b25;
+  font-family: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.landscapeIssue small {
+  max-width: 25ch;
+  margin-top: 5px;
+  color: #788294;
+  font-size: 11.5px;
+  line-height: 1.42;
+}
+
+@keyframes landscapePulse {
+  0%, 100% { transform: scale(0.92); opacity: 0.72; }
+  50% { transform: scale(1.08); opacity: 1; }
+}
+
+@media (max-width: 1100px) {
+  .landscapeGrid {
+    grid-template-columns: minmax(0, 1fr) minmax(300px, 0.9fr);
+  }
+
+  .landscapeMetrics {
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .landscapeMetric {
+    padding: 0 18px 0 0;
+  }
+
+  .landscapeMetric::after,
+  .landscapeIssue::before {
+    display: none;
+  }
+
+  .landscapeVisual {
+    width: min(100%, 440px);
+  }
+}
+
+@media (max-width: 680px) {
+  .landscape {
+    width: calc(100% - 28px);
+    padding: 64px 0 72px;
+  }
+
+  .landscapeTop {
+    margin-bottom: 42px;
+  }
+
+  .landscapeLabel {
+    gap: 12px;
+  }
+
+  .landscapeLabel > span {
+    font-size: 30px;
+  }
+
+  .landscapeLabel h2 {
+    font-size: 27px;
+  }
+
+  .landscapeProgress {
+    width: 36px;
+    height: 36px;
+    border-width: 7px;
+  }
+
+  .landscapeProgress span {
+    inset: -7px;
+    border-width: 7px;
+  }
+
+  .landscapeGrid {
+    grid-template-columns: 1fr;
+    gap: 44px;
+  }
+
+  .landscapeMetrics {
+    grid-column: auto;
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .landscapeMetric {
+    padding: 0 0 24px;
+    border-bottom: 1px solid var(--pw-line);
+  }
+
+  .landscapeMetric:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
+
+  .landscapeMetric p {
+    max-width: 42ch;
+  }
+
+  .landscapeVisual {
+    width: min(100%, 360px);
+  }
+
+  .landscapeIssues {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 26px 18px;
+  }
+
+  .landscapeIssue {
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .issueIcon {
+    width: 40px;
+    height: 40px;
+    box-shadow: 0 0 0 5px rgba(37, 99, 235, 0.035);
+  }
+
+  .issueIcon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .landscapeIssue strong {
+    font-size: 13px;
+  }
+
+  .landscapeIssue small {
+    font-size: 10.5px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orbitPulse {
+    animation: none;
+  }
+}
+
 /* ---------------------------- Header ---------------------------- */
 
 .header {
-  width: min(1320px, calc(100% - clamp(40px, 8vw, 96px)));
+  width: min(1360px, calc(100% - 64px));
   margin: 0 auto;
-  padding: clamp(72px, 8vw, 120px) 0 clamp(16px, 2vw, 28px);
+  padding: 56px 0 clamp(16px, 2vw, 28px);
 }
 
 .eyebrow {
@@ -40,12 +434,13 @@
 
 .header :global(h2) {
   margin: 0;
-  font-family: "Plus Jakarta Sans", Inter, sans-serif;
-  font-size: clamp(40px, 5.4vw, 72px);
-  font-weight: 650;
-  line-height: 1.02;
-  letter-spacing: -0.03em;
-  color: var(--pw-ink);
+  font-family: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", Inter, sans-serif;
+  font-size: 50px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 54px;
+  letter-spacing: normal;
+  color: rgb(19, 19, 19);
 }
 
 .header :global(h2) :global(.reveal-heading__visual),
@@ -86,7 +481,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background: #fbfcfe;
+  background: #ffffff;
 }
 
 .trackViewport {
@@ -115,10 +510,10 @@
 }
 
 .sceneInner {
-  width: 100%;
-  max-width: 1380px;
+  width: min(1360px, calc(100% - 64px));
+  max-width: none;
   margin: 0 auto;
-  padding: clamp(16px, 3vh, 40px) clamp(48px, 6vw, 96px) clamp(16px, 3vh, 40px);
+  padding: clamp(16px, 3vh, 40px) 0;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   column-gap: clamp(32px, 4.5vw, 72px);
@@ -419,7 +814,7 @@
   gap: clamp(16px, 3vw, 40px);
   padding: 0 clamp(48px, 6vw, 96px);
   border-top: 1px solid var(--pw-line);
-  background: #fbfcfe;
+  background: #ffffff;
 }
 
 .navHint {
@@ -471,7 +866,7 @@
   padding: 0;
   border: 1.5px solid var(--pw-line-strong);
   border-radius: 50%;
-  background: #fbfcfe;
+  background: #ffffff;
   color: var(--pw-muted);
   font-family: inherit;
   cursor: pointer;
@@ -521,7 +916,7 @@
 /* -------------------- Tablet / mobile vertical story -------------------- */
 
 .vertical {
-  width: min(960px, calc(100% - clamp(40px, 8vw, 72px)));
+  width: min(1360px, calc(100% - 64px));
   margin: 0 auto;
   padding: 0 0 clamp(64px, 8vw, 110px);
 }
@@ -618,6 +1013,7 @@
 @media (min-width: 1180px) {
   .section:not([data-reduced="true"]) .horizontal {
     display: block;
+    margin-top: clamp(-150px, -14vh, -96px);
   }
 
   .section:not([data-reduced="true"]) .vertical {
@@ -671,7 +1067,7 @@
 @media (max-width: 1320px) and (min-width: 1180px) {
   .sceneInner {
     column-gap: 40px;
-    padding: clamp(12px, 3vh, 32px) clamp(40px, 5vw, 64px);
+    padding: clamp(12px, 3vh, 32px) 0;
   }
 
   .sceneTitle {
@@ -685,7 +1081,7 @@
 
 @media (max-width: 1179px) {
   .header {
-    padding-top: 64px;
+    padding-top: 48px;
   }
 
   .intro {
@@ -699,7 +1095,19 @@
   }
 
   .vertical {
-    width: calc(100% - clamp(36px, 8vw, 48px));
+    width: calc(100% - 28px);
+  }
+}
+
+@media (max-width: 680px) {
+  .header {
+    width: calc(100% - 28px);
+    padding-top: 40px;
+  }
+
+  .header :global(h2) {
+    font-size: 42px;
+    line-height: 46px;
   }
 }
 

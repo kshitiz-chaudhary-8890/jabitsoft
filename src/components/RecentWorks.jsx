@@ -80,7 +80,14 @@ function ProjectVisual({ project }) {
   return (
     <div className={`rw-visual rw-visual--${project.visual}`}>
       <div className="rw-visual__image-frame">
-        <img src={project.image} alt={`${project.name} project visual`} loading="lazy" />
+        <img
+          src={project.image}
+          srcSet={`${project.image.replace(/w=\d+/, "w=640")} 640w, ${project.image.replace(/w=\d+/, "w=900")} 900w, ${project.image} 1400w`}
+          sizes="(max-width: 680px) calc(100vw - 32px), 520px"
+          alt={`${project.name} project visual`}
+          loading="lazy"
+          decoding="async"
+        />
         <div className="rw-visual__shade" />
 
         <div className="rw-visual__top">
@@ -1168,7 +1175,12 @@ export default function RecentWorks() {
 
         @media (max-width: 680px) {
           .recent-works {
-            padding: 64px 0 82px;
+            padding: 58px 0 72px;
+          }
+
+          .recent-works__head {
+            width: min(100% - 40px, 560px);
+            margin-bottom: 0;
           }
 
           .recent-works__pin-stage {
@@ -1179,119 +1191,678 @@ export default function RecentWorks() {
           }
 
           .recent-works__head h2 {
-            font-size: 42px;
-            line-height: 46px;
+            font-size: 38px;
+            line-height: 42px;
+          }
+
+          .recent-works__eyebrow {
+            margin-bottom: 10px;
+            font-size: 14px;
+            line-height: 21px;
           }
 
           .recent-works__subhead {
-            padding-inline: 8px;
+            max-width: 520px;
+            margin-top: 12px;
+            padding-inline: 0;
             font-size: 13px;
+            line-height: 1.62;
           }
 
           .recent-works__stack {
             display: flex;
-            width: calc(100% - 24px);
+            width: min(100% - 32px, 560px);
             height: auto;
             min-height: 0;
-            margin: 34px auto 0;
+            margin: 26px auto 0;
             flex-direction: column;
-            gap: 24px;
+            gap: 16px;
+            overflow: visible;
           }
 
           .recent-works .recent-work-card {
+            position: relative;
+            top: auto;
             grid-area: auto;
             height: auto;
-            min-height: 760px;
+            min-height: 0;
             max-height: none;
             aspect-ratio: auto;
+            border-radius: 22px;
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.10);
             transform: none !important;
+            will-change: auto;
+            contain: layout paint;
+            content-visibility: auto;
+            contain-intrinsic-size: 720px;
+          }
+
+          .recent-works .recent-work-card:last-child {
+            margin-bottom: 0;
+          }
+
+          .rw-card__ambient {
+            display: none;
           }
 
           .rw-card__content {
-            padding: 22px 20px;
+            display: block;
+            height: auto;
+            padding: 16px 15px 15px;
           }
 
           .rw-card__top {
+            display: grid;
             grid-template-columns: 1fr auto;
+            gap: 8px 12px;
+          }
+
+          .rw-card__count {
+            align-self: center;
+            font-size: 10px;
           }
 
           .rw-card__category {
             grid-column: 1 / -1;
             grid-row: 2;
             width: max-content;
-            margin-top: 8px;
+            min-height: 28px;
+            margin-top: 2px;
+            padding-inline: 10px;
+            font-size: 9px;
           }
 
           .rw-card__year {
             grid-column: 2;
             grid-row: 1;
+            gap: 6px;
+            font-size: 10px;
           }
 
           .rw-card__main {
-            padding: 26px 0 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            padding: 16px 0 14px;
+          }
+
+          .rw-card__visual-wrap {
+            order: -1;
+            width: 100%;
+            margin-bottom: 17px;
+            place-items: stretch;
+          }
+
+          .rw-visual {
+            width: 100%;
+            max-width: none;
+          }
+
+          .rw-visual__image-frame {
+            height: clamp(200px, 57vw, 255px);
+            border-radius: 16px;
+            box-shadow: none;
+          }
+
+          .rw-visual__caption {
+            margin-top: 7px;
+            font-size: 7px;
+          }
+
+          .rw-visual__top {
+            top: 12px;
+            right: 12px;
+            left: 12px;
+          }
+
+          .rw-visual__top span,
+          .rw-visual__top b {
+            min-height: 25px;
+            padding-inline: 8px;
+            font-size: 8px;
+          }
+
+          .rw-visual__overlay {
+            right: 12px;
+            bottom: 12px;
+            left: 12px;
+          }
+
+          .rw-visual__panel {
+            max-width: min(78%, 250px);
+            padding: 11px 12px;
+            border-radius: 12px;
+          }
+
+          .rw-visual__panel strong {
+            margin-top: 4px;
+            font-size: 13px;
+          }
+
+          .rw-visual__panel > span {
+            margin-top: 4px;
+            font-size: 8px;
+          }
+
+          .rw-visual__mini-grid {
+            width: 92px;
+            gap: 5px;
+          }
+
+          .rw-visual__mini-grid i {
+            padding: 7px 8px;
+            border-radius: 9px;
+          }
+
+          .rw-visual__mini-grid b {
+            font-size: 11px;
+          }
+
+          .rw-ai-flow {
+            width: 170px;
+            height: 82px;
+          }
+
+          .rw-ai-node {
+            min-width: 46px;
+            height: 23px;
+            font-size: 7px;
+          }
+
+          .rw-ai-node--main {
+            min-width: 62px;
           }
 
           .rw-card__copy h3 {
-            font-size: 42px;
+            font-size: 34px;
+            line-height: 1.02;
+            letter-spacing: -0.04em;
           }
 
           .rw-card__intro {
-            font-size: 13px;
+            max-width: none;
+            margin-top: 12px;
+            font-size: 12.5px;
+            line-height: 1.58;
           }
 
           .rw-card__story {
             grid-template-columns: 1fr;
-            margin-top: 22px;
+            margin-top: 18px;
+            gap: 14px;
+          }
+
+          .rw-card__story > div {
+            padding-top: 12px;
+          }
+
+          .rw-card__story p {
+            margin-top: 7px;
+            font-size: 11.5px;
+            line-height: 1.52;
+          }
+
+          .rw-card__capabilities {
+            margin-top: 16px;
+          }
+
+          .rw-card__capabilities > div {
+            margin-top: 8px;
+            gap: 6px;
+          }
+
+          .rw-card__capabilities b,
+          .rw-card__tech b {
+            min-height: 26px;
+            padding-inline: 8px;
+            font-size: 9px;
+          }
+
+          .rw-card__footer {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            min-height: 0;
+            padding-top: 15px;
+            gap: 16px 12px;
+            align-items: start;
+          }
+
+          .rw-card__metric strong {
+            margin-top: 5px;
+            font-size: 20px;
+          }
+
+          .rw-card__metric small {
+            margin-top: 4px;
+            font-size: 8px;
+            line-height: 1.35;
+          }
+
+          .rw-card__tech {
+            grid-column: 1 / -1;
+          }
+
+          .rw-card__tech > div {
+            margin-top: 7px;
+            gap: 5px;
+          }
+
+          .rw-card__link {
+            grid-column: 1 / -1;
+            display: inline-flex;
+            width: 100%;
+            min-height: 42px;
+            margin-top: 2px;
+            background: rgba(255, 255, 255, 0.1);
+          }
+        }
+
+        @media (max-width: 450px) {
+          .recent-works {
+            padding-top: 52px;
+          }
+
+          .recent-works__head {
+            width: calc(100% - 32px);
+          }
+
+          .recent-works__head h2 {
+            font-size: 35px;
+            line-height: 39px;
+          }
+
+          .recent-works__stack {
+            width: calc(100% - 24px);
             gap: 16px;
+          }
+
+          .rw-card__content {
+            padding: 15px 13px 14px;
+          }
+
+          .rw-card__main {
+            padding-top: 15px;
+          }
+
+          .rw-card__visual-wrap {
+            margin-bottom: 17px;
+          }
+
+          .rw-visual__image-frame {
+            height: clamp(200px, 63vw, 250px);
+          }
+
+          .rw-card__copy h3 {
+            font-size: 31px;
+          }
+
+          .rw-card__intro {
+            font-size: 12px;
           }
 
           .rw-card__story p {
             font-size: 11px;
           }
 
-          .rw-card__capabilities {
-            margin-top: 18px;
+          .rw-visual__mini-grid {
+            display: none;
           }
 
-          .rw-visual {
-            max-width: 470px;
+          .rw-ai-flow {
+            transform: scale(0.88);
+            transform-origin: right bottom;
+          }
+
+          .rw-card__footer {
+            gap: 14px 10px;
+          }
+
+          .rw-card__metric strong {
+            font-size: 19px;
+          }
+        }
+
+        @media (max-width: 420px) {
+          .rw-visual__mini-grid,
+          .rw-ai-flow {
+            display: none;
+          }
+
+          .rw-visual__panel {
+            max-width: 88%;
+          }
+
+          .rw-card__story {
+            gap: 12px;
+          }
+        }
+
+        @media (max-width: 360px) {
+          .recent-works__head h2 {
+            font-size: 32px;
+            line-height: 36px;
+          }
+
+          .rw-card__copy h3 {
+            font-size: 28px;
           }
 
           .rw-visual__image-frame {
-            height: 300px;
+            height: 190px;
           }
 
+          .rw-card__story p,
+          .rw-card__intro {
+            font-size: 11.5px;
+          }
+
+          .rw-card__capabilities b,
+          .rw-card__tech b {
+            font-size: 8.5px;
+          }
+        }
+
+
+        /* =========================================================
+           MOBILE ONLY: lightweight swipe carousel
+           Desktop + tablet (681px+) stay unchanged.
+           ========================================================= */
+        @media (max-width: 680px) {
+          .recent-works {
+            padding: 56px 0 70px;
+            overflow: hidden;
+          }
+
+          .recent-works__head {
+            width: min(100% - 36px, 560px);
+          }
+
+          .recent-works__pin-stage {
+            display: block;
+            width: 100%;
+            height: auto;
+            min-height: 0;
+            overflow: visible;
+          }
+
+          .recent-works__stack {
+            display: flex;
+            width: 100%;
+            height: auto;
+            min-height: 0;
+            margin: 28px 0 0;
+            padding: 0 18px 12px;
+            gap: 12px;
+            flex-direction: row;
+            overflow-x: auto;
+            overflow-y: hidden;
+            scroll-snap-type: x mandatory;
+            scroll-padding-inline: 18px;
+            overscroll-behavior-x: contain;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            touch-action: pan-x pan-y;
+          }
+
+          .recent-works__stack::-webkit-scrollbar {
+            display: none;
+          }
+
+          .recent-works .recent-work-card {
+            position: relative;
+            top: auto;
+            flex: 0 0 min(86vw, 355px);
+            width: min(86vw, 355px);
+            height: auto;
+            min-height: 0;
+            max-height: none;
+            margin: 0;
+            grid-area: auto;
+            scroll-snap-align: center;
+            scroll-snap-stop: always;
+            border-radius: 22px;
+            transform: none !important;
+            will-change: auto;
+            contain: layout paint;
+            content-visibility: auto;
+            contain-intrinsic-size: 680px;
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.10);
+          }
+
+          .recent-works .recent-work-card:last-child {
+            margin-right: 18px;
+          }
+
+          .rw-card__content {
+            display: block;
+            height: auto;
+            padding: 16px 15px 15px;
+          }
+
+          .rw-card__top {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 8px 10px;
+          }
+
+          .rw-card__category {
+            grid-column: 1 / -1;
+            grid-row: 2;
+            margin-top: 2px;
+          }
+
+          .rw-card__main {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            padding: 16px 0 14px;
+          }
+
+          /* Keep copy first and project visual after it, matching the compact card look. */
+          .rw-card__copy {
+            order: 1;
+          }
+
+          .rw-card__visual-wrap {
+            order: 2;
+            width: 100%;
+            margin: 18px 0 0;
+            place-items: stretch;
+          }
+
+          .rw-card__copy h3 {
+            font-size: 31px;
+            line-height: 1.02;
+            letter-spacing: -0.04em;
+          }
+
+          .rw-card__intro {
+            margin-top: 11px;
+            font-size: 12px;
+            line-height: 1.55;
+          }
+
+          .rw-card__story {
+            grid-template-columns: 1fr;
+            margin-top: 16px;
+            gap: 12px;
+          }
+
+          .rw-card__story > div {
+            padding-top: 11px;
+          }
+
+          .rw-card__story p {
+            margin-top: 6px;
+            font-size: 10.5px;
+            line-height: 1.48;
+          }
+
+          .rw-card__capabilities {
+            margin-top: 14px;
+          }
+
+          .rw-card__capabilities > div {
+            margin-top: 7px;
+            gap: 5px;
+          }
+
+          .rw-card__capabilities b,
+          .rw-card__tech b {
+            min-height: 25px;
+            padding-inline: 8px;
+            font-size: 8.5px;
+          }
+
+          .rw-visual {
+            width: 100%;
+            max-width: none;
+          }
+
+          .rw-visual__image-frame {
+            height: clamp(185px, 52vw, 225px);
+            border-radius: 16px;
+            box-shadow: none;
+          }
+
+          .rw-visual__caption {
+            display: none;
+          }
+
+          .rw-visual__top {
+            top: 10px;
+            right: 10px;
+            left: 10px;
+          }
+
+          .rw-visual__top span,
+          .rw-visual__top b {
+            min-height: 24px;
+            padding-inline: 7px;
+            font-size: 7.5px;
+          }
+
+          .rw-visual__overlay {
+            right: 10px;
+            bottom: 10px;
+            left: 10px;
+          }
+
+          .rw-visual__panel {
+            max-width: 78%;
+            padding: 10px 11px;
+            border-radius: 11px;
+          }
+
+          .rw-visual__panel small {
+            font-size: 7px;
+          }
+
+          .rw-visual__panel strong {
+            margin-top: 4px;
+            font-size: 12px;
+          }
+
+          .rw-visual__panel > span {
+            margin-top: 4px;
+            font-size: 7.5px;
+          }
+
+          .rw-visual__mini-grid {
+            width: 82px;
+            gap: 4px;
+          }
+
+          .rw-visual__mini-grid i {
+            padding: 6px 7px;
+          }
+
+          .rw-visual__mini-grid b {
+            font-size: 10px;
+          }
 
           .rw-card__footer {
+            display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 18px;
+            min-height: 0;
+            padding-top: 14px;
+            gap: 14px 10px;
+            align-items: start;
+          }
+
+          .rw-card__metric strong {
+            font-size: 18px;
+          }
+
+          .rw-card__metric small {
+            font-size: 8px;
           }
 
           .rw-card__tech {
             grid-column: 1 / -1;
           }
+
+          .rw-card__link {
+            grid-column: 1 / -1;
+            display: inline-flex;
+            width: 100%;
+            min-height: 40px;
+          }
         }
 
-        @media (max-width: 450px) {
+        @media (max-width: 420px) {
           .recent-works__stack {
-            min-height: 0;
+            padding-inline: 14px;
+            scroll-padding-inline: 14px;
+          }
+
+          .recent-works .recent-work-card {
+            flex-basis: 88vw;
+            width: 88vw;
+          }
+
+          .recent-works .recent-work-card:last-child {
+            margin-right: 14px;
           }
 
           .rw-card__copy h3 {
-            font-size: 38px;
+            font-size: 29px;
           }
 
-          .rw-card__capabilities b,
-          .rw-card__tech b {
-            min-height: 27px;
-            padding-inline: 8px;
-            font-size: 9px;
+          .rw-visual__image-frame {
+            height: 190px;
           }
 
-          .rw-card__metric strong {
-            font-size: 21px;
+          .rw-visual__mini-grid,
+          .rw-ai-flow {
+            display: none;
           }
         }
+
+        @media (max-width: 360px) {
+          .recent-works .recent-work-card {
+            flex-basis: 90vw;
+            width: 90vw;
+          }
+
+          .rw-card__content {
+            padding-inline: 13px;
+          }
+
+          .rw-card__copy h3 {
+            font-size: 27px;
+          }
+
+          .rw-card__story p,
+          .rw-card__intro {
+            font-size: 10.5px;
+          }
+
+          .rw-visual__image-frame {
+            height: 176px;
+          }
+        }
+
         @media (prefers-reduced-motion: reduce) {
           .recent-works {
             display: block;
@@ -1300,17 +1871,23 @@ export default function RecentWorks() {
             overflow: visible;
           }
 
-          .recent-works__stack {
-            display: flex;
-            height: auto;
-            min-height: 0;
-            flex-direction: column;
-            gap: 24px;
-          }
+          @media (min-width: 681px) {
+            .recent-works__stack {
+              display: flex;
+              height: auto;
+              min-height: 0;
+              flex-direction: column;
+              gap: 24px;
+            }
 
-          .recent-works .recent-work-card {
-            height: auto;
-            min-height: 680px;
+            .recent-works .recent-work-card {
+              position: relative;
+              top: auto;
+              height: auto;
+              min-height: 0;
+              transform: none !important;
+              will-change: auto;
+            }
           }
         }
 

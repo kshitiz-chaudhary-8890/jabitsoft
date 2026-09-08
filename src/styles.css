@@ -489,6 +489,51 @@ main {
   transform: none;
 }
 
+@media (max-width: 960px) {
+  .showcase {
+    height: auto;
+    min-height: 0;
+    margin-top: 14px;
+    margin-bottom: 0;
+  }
+
+  .showcase-inner {
+    position: relative;
+    top: auto;
+    width: 100%;
+    max-width: 100%;
+    padding: 8px;
+    transform: none;
+    transform-origin: 50% 50%;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.1);
+  }
+
+  .showcase-inner img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: 16px;
+    display: block;
+  }
+}
+
+@media (max-width: 640px) {
+  .showcase {
+    margin-top: 10px;
+    margin-bottom: 0;
+  }
+
+  .showcase-inner {
+    padding: 6px;
+    border-radius: 20px;
+  }
+
+  .showcase-inner img {
+    border-radius: 14px;
+  }
+}
+
 .client-logos {
   mask-image: linear-gradient(to right, transparent 0, #000 clamp(80px, 10%, 120px), #000 calc(100% - clamp(80px, 10%, 120px)), transparent 100%);
   -webkit-mask-image: linear-gradient(to right, transparent 0, #000 clamp(80px, 10%, 120px), #000 calc(100% - clamp(80px, 10%, 120px)), transparent 100%);
@@ -2010,8 +2055,8 @@ main {
 
 @media (max-width: 900px) {
   .hero-reference {
-    min-height: calc(100svh - 88px);
-    padding: 72px 18px 56px;
+    min-height: auto;
+    padding: 72px 18px 44px;
   }
 
   .hero-reference h1 {
@@ -2032,8 +2077,8 @@ main {
 
 @media (max-width: 700px) {
   .hero-reference {
-    min-height: calc(100svh - 76px);
-    padding: 56px 18px 48px;
+    min-height: auto;
+    padding: 56px 18px 36px;
   }
 
   .hero-reference .founder-proof {

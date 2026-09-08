@@ -138,11 +138,13 @@ function CompanyFooter({ item }) {
   );
 }
 
-function RailCard({ item, index }) {
+function RailCard({ item }) {
   return (
     <article className="cr-card cr-rail-card">
-      <div className="cr-rail-number">{String(index).padStart(2, "0")}</div>
-      <StarRating count={item.rating} />
+      <div className="cr-rail-rating-row">
+        <StarRating count={item.rating} />
+        <strong>{Number(item.rating).toFixed(1)}</strong>
+      </div>
       <blockquote>“{item.quote}”</blockquote>
       <CompanyFooter item={item} />
     </article>
@@ -478,36 +480,50 @@ export default function ClientResults() {
         </div>
 
         <div className="cr-rail-wrap">
-          <div className="cr-rail-header">
-            <div>
-              <span className="cr-rail-kicker">More client notes</span>
-              <h3>More teams. Same standard.</h3>
-            </div>
-          </div>
-
-          <div className={`cr-rail${reducedMotion ? " cr-rail--static" : ""}`}>
-            <div className="cr-rail-track">
-              <div className="cr-rail-half cr-rail-half-a">
-                {railReviews.map((item, index) => (
-                  <RailCard
-                    key={item.company}
-                    item={item}
-                    index={index + 5}
-                  />
-                ))}
+          <div className="cr-rail-layout">
+            <aside className="cr-rail-intro" aria-label="More client notes">
+              <div>
+                <span className="cr-rail-kicker">More client notes</span>
+                <h3>More teams.<br />Same standard.</h3>
               </div>
 
-              {!reducedMotion && (
-                <div className="cr-rail-half cr-rail-half-b" aria-hidden="true">
-                  {railReviews.map((item, index) => (
+              <p>
+                Additional feedback across product engineering, cloud, mobile,
+                ERP, AI and digital growth.
+              </p>
+
+              <div className="cr-rail-proof" aria-hidden="true">
+                <div className="cr-rail-proof-stack">
+                  {railReviews.slice(0, 3).map((item) => (
+                    <span key={item.company}>{item.logo}</span>
+                  ))}
+                </div>
+                <small>Selected client feedback</small>
+              </div>
+            </aside>
+
+            <div className={`cr-rail${reducedMotion ? " cr-rail--static" : ""}`}>
+              <div className="cr-rail-track">
+                <div className="cr-rail-half cr-rail-half-a">
+                  {railReviews.map((item) => (
                     <RailCard
                       key={item.company}
                       item={item}
-                      index={index + 5}
                     />
                   ))}
                 </div>
-              )}
+
+                {!reducedMotion && (
+                  <div className="cr-rail-half cr-rail-half-b" aria-hidden="true">
+                    {railReviews.map((item) => (
+                      <RailCard
+                        key={item.company}
+                        item={item}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -890,39 +906,153 @@ export default function ClientResults() {
         }
 
         .cr-rail-wrap {
-          margin-top: clamp(54px,6vw,88px);
+          margin-top: clamp(64px, 7vw, 104px);
         }
 
-        .cr-rail-header {
-          display: flex;
-          align-items: flex-end;
-          justify-content: space-between;
+        .cr-rail-layout {
+          display: grid;
+          grid-template-columns: clamp(330px, 24vw, 370px) minmax(0, 1fr);
           gap: 24px;
-          margin-bottom: 20px;
+          align-items: stretch;
+        }
+
+        .cr-rail-intro {
+          position: relative;
+          z-index: 2;
+          display: flex;
+          min-height: 336px;
+          flex-direction: column;
+          justify-content: space-between;
+          padding: 34px;
+          overflow: hidden;
+          border-radius: 26px;
+          background:
+            radial-gradient(circle at 88% 12%, rgba(0,113,227,.24), transparent 30%),
+            #151922;
+          color: #ffffff;
+        }
+
+        .cr-rail-intro::after {
+          content: "";
+          position: absolute;
+          right: -72px;
+          bottom: -96px;
+          width: 210px;
+          height: 210px;
+          border: 1px solid rgba(255,255,255,.08);
+          border-radius: 50%;
+          box-shadow:
+            0 0 0 32px rgba(255,255,255,.025),
+            0 0 0 66px rgba(255,255,255,.018);
+          pointer-events: none;
         }
 
         .cr-rail-kicker {
           display: block;
-          margin-bottom: 8px;
+          margin-bottom: 16px;
+          font-family: Inter, "DM Sans", -apple-system, BlinkMacSystemFont, sans-serif;
           font-size: 11px;
+          font-weight: 650;
+          line-height: 1.2;
           text-transform: uppercase;
-          letter-spacing: .1em;
-          color: rgba(17,17,17,.38);
+          letter-spacing: .12em;
+          color: rgba(255,255,255,.54);
         }
 
-        .cr-rail-header h3 {
+        .cr-rail-intro h3 {
+          position: relative;
+          z-index: 1;
           margin: 0;
-          font-size: clamp(28px,3.2vw,46px);
-          line-height: 1;
-          font-weight: 600;
-          letter-spacing: -.045em;
-          color: #111111;
+          font-family: "Plus Jakarta Sans", Inter, sans-serif;
+          font-size: clamp(31px, 2.7vw, 42px);
+          line-height: 1.02;
+          font-weight: 650;
+          letter-spacing: -.05em;
+          color: #ffffff;
+        }
+
+        .cr-rail-intro > p {
+          position: relative;
+          z-index: 1;
+          max-width: 24ch;
+          margin: 34px 0 0;
+          font-family: Inter, "DM Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+          font-size: 13px;
+          line-height: 1.65;
+          color: rgba(255,255,255,.62);
+        }
+
+        .cr-rail-proof {
+          position: relative;
+          z-index: 1;
+          display: flex;
+          align-items: center;
+          gap: 11px;
+          margin-top: 28px;
+        }
+
+        .cr-rail-proof-stack {
+          display: flex;
+          align-items: center;
+        }
+
+        .cr-rail-proof-stack span {
+          display: grid;
+          width: 34px;
+          height: 34px;
+          place-items: center;
+          margin-left: -8px;
+          border: 2px solid #151922;
+          border-radius: 50%;
+          background: #f5f7fa;
+          color: #151922;
+          font-family: Inter, sans-serif;
+          font-size: 8px;
+          font-weight: 750;
+          letter-spacing: -.02em;
+        }
+
+        .cr-rail-proof-stack span:first-child {
+          margin-left: 0;
+          background: #eaf2ff;
+          color: #456790;
+        }
+
+        .cr-rail-proof-stack span:nth-child(2) {
+          background: #eef1f5;
+        }
+
+        .cr-rail-proof-stack span:nth-child(3) {
+          background: #edf6f8;
+          color: #3f7482;
+        }
+
+        .cr-rail-proof small {
+          max-width: 90px;
+          font-family: Inter, sans-serif;
+          font-size: 10px;
+          line-height: 1.35;
+          color: rgba(255,255,255,.54);
         }
 
         .cr-rail {
           position: relative;
+          min-width: 0;
           overflow: hidden;
           padding-bottom: 2px;
+          border-radius: 26px;
+          mask-image: linear-gradient(
+            to right,
+            #000 0,
+            #000 calc(100% - 70px),
+            transparent 100%
+          );
+          -webkit-mask-image: linear-gradient(
+            to right,
+            #000 0,
+            #000 calc(100% - 70px),
+            transparent 100%
+          );
         }
 
         .cr-rail--static {
@@ -930,6 +1060,8 @@ export default function ClientResults() {
           scroll-snap-type: x mandatory;
           scrollbar-width: none;
           overscroll-behavior-inline: contain;
+          mask-image: none;
+          -webkit-mask-image: none;
         }
 
         .cr-rail--static::-webkit-scrollbar {
@@ -939,14 +1071,16 @@ export default function ClientResults() {
         .cr-rail-track {
           display: flex;
           width: max-content;
+          height: 100%;
           gap: 0;
           will-change: transform;
         }
 
         .cr-rail-half {
           display: flex;
-          gap: 16px;
-          padding-right: 16px;
+          align-items: stretch;
+          gap: 18px;
+          padding-right: 18px;
           flex: 0 0 auto;
         }
 
@@ -955,18 +1089,59 @@ export default function ClientResults() {
         }
 
         .cr-rail-card {
-          flex: 0 0 clamp(310px,31vw,440px);
-          min-height: 300px;
+          flex: 0 0 clamp(330px, 30vw, 390px);
+          min-height: 336px;
+          padding: 28px;
+          border-color: rgba(21,25,34,.065);
+          border-radius: 24px;
+          background: #ffffff;
           scroll-snap-align: start;
         }
 
-        .cr-rail-number {
-          position: absolute;
-          top: 24px;
-          right: 26px;
-          font-size: 10px;
-          color: rgba(17,17,17,.28);
-          letter-spacing: .08em;
+        .cr-rail-rating-row {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          margin-bottom: 26px;
+        }
+
+        .cr-rail-rating-row .cr-stars {
+          margin-bottom: 0;
+          gap: 3px;
+        }
+
+        .cr-rail-rating-row .cr-star {
+          font-size: 14px;
+        }
+
+        .cr-rail-rating-row .cr-star.is-filled {
+          color: #0071e3;
+        }
+
+        .cr-rail-rating-row > strong {
+          font-family: Inter, sans-serif;
+          font-size: 18px;
+          line-height: 1;
+          font-weight: 700;
+          letter-spacing: -.035em;
+          color: #151922;
+        }
+
+        .cr-rail-card blockquote {
+          font-family: Inter, "DM Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+          font-size: 16px;
+          line-height: 1.55;
+          letter-spacing: -.015em;
+          color: rgba(21,25,34,.72);
+        }
+
+        .cr-rail-card .cr-company {
+          padding-top: 38px;
+        }
+
+        .cr-rail-card .cr-logo {
+          border-color: rgba(21,25,34,.08);
+          background: #f2f5f8;
         }
 
         @media (hover:hover) and (pointer:fine) {
@@ -985,6 +1160,15 @@ export default function ClientResults() {
             opacity: 1;
           }
 
+          .cr-rail-card:hover {
+            border-color: rgba(0,113,227,.12);
+            background: #f3f7ff;
+          }
+
+          .cr-rail-card:hover::after {
+            opacity: 0;
+          }
+
           .cr-card-featured:hover .cr-featured-media img {
             transform: scale(1.035);
           }
@@ -1001,8 +1185,18 @@ export default function ClientResults() {
             min-height: auto;
           }
 
+          .cr-rail-layout {
+            grid-template-columns: 300px minmax(0, 1fr);
+          }
+
+          .cr-rail-intro {
+            min-height: 320px;
+            padding: 28px;
+          }
+
           .cr-rail-card {
-            flex-basis: min(72vw,420px);
+            flex-basis: min(68vw,380px);
+            min-height: 320px;
           }
         }
 
@@ -1041,17 +1235,58 @@ export default function ClientResults() {
             height: 235px;
           }
 
-          .cr-rail-header {
-            align-items: center;
+          .cr-rail-layout {
+            grid-template-columns: 1fr;
+            gap: 16px;
           }
 
-          .cr-rail-header h3 {
-            font-size: 30px;
+          .cr-rail-intro {
+            min-height: 280px;
+            padding: 26px;
+            border-radius: 22px;
+          }
+
+          .cr-rail-intro h3 {
+            font-size: 34px;
+          }
+
+          .cr-rail-intro > p {
+            max-width: 34ch;
+            margin-top: 24px;
+          }
+
+          .cr-rail {
+            width: calc(100vw - 24px);
+            margin-left: 0;
+            border-radius: 22px;
+            mask-image: linear-gradient(
+              to right,
+              #000 0,
+              #000 calc(100% - 36px),
+              transparent 100%
+            );
+            -webkit-mask-image: linear-gradient(
+              to right,
+              #000 0,
+              #000 calc(100% - 36px),
+              transparent 100%
+            );
+          }
+
+          .cr-rail-half {
+            gap: 14px;
+            padding-right: 14px;
           }
 
           .cr-rail-card {
-            flex-basis: min(86vw,360px);
-            min-height: 280px;
+            flex-basis: min(84vw,340px);
+            min-height: 290px;
+            padding: 24px;
+            border-radius: 20px;
+          }
+
+          .cr-rail-card blockquote {
+            font-size: 14px;
           }
         }
       `}</style>

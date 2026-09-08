@@ -116,11 +116,11 @@ export default function ServiceDirectory() {
         }
 
         .service-directory {
-          --service-blue: rgb(0, 153, 255);
-          --diagram-accent: #a4f66f;
+          --service-blue: #0071e3;
+          --diagram-accent: #4da3ff;
           position: relative;
           width: 100%;
-          padding: clamp(88px, 8vw, 132px) 0 clamp(92px, 8vw, 126px);
+          padding: clamp(56px, 5.5vw, 84px) 0 clamp(84px, 7vw, 112px);
           overflow: clip;
           background: #ffffff;
           color: #131313;
@@ -133,106 +133,155 @@ export default function ServiceDirectory() {
         }
 
         .service-directory__header {
-          width: min(760px, 100%);
-          margin: 0 auto clamp(62px, 6vw, 92px);
-          text-align: center;
+          width: 100%;
+          margin: 0 0 clamp(42px, 4vw, 56px);
+          display: grid;
+          grid-template-columns: minmax(0, 1.05fr) minmax(320px, .62fr);
+          column-gap: clamp(42px, 7vw, 110px);
+          row-gap: 14px;
+          align-items: end;
+          text-align: left;
         }
 
         .service-directory__eyebrow {
-          margin: 0 0 12px;
-          font: 500 15px/23px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+          grid-column: 1 / -1;
+          margin: 0;
+          font-family: Inter, "DM Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+          font-style: normal;
+          font-weight: 500;
+          font-size: 15px;
+          line-height: 23px;
+          letter-spacing: normal;
+          text-transform: none;
           color: rgb(92, 92, 92);
         }
 
         .service-directory__header h2 {
           margin: 0;
-          font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-          font-size: clamp(44px, 4.5vw, 64px);
-          line-height: 1.03;
-          font-weight: 600;
-          letter-spacing: -0.045em;
-          color: #131313;
+          max-width: 760px;
+          font-family: "Plus Jakarta Sans", Inter, sans-serif;
+          font-style: normal;
+          font-weight: 700;
+          font-size: 50px;
+          line-height: 54px;
+          letter-spacing: normal;
+          color: rgb(19, 19, 19);
+          text-wrap: balance;
         }
 
         .service-directory__intro {
-          width: min(620px, 100%);
-          margin: 20px auto 0;
-          font: 400 15px/1.65 Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-          color: #737373;
+          width: min(520px, 100%);
+          margin: 0;
+          padding: 0 0 4px;
+          font-family: Inter, "DM Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+          font-size: 16px;
+          line-height: 1.62;
+          font-weight: 400;
+          color: rgba(17, 17, 17, .54);
         }
 
         .service-directory__list {
           position: relative;
-          border-top: 1px solid #dedede;
+          border-top: 1px solid rgba(21, 25, 34, .14);
         }
 
         .service-directory__row {
           position: relative;
           z-index: 1;
-          min-height: 132px;
+          min-height: 148px;
           display: grid;
-          grid-template-columns: minmax(360px, 0.9fr) minmax(280px, 0.72fr) 54px;
-          gap: clamp(26px, 4vw, 64px);
+          grid-template-columns: minmax(430px, 1.08fr) minmax(300px, .72fr) 58px;
+          gap: clamp(28px, 4.4vw, 72px);
           align-items: center;
-          padding: 26px 4px;
-          border-bottom: 1px solid #dedede;
+          padding: 30px 16px;
+          overflow: visible;
+          border-bottom: 1px solid rgba(21, 25, 34, .11);
           outline: none;
+          transition:
+            background-color 260ms ease,
+            border-color 260ms ease;
+        }
+
+        .service-directory__row::before {
+          content: "";
+          position: absolute;
+          inset: 8px 0;
+          z-index: -1;
+          border-radius: 18px;
+          background:
+            linear-gradient(90deg, rgba(0, 113, 227, .055), rgba(0, 113, 227, .018) 52%, transparent 86%);
+          opacity: 0;
+          transform: scaleX(.985);
+          transform-origin: left center;
+          transition:
+            opacity 260ms ease,
+            transform 360ms cubic-bezier(.2,.8,.2,1);
         }
 
         .service-directory__row:hover,
         .service-directory__row:focus-visible {
           z-index: 20;
-          border-color: #cfcfcf;
+          border-color: rgba(0, 113, 227, .2);
+        }
+
+        .service-directory__row:hover::before,
+        .service-directory__row:focus-visible::before {
+          opacity: 1;
+          transform: scaleX(1);
         }
 
         .service-directory__title-wrap {
           min-width: 0;
-          display: flex;
-          align-items: baseline;
-          gap: 12px;
+          display: grid;
+          grid-template-columns: 42px minmax(0, 1fr);
+          column-gap: 18px;
+          align-items: center;
         }
 
         .service-directory__number {
-          flex: 0 0 auto;
-          min-width: 28px;
-          font-size: 12px;
+          display: grid;
+          width: 38px;
+          height: 38px;
+          place-items: center;
+          border: 1px solid rgba(21, 25, 34, .1);
+          border-radius: 50%;
+          font-size: 10px;
           line-height: 1;
-          font-weight: 500;
-          color: #9a9a9a;
+          font-weight: 700;
+          color: #7f8792;
+          background: #fff;
           font-variant-numeric: tabular-nums;
-          transition: color 240ms ease;
+          transition:
+            color 240ms ease,
+            border-color 240ms ease,
+            background-color 240ms ease;
         }
 
         .service-directory__title-wrap h3 {
           min-width: 0;
           margin: 0;
-          font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-          font-size: clamp(28px, 2.5vw, 38px);
-          line-height: 1.08;
-          font-weight: 500;
-          letter-spacing: -0.04em;
-          color: #1a1a1a;
+          font-family: "Plus Jakarta Sans", Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+          font-size: clamp(26px, 2.1vw, 34px);
+          line-height: 1.04;
+          font-weight: 560;
+          letter-spacing: -0.05em;
+          color: #151922;
           transition:
             color 240ms ease,
-            transform 240ms ease;
+            transform 300ms cubic-bezier(.2,.8,.2,1);
         }
 
         .service-directory__title-wrap sup {
-          align-self: flex-start;
-          margin-top: 3px;
-          font-size: 10px;
-          line-height: 1;
-          font-weight: 500;
-          color: #8e8e8e;
+          display: none;
         }
 
         .service-directory__description {
-          width: min(430px, 100%);
+          width: min(470px, 100%);
           margin: 0;
-          font-size: 13px;
-          line-height: 1.55;
+          font-size: 14px;
+          line-height: 1.62;
           font-weight: 400;
-          color: #898989;
+          color: #7d848e;
           transition:
             color 240ms ease,
             opacity 240ms ease;
@@ -242,30 +291,32 @@ export default function ServiceDirectory() {
           justify-self: end;
           display: grid;
           place-items: center;
-          width: 42px;
-          height: 42px;
-          border: 1px solid #dedede;
+          width: 48px;
+          height: 48px;
+          border: 1px solid rgba(21, 25, 34, .12);
           border-radius: 50%;
-          font-size: 19px;
+          font-size: 20px;
           line-height: 1;
-          color: #242424;
+          color: #232933;
           background: #fff;
           transition:
             color 240ms ease,
             border-color 240ms ease,
             background-color 240ms ease,
-            transform 240ms ease;
+            transform 300ms cubic-bezier(.2,.8,.2,1);
         }
 
         .service-directory__row:hover .service-directory__number,
         .service-directory__row:focus-visible .service-directory__number {
-          color: var(--service-blue);
+          color: #fff;
+          border-color: var(--service-blue);
+          background: var(--service-blue);
         }
 
         .service-directory__row:hover .service-directory__title-wrap h3,
         .service-directory__row:focus-visible .service-directory__title-wrap h3 {
-          transform: translateX(3px);
-          color: #0f0f0f;
+          transform: translateX(6px);
+          color: #0f1722;
         }
 
         .service-directory__row:hover .service-directory__description,
@@ -285,19 +336,20 @@ export default function ServiceDirectory() {
         .service-directory__preview {
           position: absolute;
           top: 50%;
-          right: clamp(82px, 8.6vw, 132px);
+          right: clamp(84px, 8vw, 126px);
           z-index: 30;
-          width: clamp(320px, 29vw, 420px);
-          height: 204px;
+          width: clamp(340px, 30vw, 448px);
+          height: 218px;
           pointer-events: none;
           opacity: 0;
           visibility: hidden;
-          transform: translate3d(0, calc(-50% + 18px), 0) scale(0.94) rotate(-1.4deg);
+          filter: saturate(.96);
+          transform: translate3d(0, calc(-50% + 20px), 0) scale(.94) rotate(-1deg);
           transform-origin: 54% 55%;
           transition:
             opacity 220ms ease,
             visibility 220ms ease,
-            transform 360ms cubic-bezier(0.2, 0.8, 0.2, 1);
+            transform 380ms cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
         .service-directory__row:hover .service-directory__preview,
@@ -311,12 +363,13 @@ export default function ServiceDirectory() {
           width: 100%;
           height: 100%;
           overflow: hidden;
-          border: 6px solid #fff;
-          border-radius: 18px;
-          background: #0d0d0d;
+          border: 4px solid #fff;
+          border-radius: 20px;
+          background: #0d1420;
           box-shadow:
-            0 24px 65px rgba(0, 0, 0, 0.18),
-            0 5px 16px rgba(0, 0, 0, 0.09);
+            0 28px 70px rgba(18, 34, 56, .18),
+            0 8px 22px rgba(18, 34, 56, .10),
+            0 0 0 1px rgba(0, 113, 227, .05);
         }
 
         /* ---------------- Shared hover diagram styles ---------------- */
@@ -326,10 +379,10 @@ export default function ServiceDirectory() {
           width: 100%;
           height: 100%;
           overflow: hidden;
-          border-radius: 12px;
+          border-radius: 16px;
           background:
-            radial-gradient(circle at 84% 8%, rgba(255,255,255,.05), transparent 28%),
-            linear-gradient(145deg, #1c1c1c 0%, #101010 55%, #080808 100%);
+            radial-gradient(circle at 82% 8%, rgba(77,163,255,.12), transparent 30%),
+            linear-gradient(145deg, #182231 0%, #101722 56%, #0a0f17 100%);
           color: #fff;
         }
 
@@ -359,7 +412,7 @@ export default function ServiceDirectory() {
 
         .sd-ai-lines path {
           fill: none;
-          stroke: rgba(164,246,111,.24);
+          stroke: rgba(77,163,255,.24);
           stroke-width: 1.3;
           vector-effect: non-scaling-stroke;
           stroke-dasharray: 5 8;
@@ -377,11 +430,11 @@ export default function ServiceDirectory() {
           align-items: center;
           justify-content: center;
           border-radius: 50%;
-          border: 1px solid rgba(164,246,111,.28);
+          border: 1px solid rgba(77,163,255,.28);
           background: rgba(14,18,12,.94);
           box-shadow:
-            0 0 0 10px rgba(164,246,111,.025),
-            0 0 34px rgba(164,246,111,.08);
+            0 0 0 10px rgba(77,163,255,.025),
+            0 0 34px rgba(77,163,255,.08);
           z-index: 3;
         }
 
@@ -428,7 +481,7 @@ export default function ServiceDirectory() {
           width: 22px;
           height: 22px;
           border-radius: 7px;
-          background: rgba(164,246,111,.08);
+          background: rgba(77,163,255,.08);
           color: var(--diagram-accent);
           font-size: 7px;
           font-weight: 700;
@@ -456,7 +509,7 @@ export default function ServiceDirectory() {
           height: 6px;
           border-radius: 50%;
           background: var(--diagram-accent);
-          box-shadow: 0 0 14px rgba(164,246,111,.65);
+          box-shadow: 0 0 14px rgba(77,163,255,.65);
           z-index: 5;
         }
 
@@ -474,7 +527,7 @@ export default function ServiceDirectory() {
           display: flex;
           align-items: center;
           gap: 10px;
-          border: 1px solid rgba(164,246,111,.16);
+          border: 1px solid rgba(77,163,255,.16);
           border-radius: 14px;
           background: rgba(20,24,18,.9);
           z-index: 3;
@@ -486,7 +539,7 @@ export default function ServiceDirectory() {
           width: 30px;
           height: 30px;
           border-radius: 10px;
-          background: rgba(164,246,111,.1);
+          background: rgba(77,163,255,.1);
           color: var(--diagram-accent);
           font-size: 17px;
         }
@@ -515,7 +568,7 @@ export default function ServiceDirectory() {
 
         .sd-cloud-lines path {
           fill: none;
-          stroke: rgba(164,246,111,.2);
+          stroke: rgba(77,163,255,.2);
           stroke-width: 1.2;
           stroke-dasharray: 4 7;
         }
@@ -585,7 +638,7 @@ export default function ServiceDirectory() {
           border-radius: 15px;
           padding: 17px 8px 9px;
           background:
-            radial-gradient(circle at 70% 8%, rgba(164,246,111,.11), transparent 34%),
+            radial-gradient(circle at 70% 8%, rgba(77,163,255,.11), transparent 34%),
             #121212;
         }
 
@@ -615,9 +668,9 @@ export default function ServiceDirectory() {
         .sd-mobile-hero {
           margin-top: 10px;
           padding: 9px 7px;
-          border: 1px solid rgba(164,246,111,.12);
+          border: 1px solid rgba(77,163,255,.12);
           border-radius: 10px;
-          background: rgba(164,246,111,.035);
+          background: rgba(77,163,255,.035);
         }
 
         .sd-mobile-hero span {
@@ -712,7 +765,7 @@ export default function ServiceDirectory() {
           width: 36px;
           height: 8px;
           border-radius: 99px;
-          background: rgba(164,246,111,.08);
+          background: rgba(77,163,255,.08);
         }
 
         .sd-erp-sidebar {
@@ -754,7 +807,7 @@ export default function ServiceDirectory() {
         .sd-erp-chart span {
           flex: 1;
           border-radius: 5px 5px 2px 2px;
-          background: linear-gradient(180deg, var(--diagram-accent), rgba(164,246,111,.16));
+          background: linear-gradient(180deg, var(--diagram-accent), rgba(77,163,255,.16));
         }
 
         .sd-erp-chart span:nth-child(1) { height: 28%; }
@@ -902,7 +955,7 @@ export default function ServiceDirectory() {
           stroke-dasharray: 900;
           stroke-dashoffset: 900;
           vector-effect: non-scaling-stroke;
-          filter: drop-shadow(0 0 7px rgba(164,246,111,.24));
+          filter: drop-shadow(0 0 7px rgba(77,163,255,.24));
         }
 
         .sd-seo-dot {
@@ -911,7 +964,7 @@ export default function ServiceDirectory() {
           height: 6px;
           border-radius: 50%;
           background: var(--diagram-accent);
-          box-shadow: 0 0 12px rgba(164,246,111,.55);
+          box-shadow: 0 0 12px rgba(77,163,255,.55);
         }
 
         .sd-seo-dot-one { left: 29%; bottom: 42%; }
@@ -1004,7 +1057,7 @@ export default function ServiceDirectory() {
           height: 5px;
           margin-bottom: 7px;
           border-radius: 99px;
-          background: linear-gradient(90deg, rgba(164,246,111,.42), rgba(255,255,255,.06));
+          background: linear-gradient(90deg, rgba(77,163,255,.42), rgba(255,255,255,.06));
         }
 
         .sd-code-line:nth-child(1) { width: 80%; }
@@ -1023,7 +1076,7 @@ export default function ServiceDirectory() {
           align-self: flex-start;
           padding: 4px 6px;
           border-radius: 999px;
-          background: rgba(164,246,111,.07);
+          background: rgba(77,163,255,.07);
           color: var(--diagram-accent);
           font-size: 6px;
         }
@@ -1184,8 +1237,8 @@ export default function ServiceDirectory() {
               background: rgba(255,255,255,.018);
             }
             50% {
-              border-color: rgba(164,246,111,.22);
-              background: rgba(164,246,111,.035);
+              border-color: rgba(77,163,255,.22);
+              background: rgba(77,163,255,.035);
             }
           }
 
@@ -1197,11 +1250,11 @@ export default function ServiceDirectory() {
           @keyframes sdSoftGlow {
             0%, 100% {
               opacity: .7;
-              filter: drop-shadow(0 0 0 rgba(164,246,111,0));
+              filter: drop-shadow(0 0 0 rgba(77,163,255,0));
             }
             50% {
               opacity: 1;
-              filter: drop-shadow(0 0 7px rgba(164,246,111,.32));
+              filter: drop-shadow(0 0 7px rgba(77,163,255,.32));
             }
           }
 
@@ -1216,7 +1269,7 @@ export default function ServiceDirectory() {
               transform: translate3d(0, 0, 0);
             }
             50% {
-              border-color: rgba(164,246,111,.15);
+              border-color: rgba(77,163,255,.15);
               transform: translate3d(0, -2px, 0);
             }
           }
@@ -1247,35 +1300,63 @@ export default function ServiceDirectory() {
         }
 
         @media (max-width: 1080px) {
+          .service-directory__header {
+            grid-template-columns: minmax(0, 1fr) minmax(280px, .55fr);
+            column-gap: 44px;
+            row-gap: 12px;
+          }
+
           .service-directory__row {
-            grid-template-columns: minmax(330px, 1fr) minmax(230px, .62fr) 48px;
+            grid-template-columns: minmax(360px, 1fr) minmax(230px, .58fr) 50px;
             gap: 28px;
           }
 
           .service-directory__preview {
-            right: 70px;
-            width: 320px;
-            height: 184px;
+            right: 72px;
+            width: 330px;
+            height: 190px;
           }
         }
 
         @media (max-width: 900px) {
           .service-directory {
-            padding: 82px 0 88px;
+            padding: 48px 0 80px;
           }
 
           .service-directory__inner {
-            width: min(100% - 40px, 1320px);
+            width: min(100% - 56px, 1320px);
           }
 
           .service-directory__header {
-            margin-bottom: 54px;
+            grid-template-columns: minmax(0, 1fr) minmax(250px, .72fr);
+            column-gap: 34px;
+            row-gap: 12px;
+            margin-bottom: 42px;
+            align-items: end;
+          }
+
+          .service-directory__eyebrow {
+            grid-column: 1 / -1;
+            margin: 0;
+          }
+
+          .service-directory__header h2 {
+            font-size: 44px;
+            line-height: 48px;
+          }
+
+          .service-directory__intro {
+            width: 100%;
+            max-width: 420px;
+            font-size: 14.5px;
+            line-height: 1.62;
           }
 
           .service-directory__row {
-            min-height: 122px;
-            grid-template-columns: minmax(0, 1fr) 44px;
+            min-height: 128px;
+            grid-template-columns: minmax(0, 1fr) 46px;
             gap: 20px;
+            padding-inline: 8px;
           }
 
           .service-directory__description {
@@ -1296,26 +1377,40 @@ export default function ServiceDirectory() {
 
         @media (max-width: 640px) {
           .service-directory {
-            padding: 66px 0 72px;
+            padding: 54px 0 72px;
           }
 
           .service-directory__inner {
-            width: min(100% - 28px, 1320px);
+            width: min(100% - 40px, 1320px);
           }
 
           .service-directory__header {
+            grid-template-columns: 1fr;
+            gap: 10px;
             text-align: left;
-            margin-bottom: 44px;
+            margin-bottom: 38px;
+          }
+
+          .service-directory__eyebrow {
+            grid-column: auto;
+            margin: 0 0 2px;
+            font-size: 14px;
+            line-height: 22px;
           }
 
           .service-directory__header h2 {
-            font-size: 40px;
-            line-height: 1.06;
+            font-size: 42px;
+            line-height: 46px;
+            letter-spacing: normal;
           }
 
           .service-directory__intro {
-            margin-left: 0;
+            width: 100%;
+            max-width: 520px;
+            margin: 0;
+            padding: 0;
             font-size: 14px;
+            line-height: 1.62;
           }
 
           .service-directory__row {
@@ -1324,16 +1419,18 @@ export default function ServiceDirectory() {
           }
 
           .service-directory__title-wrap {
-            gap: 8px;
-            flex-wrap: wrap;
+            grid-template-columns: 32px minmax(0, 1fr);
+            column-gap: 10px;
           }
 
           .service-directory__number {
-            min-width: 24px;
+            width: 30px;
+            height: 30px;
           }
 
           .service-directory__title-wrap h3 {
-            font-size: 25px;
+            font-size: 24px;
+            line-height: 1.08;
           }
 
           .service-directory__description {
@@ -1345,6 +1442,53 @@ export default function ServiceDirectory() {
             width: 38px;
             height: 38px;
             font-size: 17px;
+          }
+        }
+
+        @media (max-width: 420px) {
+          .service-directory__header h2 {
+            font-size: 38px;
+            line-height: 42px;
+          }
+
+          .service-directory__header {
+            gap: 9px;
+            margin-bottom: 36px;
+          }
+
+          .service-directory__row {
+            min-height: 112px;
+            padding-block: 20px;
+          }
+
+          .service-directory__title-wrap h3 {
+            font-size: 20px;
+          }
+        }
+
+        @media (max-width: 350px) {
+          .service-directory__header h2 {
+            font-size: 35px;
+            line-height: 39px;
+          }
+
+          .service-directory__inner {
+            width: min(100% - 32px, 1320px);
+          }
+
+          .service-directory__title-wrap {
+            grid-template-columns: 28px minmax(0, 1fr);
+            column-gap: 8px;
+          }
+
+          .service-directory__number {
+            width: 28px;
+            height: 28px;
+            font-size: 9px;
+          }
+
+          .service-directory__title-wrap h3 {
+            font-size: 22px;
           }
         }
 
@@ -1571,24 +1715,24 @@ function GrowthDiagram() {
           <small>GROWTH OVERVIEW</small>
           <strong>Organic performance</strong>
         </div>
-        <span>LIVE</span>
+        <span>Signal</span>
       </div>
 
       <div className="sd-seo-kpis">
         <div>
-          <small>Traffic</small>
-          <strong>128K</strong>
-          <em>+34%</em>
+          <small>Organic</small>
+          <strong>Traffic</strong>
+          <em>Growing</em>
         </div>
         <div>
-          <small>Leads</small>
-          <strong>4.8K</strong>
-          <em>+21%</em>
+          <small>Qualified</small>
+          <strong>Leads</strong>
+          <em>Focused</em>
         </div>
         <div>
-          <small>Rankings</small>
-          <strong>186</strong>
-          <em>+42%</em>
+          <small>Search</small>
+          <strong>Visibility</strong>
+          <em>Improving</em>
         </div>
       </div>
 
