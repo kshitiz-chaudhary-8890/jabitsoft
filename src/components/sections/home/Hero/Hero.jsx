@@ -2,7 +2,7 @@
 
 import { Fragment, useLayoutEffect, useRef } from "react";
 import { gsap } from "gsap";
-import HillsBackground from "./HillsBackground.jsx";
+import HillsBackground from "../../../three/HillsBackground/HillsBackground.jsx";
 
 const media = {
   founders: [

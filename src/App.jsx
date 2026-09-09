@@ -1,20 +1,20 @@
 import { Fragment, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Hero from "./components/Hero.jsx";
-import ClientMarquee from "./components/ClientMarquee.jsx";
-import DualMarquee from "./components/DualMarquee.jsx";
-import Intro from "./components/sections/Intro/intro";
+import Hero from "./components/sections/home/Hero/Hero.jsx";
+import ClientMarquee from "./components/sections/home/ClientMarquee/ClientMarquee.jsx";
+import DualMarquee from "./components/sections/home/DualMarquee/DualMarquee.jsx";
+import Intro from "./components/sections/home/Intro/intro";
 import ServiceCardCarousel from "./components/ServiceCardCarousel.jsx";
-import ClientResults from "./components/ClientResults.jsx";
-import CompanyStats from "./components/CompanyStats.jsx";
-import RecentWorks from "./components/RecentWorks.jsx";
-import ServiceDirectory from "./components/ServiceDirectory.jsx";
-import ProblemsWeSolve from "./components/sections/ProblemsWeSolve/ProblemsWeSolve";
-import HowWeBuild from "./components/sections/HowWeBuild/HowWeBuild";
-import FAQ from "./components/FAQ.jsx";
-import Footer from "./components/Footer.jsx";
-import LatestBlog from "./components/LatestBlog.jsx";
+import ClientResults from "./components/sections/home/ClientResults/ClientResults.jsx";
+import CompanyStats from "./components/sections/home/CompanyStats/CompanyStats.jsx";
+import RecentWorks from "./components/sections/home/RecentWorks/RecentWorks.jsx";
+import ServiceDirectory from "./components/sections/home/Services/ServiceDirectory.jsx";
+import ProblemsWeSolve from "./components/sections/home/ProblemsWeSolve/ProblemsWeSolve";
+import HowWeBuild from "./components/sections/home/HowWeBuild/HowWeBuild";
+import FAQ from "./components/sections/home/FAQ/FAQ.jsx";
+import Footer from "./components/layout/Footer/Footer.jsx";
+import LatestBlog from "./components/sections/home/LatestBlog/LatestBlog.jsx";
 import jabitLogo from "./assets/jabit-logo.png";
 
 const media = {
