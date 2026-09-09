@@ -1326,7 +1326,7 @@ function ProblemDialog({
 				progressRef.current.style.transform = `scaleX(${ratio})`
 			}
 			const probe = scroller.scrollTop + scroller.clientHeight * 0.3
-			let current = DIALOG_STEPS[0].id
+			let current: (typeof DIALOG_STEPS)[number]["id"] = DIALOG_STEPS[0].id
 			DIALOG_STEPS.forEach((step) => {
 				const el = stepRefs.current[step.id]
 				if (el && el.offsetTop <= probe) current = step.id
