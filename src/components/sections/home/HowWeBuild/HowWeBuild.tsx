@@ -606,7 +606,9 @@ export default function HowWeBuild() {
           const q = gsap.utils.selector(section);
           const cleanups: Array<() => void> = [];
           const scenes = q("[data-stage-scene]") as HTMLElement[];
-          const drawPaths = q("[data-draw]") as SVGPathElement[];
+          const drawPaths = Array.from(
+            section.querySelectorAll<SVGPathElement>("[data-draw]"),
+          );
           const progressFill = q("[data-process-progress]")[0] as
             HTMLElement | undefined;
 
