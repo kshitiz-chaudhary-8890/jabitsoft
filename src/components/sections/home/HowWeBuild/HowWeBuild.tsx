@@ -2,566 +2,464 @@
 
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
-import { AnimatePresence, MotionConfig, motion } from "motion/react";
-import { useLayoutEffect, useRef, useState } from "react";
+import {
+  AnimatePresence,
+  MotionConfig,
+  motion,
+  type Variants,
+} from "motion/react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 
 import styles from "./HowWeBuild.module.css";
 
-type StageKey = "discover" | "architect" | "build" | "launch" | "scale";
+/* ==========================================================================
+   JabitSoft — How we work
+   Editorial "delivery ledger": six horizontal panels on desktop, one open at a
+   time; vertical accordion under 1024px. Motion is layered on top of a layout
+   that already reads correctly with JavaScript and animation disabled.
+   ========================================================================== */
+
+type StageKey =
+  | "align"
+  | "blueprint"
+  | "prove"
+  | "build"
+  | "launch"
+  | "compound";
+
+type StageColumn = {
+  label: string;
+  items: string[];
+};
 
 type Stage = {
   key: StageKey;
   number: string;
+  spine: string;
   phase: string;
-  shortTitle: string;
   title: string;
-  duration: string;
-  summary: string;
-  deliverables: string[];
-  output: string;
-  signal: string;
-  visualLabel: string;
+  lead: string;
+  columns: StageColumn[];
+  outcome: string;
+  meta: { label: string; value: string }[];
+  practices: string;
 };
 
 const STAGES: Stage[] = [
   {
-    key: "discover",
+    key: "align",
     number: "01",
-    phase: "Discovery",
-    shortTitle: "Discover",
-    title: "Find the leverage, not just the feature list.",
-    duration: "1–2 weeks",
-    summary:
-      "We map the operation behind the brief: people, workflows, systems, data and the business result that matters. A broad ambition becomes a buildable first move.",
-    deliverables: [
-      "Stakeholder and workflow mapping",
-      "Systems, data and integration audit",
-      "Prioritised scope with success measures",
+    spine: "Align",
+    phase: "Discovery & alignment",
+    title: "We map the operation before we scope the software.",
+    lead:
+      "The first conversations are spent on how work actually moves through your business — who touches it, which systems hold the data, and where the cost or delay is created. A broad ambition is turned into a first release that can be defended internally.",
+    columns: [
+      {
+        label: "You are involved in",
+        items: [
+          "Two working sessions a week with the people who live inside the workflow",
+          "Read-only access to current tools, exports and reporting",
+          "One decision-maker who can confirm scope and success measures",
+        ],
+      },
+      {
+        label: "What our team does",
+        items: [
+          "Process and data-flow mapping across ERP, CRM, spreadsheets and internal tools",
+          "Constraint review: compliance, procurement, integration limits, internal capacity",
+          "Effort-to-impact scoring for every candidate module, with assumptions written down",
+        ],
+      },
+      {
+        label: "You receive",
+        items: [
+          "Current-state workflow map and system inventory",
+          "Prioritised scope with measurable success criteria",
+          "Indicative budget bands and a delivery sequence",
+        ],
+      },
     ],
-    output: "A shared brief with a measurable target",
-    signal: "Inputs aligned",
-    visualLabel:
-      "Business, user and system signals converging into one prioritised scope",
+    outcome:
+      "Both sides agree on the same problem, the same first release and the same definition of done.",
+    meta: [
+      { label: "Typical duration", value: "1–2 weeks" },
+      { label: "Your time", value: "~4 hrs / week" },
+      { label: "Led by", value: "Delivery lead + domain engineer" },
+    ],
+    practices: "Applies across ERP · Cloud Consulting · Agentic AI",
   },
   {
-    key: "architect",
+    key: "blueprint",
     number: "02",
-    phase: "Architecture",
-    shortTitle: "Architect",
-    title: "Design the system before complexity gets expensive.",
-    duration: "1–3 weeks",
-    summary:
-      "Product, engineering, cloud and AI decisions are made together. We shape the experience, data model, integrations and infrastructure as one coherent system.",
-    deliverables: [
-      "Experience flows and interface direction",
-      "Data, API and integration contracts",
-      "Cloud, security and agent architecture",
+    spine: "Blueprint",
+    phase: "Architecture & solution design",
+    title: "One blueprint covering product, data, cloud and agents.",
+    lead:
+      "Product, engineering, cloud and AI decisions are made in the same room instead of being handed between teams. You see two viable architectures with honest trade-offs — cost, speed, lock-in, operating burden — and choose with your own IT and security stakeholders present.",
+    columns: [
+      {
+        label: "You are involved in",
+        items: [
+          "A structured review of two architecture options, explained without jargon",
+          "Sign-off on data ownership, hosting region and access model",
+          "Security and IT review with your internal or external auditors",
+        ],
+      },
+      {
+        label: "What our team does",
+        items: [
+          "Domain and data modelling, API contracts, event flows and integration boundaries",
+          "Cloud topology: environments, networking, IAM, backup strategy and a cost envelope",
+          "Agent design — tool permissions, retrieval sources, evaluation criteria, human-in-the-loop points",
+        ],
+      },
+      {
+        label: "You receive",
+        items: [
+          "Solution architecture, data model and integration contracts",
+          "Interface direction and the flows that carry the most business value",
+          "Sprint-level delivery plan with dependencies and owners named",
+        ],
+      },
     ],
-    output: "A reviewed blueprint and delivery plan",
-    signal: "System resolved",
-    visualLabel:
-      "A layered solution architecture connecting experience, services, intelligence and cloud",
+    outcome:
+      "The expensive decisions get made on paper, while changing them still costs a conversation instead of a rebuild.",
+    meta: [
+      { label: "Typical duration", value: "1–3 weeks" },
+      { label: "Your time", value: "2 review sessions" },
+      { label: "Led by", value: "Solution architect" },
+    ],
+    practices: "Applies across Cloud Consulting · Agentic AI · Website Solutions",
+  },
+  {
+    key: "prove",
+    number: "03",
+    spine: "Prove",
+    phase: "Prototype & technical proof",
+    title: "Prove the risky twenty percent before the budget commits.",
+    lead:
+      "Every programme has one part that decides whether the rest works: a legacy integration, a data migration, a model that has to be accurate enough to trust. We build a thin slice straight through it and measure the result against thresholds you set in advance.",
+    columns: [
+      {
+        label: "You are involved in",
+        items: [
+          "Hands-on review of a clickable prototype running on real sample data",
+          "Agreeing acceptance thresholds for accuracy, latency and unit cost",
+          "An honest go / adjust / stop conversation at the end of the stage",
+        ],
+      },
+      {
+        label: "What our team does",
+        items: [
+          "Builds one vertical slice through the hardest path, end to end",
+          "Runs agent and model evaluations against a labelled golden set, not vibes",
+          "Load, failure-mode and cost testing on the shortlisted stack, including fallback behaviour",
+        ],
+      },
+      {
+        label: "You receive",
+        items: [
+          "Working prototype on a staging environment you can share internally",
+          "Benchmark report: accuracy, latency, throughput and cost per transaction",
+          "Revised estimate for the full build, based on measured evidence",
+        ],
+      },
+    ],
+    outcome:
+      "Technical and commercial risk is retired with data before the largest part of the investment is released.",
+    meta: [
+      { label: "Typical duration", value: "2–3 weeks" },
+      { label: "Gate", value: "Thresholds met or scope changes" },
+      { label: "Led by", value: "Principal engineer" },
+    ],
+    practices: "Applies across Agentic AI · ERP · Mobile Apps",
   },
   {
     key: "build",
-    number: "03",
-    phase: "Engineering",
-    shortTitle: "Build",
-    title: "Ship working software in focused, visible cycles.",
-    duration: "2-week sprints",
-    summary:
-      "A senior delivery pod builds the highest-value path first. Every sprint ends with tested software you can use, review and redirect — not another status presentation.",
-    deliverables: [
-      "Web, mobile, ERP and AI engineering",
-      "Automated tests, review and continuous delivery",
-      "Working product review every sprint",
+    number: "04",
+    spine: "Build",
+    phase: "Engineering delivery",
+    title: "Two-week cycles that end in software, not status decks.",
+    lead:
+      "A senior pod builds the highest-value path first and keeps it releasable. You work from the same board we do, see running software every second Friday, and can reprioritise the next cycle without renegotiating the contract.",
+    columns: [
+      {
+        label: "You are involved in",
+        items: [
+          "A demo of working software at the end of every sprint",
+          "One product owner with the authority to reorder the backlog",
+          "Shared board and shared repository access — the same tickets we work from",
+        ],
+      },
+      {
+        label: "What our team does",
+        items: [
+          "Product engineering across web, mobile, ERP modules and agent workflows",
+          "Trunk-based delivery with CI, automated test suites and per-branch preview environments",
+          "Continuous integration against your live systems, plus code review on every change",
+        ],
+      },
+      {
+        label: "You receive",
+        items: [
+          "A tested increment deployed to staging each sprint",
+          "Sprint notes covering scope changes, decisions and remaining budget",
+          "Technical documentation, API references and test coverage kept current",
+        ],
+      },
     ],
-    output: "A tested increment in your hands every cycle",
-    signal: "Sprint shipping",
-    visualLabel:
-      "A delivery pipeline moving product work through plan, build, review and release",
+    outcome:
+      "Progress stays visible and reversible, so scope can change direction without losing the work already paid for.",
+    meta: [
+      { label: "Typical duration", value: "6–20 weeks" },
+      { label: "Cadence", value: "2-week sprints" },
+      { label: "Pod", value: "4–6 senior engineers" },
+    ],
+    practices: "Applies across Mobile Apps · Website Solutions · ERP · Agentic AI",
   },
   {
     key: "launch",
-    number: "04",
-    phase: "Release",
-    shortTitle: "Launch",
-    title: "Launch with proof, observability and a way back.",
-    duration: "1–2 weeks",
-    summary:
-      "Before release, we prove the critical paths across security, performance, accessibility and search. Production goes live with monitoring, ownership and rollback in place.",
-    deliverables: [
-      "Security, performance and accessibility passes",
-      "Cloud deployment and observability",
-      "Runbooks, training and release support",
+    number: "05",
+    spine: "Launch",
+    phase: "Hardening & release",
+    title: "Release day is rehearsed, observable and reversible.",
+    lead:
+      "Before anything reaches your customers, the critical paths are proven under security, performance, accessibility and search conditions. Migration is rehearsed on a copy of production, and the rollout has a monitored path forward and a tested path back.",
+    columns: [
+      {
+        label: "You are involved in",
+        items: [
+          "Signed user-acceptance testing on the flows your business depends on",
+          "Admin and support training, recorded and documented for new joiners",
+          "Choosing the launch window, comms plan and rollback criteria",
+        ],
+      },
+      {
+        label: "What our team does",
+        items: [
+          "Security review, load testing and a WCAG 2.2 AA accessibility pass",
+          "Core Web Vitals, technical SEO, indexation, redirects and analytics instrumentation",
+          "Staged or blue-green rollout with migration dry runs, alerting and dashboards in place",
+        ],
+      },
+      {
+        label: "You receive",
+        items: [
+          "Production environment with monitoring, alert routing and on-call runbooks",
+          "Migration and rollback plan that has already been executed in rehearsal",
+          "Handover pack: architecture, credentials, ownership matrix and training material",
+        ],
+      },
     ],
-    output: "A production release your team can operate",
-    signal: "Release ready",
-    visualLabel:
-      "A release system connecting quality gates, observability and controlled deployment",
+    outcome:
+      "You go live with documented proof of readiness — and a team that can operate the system without us in the room.",
+    meta: [
+      { label: "Typical duration", value: "1–2 weeks" },
+      { label: "Gates", value: "Security · performance · a11y · SEO" },
+      { label: "Support", value: "Hypercare for 30 days" },
+    ],
+    practices: "Applies across Website Solutions · SEO / Digital Growth · Cloud Consulting",
   },
   {
-    key: "scale",
-    number: "05",
-    phase: "Growth",
-    shortTitle: "Scale",
-    title: "Turn real usage into the next compounding advantage.",
-    duration: "Ongoing",
-    summary:
-      "After launch, evidence replaces opinion. Product, infrastructure and growth signals feed one improvement loop, so the next investment is tied to measurable impact.",
-    deliverables: [
-      "Product analytics and UX optimisation",
-      "Cloud cost, reliability and performance tuning",
-      "SEO, content and growth experiments",
+    key: "compound",
+    number: "06",
+    spine: "Compound",
+    phase: "Operate, measure & improve",
+    title: "After launch, real usage decides the roadmap.",
+    lead:
+      "Once the system is live, evidence replaces opinion. Product analytics, reliability data, cloud spend and search performance feed one improvement loop, and every next investment is argued from measured impact rather than a wish list.",
+    columns: [
+      {
+        label: "You are involved in",
+        items: [
+          "A monthly review of adoption, reliability, spend and growth metrics",
+          "One ranked backlog, ordered by business impact and cost to serve",
+          "Optional co-ownership: your engineers work inside the same pod and rituals",
+        ],
+      },
+      {
+        label: "What our team does",
+        items: [
+          "Reliability engineering: SLOs, incident response, capacity and cloud cost optimisation",
+          "Regression tracking for prompts, models and agent tools as your data drifts",
+          "Conversion, content and technical SEO experiments with measured lift and a written result",
+        ],
+      },
+      {
+        label: "You receive",
+        items: [
+          "Monthly impact report across product, uptime, cloud cost and search",
+          "Prioritised next-quarter roadmap with effort and expected return",
+          "A continuous release train under an agreed response and resolution SLA",
+        ],
+      },
     ],
-    output: "A living roadmap ranked by business impact",
-    signal: "Loop active",
-    visualLabel:
-      "A continuous measure, learn, improve and ship loop centred on business impact",
+    outcome:
+      "The platform keeps compounding value instead of freezing at version one and quietly ageing.",
+    meta: [
+      { label: "Duration", value: "Ongoing" },
+      { label: "Rhythm", value: "Monthly review · quarterly plan" },
+      { label: "Led by", value: "Account engineer + growth lead" },
+    ],
+    practices: "Applies across SEO / Digital Growth · Cloud Consulting · Agentic AI",
   },
 ];
 
-const DELIVERY_FACTS = [
-  { value: "05", label: "clear delivery stages" },
-  { value: "2 weeks", label: "default sprint rhythm" },
-  { value: "06", label: "specialist practices" },
-  { value: "01", label: "accountable delivery lead" },
+const FACTS = [
+  { value: "06", label: "stages from first call to compounding value" },
+  { value: "02", label: "week release cadence, from stage four onward" },
+  { value: "01", label: "accountable delivery lead for the whole journey" },
+  { value: "03", label: "decision gates where you can stop or redirect" },
 ];
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
-function CheckIcon() {
-  return (
-    <svg viewBox="0 0 18 18" aria-hidden="true">
-      <path d="m3.8 9.2 3.2 3.3 7.2-7.4" />
-    </svg>
-  );
+const bodyVariants: Variants = {
+  hidden: {},
+  show: {
+    transition: { staggerChildren: 0.055, delayChildren: 0.08 },
+  },
+  exit: {},
+};
+
+const pieceVariants: Variants = {
+  hidden: { opacity: 0, y: 18 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.55, ease: EASE },
+  },
+  exit: { opacity: 0, transition: { duration: 0.18, ease: "linear" } },
+};
+
+/* ------------------------------------------------------------------ glyphs */
+
+function StageGlyph({ stageKey }: { stageKey: StageKey }) {
+  const common = {
+    className: styles.glyph,
+    viewBox: "0 0 48 48",
+    "aria-hidden": true as const,
+  };
+
+  switch (stageKey) {
+    case "align":
+      return (
+        <svg {...common}>
+          <path data-draw="" d="M4 10h16M4 24h10M4 38h16" />
+          <path data-draw="" d="M20 10 34 24 20 38" />
+          <circle data-draw="" cx="40" cy="24" r="4" />
+        </svg>
+      );
+    case "blueprint":
+      return (
+        <svg {...common}>
+          <path data-draw="" d="M6 14h36M6 24h36M6 34h36" />
+          <path data-draw="" d="M16 8v32M32 8v32" />
+          <rect data-draw="" x="16" y="14" width="16" height="10" />
+        </svg>
+      );
+    case "prove":
+      return (
+        <svg {...common}>
+          <path data-draw="" d="M4 34c6 0 8-20 14-20s8 14 14 14 6-8 12-8" />
+          <path data-draw="" d="M4 42h40" />
+          <circle data-draw="" cx="18" cy="14" r="3" />
+        </svg>
+      );
+    case "build":
+      return (
+        <svg {...common}>
+          <rect data-draw="" x="4" y="12" width="12" height="10" />
+          <rect data-draw="" x="18" y="26" width="12" height="10" />
+          <rect data-draw="" x="32" y="12" width="12" height="10" />
+          <path data-draw="" d="M10 22v8h14M30 31h4v-9" />
+        </svg>
+      );
+    case "launch":
+      return (
+        <svg {...common}>
+          <path data-draw="" d="M24 4 40 12v14c0 10-8 15-16 18-8-3-16-8-16-18V12Z" />
+          <path data-draw="" d="M17 24l5 5 10-11" />
+        </svg>
+      );
+    case "compound":
+    default:
+      return (
+        <svg {...common}>
+          <path data-draw="" d="M10 30a14 14 0 1 1 28-8" />
+          <path data-draw="" d="M38 14v9h-9" />
+          <path data-draw="" d="M38 22a14 14 0 0 1-28 8" />
+          <path data-draw="" d="M10 38v-9h9" />
+        </svg>
+      );
+  }
 }
 
-function ArrowIcon() {
-  return (
-    <svg viewBox="0 0 20 20" aria-hidden="true">
-      <path d="M3.5 10h12M11.5 5.8 15.7 10l-4.2 4.2" />
-    </svg>
-  );
+/* ------------------------------------------------------------------- hooks */
+
+function useMediaQuery(query: string) {
+  const [matches, setMatches] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.matchMedia) return;
+
+    const list = window.matchMedia(query);
+    const update = () => setMatches(list.matches);
+
+    update();
+    list.addEventListener("change", update);
+
+    return () => list.removeEventListener("change", update);
+  }, [query]);
+
+  return matches;
 }
 
-function StageDiagram({ stage }: { stage: Stage }) {
-  if (stage.key === "discover") {
-    return (
-      <svg
-        className={styles.diagram}
-        viewBox="0 0 680 520"
-        role="img"
-        aria-label={stage.visualLabel}
-      >
-        <path className={styles.diagramGuide} d="M40 72H640M40 448H640" />
-        <path className={styles.diagramGuide} d="M82 48V472M598 48V472" />
-        <circle className={styles.diagramOrbit} cx="340" cy="260" r="124" />
-        <circle className={styles.diagramOrbitFine} cx="340" cy="260" r="174" />
-
-        <g data-diagram-node="">
-          <circle className={styles.diagramNode} cx="92" cy="140" r="11" />
-          <text className={styles.diagramMicro} x="118" y="136">
-            BUSINESS
-          </text>
-          <text className={styles.diagramText} x="118" y="157">
-            Outcomes
-          </text>
-        </g>
-        <g data-diagram-node="">
-          <circle className={styles.diagramNode} cx="92" cy="260" r="11" />
-          <text className={styles.diagramMicro} x="118" y="256">
-            PEOPLE
-          </text>
-          <text className={styles.diagramText} x="118" y="277">
-            Workflows
-          </text>
-        </g>
-        <g data-diagram-node="">
-          <circle className={styles.diagramNode} cx="92" cy="380" r="11" />
-          <text className={styles.diagramMicro} x="118" y="376">
-            SYSTEMS
-          </text>
-          <text className={styles.diagramText} x="118" y="397">
-            Constraints
-          </text>
-        </g>
-
-        <path
-          className={styles.diagramDraw}
-          data-draw=""
-          pathLength="1"
-          d="M103 140C216 140 218 206 286 235"
-        />
-        <path
-          className={styles.diagramDraw}
-          data-draw=""
-          pathLength="1"
-          d="M103 260H268"
-        />
-        <path
-          className={styles.diagramDraw}
-          data-draw=""
-          pathLength="1"
-          d="M103 380C216 380 218 314 286 285"
-        />
-
-        <path className={styles.diagramDiamond} d="m340 186 82 74-82 74-82-74Z" />
-        <circle className={styles.diagramNodeAccent} cx="340" cy="260" r="12" />
-        <text className={styles.diagramMicroAccent} x="340" y="244" textAnchor="middle">
-          PRIORITY
-        </text>
-        <text className={styles.diagramValue} x="340" y="286" textAnchor="middle">
-          Leverage
-        </text>
-
-        <path
-          className={styles.diagramDrawAccent}
-          data-draw=""
-          pathLength="1"
-          d="M422 260H518"
-        />
-        <path className={styles.diagramArrow} d="m506 251 14 9-14 9" />
-        <g data-diagram-node="">
-          <rect
-            className={styles.diagramOutput}
-            x="520"
-            y="218"
-            width="118"
-            height="84"
-          />
-          <text
-            className={styles.diagramMicroInvert}
-            x="579"
-            y="250"
-            textAnchor="middle"
-          >
-            NEXT MOVE
-          </text>
-          <text
-            className={styles.diagramTextInvert}
-            x="579"
-            y="278"
-            textAnchor="middle"
-          >
-            Scope
-          </text>
-        </g>
-      </svg>
-    );
-  }
-
-  if (stage.key === "architect") {
-    return (
-      <svg
-        className={styles.diagram}
-        viewBox="0 0 680 520"
-        role="img"
-        aria-label={stage.visualLabel}
-      >
-        <path className={styles.diagramGuide} d="M56 64H624M56 456H624" />
-        <path className={styles.diagramGuide} d="M104 40V480M576 40V480" />
-
-        <path
-          className={styles.diagramDrawAccent}
-          data-draw=""
-          pathLength="1"
-          d="M340 101V419"
-        />
-        <path className={styles.diagramLayer} d="M104 82H576V152H104Z" />
-        <path className={styles.diagramLayer} d="M84 178H596V248H84Z" />
-        <path className={styles.diagramLayerAccent} d="M64 274H616V344H64Z" />
-        <path className={styles.diagramLayer} d="M104 370H576V440H104Z" />
-
-        <g data-diagram-node="">
-          <text className={styles.diagramIndex} x="130" y="124">
-            01
-          </text>
-          <text className={styles.diagramMicro} x="182" y="112">
-            EXPERIENCE
-          </text>
-          <text className={styles.diagramText} x="182" y="135">
-            Web, mobile and workflows
-          </text>
-          <circle className={styles.diagramNode} cx="540" cy="117" r="9" />
-        </g>
-        <g data-diagram-node="">
-          <text className={styles.diagramIndex} x="110" y="220">
-            02
-          </text>
-          <text className={styles.diagramMicro} x="162" y="208">
-            SERVICES
-          </text>
-          <text className={styles.diagramText} x="162" y="231">
-            APIs, ERP and integrations
-          </text>
-          <path className={styles.diagramTick} d="M517 213h38" />
-        </g>
-        <g data-diagram-node="">
-          <text className={styles.diagramIndexAccent} x="90" y="316">
-            03
-          </text>
-          <text className={styles.diagramMicroAccent} x="142" y="304">
-            INTELLIGENCE
-          </text>
-          <text className={styles.diagramTextStrong} x="142" y="327">
-            Data, automation and agents
-          </text>
-          <circle className={styles.diagramNodeAccent} cx="580" cy="309" r="10" />
-        </g>
-        <g data-diagram-node="">
-          <text className={styles.diagramIndex} x="130" y="412">
-            04
-          </text>
-          <text className={styles.diagramMicro} x="182" y="400">
-            FOUNDATION
-          </text>
-          <text className={styles.diagramText} x="182" y="423">
-            Cloud, security and operations
-          </text>
-          <path className={styles.diagramTick} d="M510 405h45" />
-        </g>
-
-        <circle className={styles.diagramJunction} cx="340" cy="165" r="5" />
-        <circle className={styles.diagramJunction} cx="340" cy="261" r="5" />
-        <circle className={styles.diagramJunction} cx="340" cy="357" r="5" />
-      </svg>
-    );
-  }
-
-  if (stage.key === "build") {
-    return (
-      <svg
-        className={styles.diagram}
-        viewBox="0 0 680 520"
-        role="img"
-        aria-label={stage.visualLabel}
-      >
-        <path className={styles.diagramGuide} d="M48 80H632M48 440H632" />
-        <path className={styles.diagramGuide} d="M84 48V472M596 48V472" />
-        <path className={styles.diagramTrack} d="M86 260H594" />
-        <path
-          className={styles.diagramDrawAccent}
-          data-draw=""
-          pathLength="1"
-          d="M86 260H594"
-        />
-
-        {[
-          { x: 112, number: "01", label: "PLAN", note: "Priority" },
-          { x: 264, number: "02", label: "BUILD", note: "Working code" },
-          { x: 416, number: "03", label: "REVIEW", note: "Proof" },
-          { x: 568, number: "04", label: "RELEASE", note: "Increment" },
-        ].map((node, index) => (
-          <g key={node.label} data-diagram-node="">
-            <circle
-              className={
-                index === 3 ? styles.diagramNodeDark : styles.diagramNodeSurface
-              }
-              cx={node.x}
-              cy="260"
-              r="29"
-            />
-            <text
-              className={
-                index === 3 ? styles.diagramMicroInvert : styles.diagramMicroAccent
-              }
-              x={node.x}
-              y="265"
-              textAnchor="middle"
-            >
-              {node.number}
-            </text>
-            <text
-              className={styles.diagramMicro}
-              x={node.x}
-              y="332"
-              textAnchor="middle"
-            >
-              {node.label}
-            </text>
-            <text
-              className={styles.diagramTextSmall}
-              x={node.x}
-              y="355"
-              textAnchor="middle"
-            >
-              {node.note}
-            </text>
-          </g>
-        ))}
-
-        <path
-          className={styles.diagramDraw}
-          data-draw=""
-          pathLength="1"
-          d="M112 228C112 126 264 126 264 228"
-        />
-        <path
-          className={styles.diagramDraw}
-          data-draw=""
-          pathLength="1"
-          d="M264 292C264 394 416 394 416 292"
-        />
-        <path
-          className={styles.diagramDraw}
-          data-draw=""
-          pathLength="1"
-          d="M416 228C416 126 568 126 568 228"
-        />
-        <path className={styles.diagramArrow} d="m252 219 12 9-15 5" />
-        <path className={styles.diagramArrow} d="m404 301 12-9-15-5" />
-        <path className={styles.diagramArrow} d="m556 219 12 9-15 5" />
-        <circle className={styles.diagramPulse} cx="188" cy="260" r="6" data-pulse="" />
-      </svg>
-    );
-  }
-
-  if (stage.key === "launch") {
-    return (
-      <svg
-        className={styles.diagram}
-        viewBox="0 0 680 520"
-        role="img"
-        aria-label={stage.visualLabel}
-      >
-        <path className={styles.diagramGuide} d="M48 72H632M48 448H632" />
-        <path className={styles.diagramGuide} d="M84 48V472M596 48V472" />
-
-        <circle className={styles.diagramOrbitFine} cx="250" cy="260" r="166" />
-        <circle className={styles.diagramOrbit} cx="250" cy="260" r="116" />
-        <circle className={styles.diagramCore} cx="250" cy="260" r="72" />
-        <path
-          className={styles.diagramDrawAccentWide}
-          data-draw=""
-          pathLength="1"
-          d="M250 94a166 166 0 1 1-117 48"
-        />
-        <text className={styles.diagramMicroAccent} x="250" y="247" textAnchor="middle">
-          RELEASE
-        </text>
-        <text className={styles.diagramValue} x="250" y="282" textAnchor="middle">
-          Ready
-        </text>
-
-        {[
-          { y: 145, label: "Security" },
-          { y: 222, label: "Performance" },
-          { y: 299, label: "Accessibility" },
-          { y: 376, label: "Operations" },
-        ].map((item) => (
-          <g key={item.label} data-diagram-node="">
-            <path className={styles.diagramStatusLine} d={`M448 ${item.y}H612`} />
-            <circle className={styles.diagramCheckCircle} cx="468" cy={item.y} r="11" />
-            <path className={styles.diagramCheck} d={`m462 ${item.y} 4 4 8-9`} />
-            <text className={styles.diagramText} x="494" y={item.y + 5}>
-              {item.label}
-            </text>
-          </g>
-        ))}
-        <path
-          className={styles.diagramDraw}
-          data-draw=""
-          pathLength="1"
-          d="M366 260H448"
-        />
-        <circle className={styles.diagramPulse} cx="250" cy="94" r="7" data-pulse="" />
-      </svg>
-    );
-  }
-
-  return (
-    <svg
-      className={styles.diagram}
-      viewBox="0 0 680 520"
-      role="img"
-      aria-label={stage.visualLabel}
-    >
-      <path className={styles.diagramGuide} d="M48 72H632M48 448H632" />
-      <path className={styles.diagramGuide} d="M84 48V472M596 48V472" />
-      <circle className={styles.diagramOrbitFine} cx="340" cy="260" r="174" />
-      <circle className={styles.diagramOrbit} cx="340" cy="260" r="126" />
-      <path
-        className={styles.diagramDrawAccentWide}
-        data-draw=""
-        pathLength="1"
-        d="M340 86a174 174 0 0 1 168 130"
-      />
-      <path
-        className={styles.diagramDrawAccentWide}
-        data-draw=""
-        pathLength="1"
-        d="M514 260a174 174 0 0 1-130 168"
-      />
-      <path
-        className={styles.diagramDrawAccentWide}
-        data-draw=""
-        pathLength="1"
-        d="M340 434a174 174 0 0 1-168-130"
-      />
-      <path
-        className={styles.diagramDrawAccentWide}
-        data-draw=""
-        pathLength="1"
-        d="M166 260A174 174 0 0 1 296 92"
-      />
-      <path className={styles.diagramArrow} d="m499 201 9 15 7-17" />
-      <path className={styles.diagramArrow} d="m399 419-15 9 17 7" />
-      <path className={styles.diagramArrow} d="m181 319-9-15-7 17" />
-      <path className={styles.diagramArrow} d="m281 101 15-9-17-7" />
-
-      {[
-        { x: 340, y: 86, label: "MEASURE" },
-        { x: 514, y: 260, label: "LEARN" },
-        { x: 340, y: 434, label: "IMPROVE" },
-        { x: 166, y: 260, label: "SHIP" },
-      ].map((item) => (
-        <g key={item.label} data-diagram-node="">
-          <rect
-            className={styles.diagramLabelPlate}
-            x={item.x - 51}
-            y={item.y - 20}
-            width="102"
-            height="40"
-          />
-          <text
-            className={styles.diagramMicroAccent}
-            x={item.x}
-            y={item.y + 4}
-            textAnchor="middle"
-          >
-            {item.label}
-          </text>
-        </g>
-      ))}
-
-      <circle className={styles.diagramNodeDark} cx="340" cy="260" r="76" />
-      <text className={styles.diagramMicroInvert} x="340" y="247" textAnchor="middle">
-        BUSINESS
-      </text>
-      <text
-        className={styles.diagramTextInvertLarge}
-        x="340"
-        y="282"
-        textAnchor="middle"
-      >
-        Impact
-      </text>
-      <circle className={styles.diagramPulse} cx="466" cy="260" r="7" data-pulse="" />
-    </svg>
-  );
-}
+/* --------------------------------------------------------------- component */
 
 export default function HowWeBuild() {
   const sectionRef = useRef<HTMLElement | null>(null);
-  const ctaRef = useRef<HTMLAnchorElement | null>(null);
-  const stageRefs = useRef<Array<HTMLElement | null>>([]);
-  const processTriggerRef = useRef<ReturnType<typeof ScrollTrigger.create> | null>(
-    null,
+  const hoverTimer = useRef<number | null>(null);
+
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const isDesktop = useMediaQuery("(min-width: 1180px)");
+  const canHover = useMediaQuery("(hover: hover) and (pointer: fine)");
+
+  const activeStage = activeIndex >= 0 ? STAGES[activeIndex] : null;
+
+  const clearHoverTimer = useCallback(() => {
+    if (hoverTimer.current !== null) {
+      window.clearTimeout(hoverTimer.current);
+      hoverTimer.current = null;
+    }
+  }, []);
+
+  useEffect(() => clearHoverTimer, [clearHoverTimer]);
+
+  const handleHover = useCallback(
+    (index: number) => {
+      if (!isDesktop || !canHover) return;
+      clearHoverTimer();
+      hoverTimer.current = window.setTimeout(() => setActiveIndex(index), 90);
+    },
+    [canHover, clearHoverTimer, isDesktop],
   );
-  const activeStageRef = useRef(0);
-  const [activeStage, setActiveStage] = useState(0);
+
+  const handleActivate = useCallback(
+    (index: number) => {
+      clearHoverTimer();
+      setActiveIndex((current) => {
+        if (current !== index) return index;
+        // Desktop always keeps one panel open; mobile allows collapsing.
+        return isDesktop ? current : -1;
+      });
+    },
+    [clearHoverTimer, isDesktop],
+  );
+
+  /* ----------------------------------------------------------- GSAP layer */
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
@@ -570,688 +468,375 @@ export default function HowWeBuild() {
     gsap.registerPlugin(ScrollTrigger);
 
     const media = gsap.matchMedia();
-    let visibilityObserver: IntersectionObserver | null = null;
-
-    if ("IntersectionObserver" in window) {
-      visibilityObserver = new IntersectionObserver(
-        ([entry]) => {
-          section.dataset.inView = entry.isIntersecting ? "true" : "false";
-        },
-        { rootMargin: "12% 0px" },
-      );
-      visibilityObserver.observe(section);
-    } else {
-      section.dataset.inView = "true";
-    }
-
-    const updateActiveStage = (index: number) => {
-      if (activeStageRef.current === index) return;
-      activeStageRef.current = index;
-      setActiveStage(index);
-    };
 
     const context = gsap.context(() => {
       media.add(
         {
           reduce: "(prefers-reduced-motion: reduce)",
-          desktop: "(min-width: 1024px)",
-          finePointer: "(hover: hover) and (pointer: fine)",
+          desktop: "(min-width: 1180px)",
         },
         (mediaContext) => {
-          const { reduce, desktop, finePointer } = mediaContext.conditions as {
+          const { reduce, desktop } = mediaContext.conditions as {
             reduce: boolean;
             desktop: boolean;
-            finePointer: boolean;
           };
+
           const q = gsap.utils.selector(section);
-          const cleanups: Array<() => void> = [];
-          const scenes = q("[data-stage-scene]") as HTMLElement[];
+          const headingLines = q("[data-heading-line]");
+          const ghost = q("[data-ghost]")[0] as HTMLElement | undefined;
           const drawPaths = Array.from(
-            section.querySelectorAll<SVGPathElement>("[data-draw]"),
+            section.querySelectorAll<SVGGeometryElement>("[data-draw]"),
           );
-          const progressFill = q("[data-process-progress]")[0] as
-            HTMLElement | undefined;
 
           section.dataset.motionReady = "true";
-          gsap.set(drawPaths, {
-            strokeDasharray: 1,
-            strokeDashoffset: reduce ? 0 : 1,
-          });
 
           if (reduce) {
-            gsap.set(q("[data-heading-line]"), {
+            gsap.set(headingLines, {
               backgroundSize: "100% 100%, 100% 100%",
             });
-            const closingHeadingFill = q("[data-closing-heading-fill]")[0];
-            if (closingHeadingFill) {
-              gsap.set(closingHeadingFill, {
+            gsap.set(q("[data-reveal]"), { clearProps: "all" });
+            gsap.set(drawPaths, { clearProps: "all" });
+            return;
+          }
+
+          // Grey → dark, left-to-right scroll fill on the section heading.
+          const headingFill = gsap.timeline({
+            scrollTrigger: {
+              trigger: q("[data-heading]")[0],
+              start: "top 88%",
+              end: "bottom 42%",
+              scrub: 0.9,
+              invalidateOnRefresh: true,
+            },
+          });
+
+          headingLines.forEach((line, index) => {
+            headingFill.fromTo(
+              line,
+              { backgroundSize: "0% 100%, 100% 100%" },
+              {
                 backgroundSize: "100% 100%, 100% 100%",
-              });
-            }
-            gsap.set(scenes, { clearProps: "all" });
-            if (progressFill) {
-              gsap.set(progressFill, { clearProps: "transform" });
-            }
-          } else {
-            gsap.fromTo(
-              q("[data-intro-reveal]"),
-              { y: 28, opacity: 0 },
-              {
-                y: 0,
-                opacity: 1,
-                duration: 0.9,
-                stagger: 0.09,
-                ease: "power3.out",
-                clearProps: "transform,opacity",
-                scrollTrigger: {
-                  trigger: q("[data-masthead]")[0],
-                  start: "top 82%",
-                  once: true,
-                },
+                duration: 1,
+                ease: "none",
               },
+              index * 0.55,
             );
+          });
 
-            const headingLines = q("[data-heading-line]");
-            const headingFill = gsap.timeline({
+          // Editorial intro reveal.
+          gsap.fromTo(
+            q("[data-reveal]"),
+            { y: 26, opacity: 0 },
+            {
+              y: 0,
+              opacity: 1,
+              duration: 0.85,
+              stagger: 0.08,
+              ease: "power3.out",
+              clearProps: "transform,opacity",
               scrollTrigger: {
-                trigger: q("[data-heading-fill]")[0],
+                trigger: q("[data-head]")[0],
+                start: "top 82%",
+                once: true,
+              },
+            },
+          );
+
+          // Rail entrance.
+          gsap.fromTo(
+            q("[data-rail]")[0],
+            { y: 34, opacity: 0 },
+            {
+              y: 0,
+              opacity: 1,
+              duration: 0.95,
+              ease: "power3.out",
+              clearProps: "transform,opacity",
+              scrollTrigger: {
+                trigger: q("[data-rail]")[0],
                 start: "top 88%",
-                end: "bottom 34%",
-                scrub: 0.9,
-                invalidateOnRefresh: true,
+                once: true,
+              },
+            },
+          );
+
+          // Technical line-drawing on the stage glyphs.
+          if (drawPaths.length) {
+            gsap.set(drawPaths, { strokeDasharray: 1, strokeDashoffset: 1 });
+            gsap.to(drawPaths, {
+              strokeDashoffset: 0,
+              duration: 1.1,
+              stagger: 0.05,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: q("[data-rail]")[0],
+                start: "top 82%",
+                once: true,
               },
             });
-            headingLines.forEach((line, index) => {
-              headingFill.fromTo(
-                line,
-                { backgroundSize: "0% 100%, 100% 100%" },
-                {
-                  backgroundSize: "100% 100%, 100% 100%",
-                  duration: 1,
-                  ease: "none",
-                },
-                index * 0.58,
-              );
-            });
-
-            gsap.fromTo(
-              q("[data-process-intro] > *"),
-              { y: 30, opacity: 0 },
-              {
-                y: 0,
-                opacity: 1,
-                duration: 0.85,
-                stagger: 0.1,
-                ease: "power3.out",
-                clearProps: "transform,opacity",
-                scrollTrigger: {
-                  trigger: q("[data-process-intro]")[0],
-                  start: "top 84%",
-                  once: true,
-                },
-              },
-            );
-
-            gsap.fromTo(
-              q("[data-closing] > *"),
-              { y: 30, opacity: 0 },
-              {
-                y: 0,
-                opacity: 1,
-                duration: 0.85,
-                stagger: 0.08,
-                ease: "power3.out",
-                clearProps: "transform,opacity",
-                scrollTrigger: {
-                  trigger: q("[data-closing]")[0],
-                  start: "top 84%",
-                  once: true,
-                },
-              },
-            );
-
-            const closingHeadingFill = q("[data-closing-heading-fill]")[0];
-            if (closingHeadingFill) {
-              gsap.fromTo(
-                closingHeadingFill,
-                { backgroundSize: "100% 100%, 0% 100%" },
-                {
-                  backgroundSize: "100% 100%, 100% 100%",
-                  ease: "none",
-                  scrollTrigger: {
-                    trigger: closingHeadingFill,
-                    start: "top 92%",
-                    end: "top 42%",
-                    scrub: 0.75,
-                    invalidateOnRefresh: true,
-                  },
-                },
-              );
-            }
           }
 
-          if (desktop && !reduce) {
-            const frame = q("[data-process-frame]")[0] as HTMLElement | undefined;
-
-            if (frame && scenes.length && progressFill) {
-              const pieces = q("[data-stage-piece]");
-              gsap.set(scenes, { autoAlpha: 0 });
-              gsap.set(scenes[0], { autoAlpha: 1 });
-              gsap.set(progressFill, { scaleY: 0, transformOrigin: "top center" });
-
-              const timeline = gsap.timeline({
-                defaults: { ease: "none" },
+          // Oversized background typography drifts slightly against the scroll.
+          if (ghost && desktop) {
+            gsap.fromTo(
+              ghost,
+              { xPercent: -3, yPercent: 6 },
+              {
+                xPercent: 3,
+                yPercent: -6,
+                ease: "none",
                 scrollTrigger: {
-                  trigger: frame,
-                  start: "top top+=24",
-                  end: () => `+=${Math.max(3200, window.innerHeight * 4.35)}`,
-                  pin: true,
-                  scrub: 1.05,
-                  anticipatePin: 1,
+                  trigger: q("[data-stageband]")[0],
+                  start: "top bottom",
+                  end: "bottom top",
+                  scrub: 1.1,
                   invalidateOnRefresh: true,
-                  onUpdate: (self) => {
-                    const index = Math.min(
-                      STAGES.length - 1,
-                      Math.max(0, Math.round(self.progress * (STAGES.length - 1))),
-                    );
-                    updateActiveStage(index);
-                  },
-                  onLeaveBack: () => updateActiveStage(0),
-                  onLeave: () => updateActiveStage(STAGES.length - 1),
                 },
-              });
-
-              timeline.to(
-                progressFill,
-                { scaleY: 1, duration: STAGES.length, ease: "none" },
-                0,
-              );
-              timeline.to(
-                scenes[0].querySelectorAll("[data-draw]"),
-                {
-                  strokeDashoffset: 0,
-                  duration: 0.72,
-                  stagger: 0.06,
-                  ease: "power2.out",
-                },
-                0.08,
-              );
-              timeline.fromTo(
-                scenes[0].querySelectorAll("[data-diagram-node]"),
-                { opacity: 0, y: 10 },
-                {
-                  opacity: 1,
-                  y: 0,
-                  duration: 0.5,
-                  stagger: 0.04,
-                  ease: "power3.out",
-                },
-                0.12,
-              );
-
-              for (let index = 1; index < scenes.length; index += 1) {
-                const previous = scenes[index - 1];
-                const current = scenes[index];
-                const at = index;
-
-                timeline.to(
-                  previous.querySelectorAll("[data-stage-piece]"),
-                  {
-                    y: -20,
-                    opacity: 0,
-                    duration: 0.36,
-                    stagger: 0.018,
-                    ease: "power2.inOut",
-                  },
-                  at - 0.22,
-                );
-                timeline.to(
-                  previous,
-                  {
-                    autoAlpha: 0,
-                    duration: 0.18,
-                    ease: "none",
-                  },
-                  at + 0.01,
-                );
-                timeline.fromTo(
-                  current,
-                  { autoAlpha: 0 },
-                  {
-                    autoAlpha: 1,
-                    duration: 0.22,
-                    ease: "none",
-                  },
-                  at + 0.03,
-                );
-                timeline.fromTo(
-                  current.querySelector("[data-stage-visual]"),
-                  { x: 20, opacity: 0 },
-                  {
-                    x: 0,
-                    opacity: 1,
-                    duration: 0.62,
-                    ease: "power2.out",
-                  },
-                  at + 0.06,
-                );
-                timeline.fromTo(
-                  current.querySelectorAll("[data-copy-reveal]"),
-                  { y: 24, opacity: 0 },
-                  {
-                    y: 0,
-                    opacity: 1,
-                    duration: 0.58,
-                    stagger: 0.045,
-                    ease: "power2.out",
-                  },
-                  at + 0.1,
-                );
-                timeline.to(
-                  current.querySelectorAll("[data-draw]"),
-                  {
-                    strokeDashoffset: 0,
-                    duration: 0.72,
-                    stagger: 0.04,
-                    ease: "power2.inOut",
-                  },
-                  at + 0.1,
-                );
-                timeline.fromTo(
-                  current.querySelectorAll("[data-diagram-node]"),
-                  { opacity: 0, y: 10 },
-                  {
-                    opacity: 1,
-                    y: 0,
-                    duration: 0.56,
-                    stagger: 0.03,
-                    ease: "power2.out",
-                  },
-                  at + 0.16,
-                );
-              }
-
-              processTriggerRef.current = timeline.scrollTrigger ?? null;
-
-              cleanups.push(() => {
-                processTriggerRef.current = null;
-                gsap.set(scenes, { clearProps: "opacity,visibility,transform" });
-                gsap.set(pieces, { clearProps: "opacity,transform" });
-                gsap.set(progressFill, { clearProps: "transform" });
-              });
-            }
-          } else {
-            gsap.set(scenes, { clearProps: "opacity,visibility,transform" });
-            if (progressFill) {
-              gsap.set(progressFill, { clearProps: "transform" });
-            }
-
-            if (!reduce) {
-              ScrollTrigger.batch(scenes, {
-                start: "top 84%",
-                onEnter: (batch) => {
-                  batch.forEach((item) => {
-                    const scene = item as HTMLElement;
-                    const index = Number(scene.dataset.stageIndex ?? 0);
-                    updateActiveStage(index);
-
-                    const reveal = gsap.timeline();
-                    reveal.fromTo(
-                      scene.querySelectorAll("[data-mobile-reveal]"),
-                      { y: 28, opacity: 0 },
-                      {
-                        y: 0,
-                        opacity: 1,
-                        duration: 0.78,
-                        stagger: 0.045,
-                        ease: "power2.out",
-                        clearProps: "transform,opacity",
-                      },
-                    );
-                    reveal.to(
-                      scene.querySelectorAll("[data-draw]"),
-                      {
-                        strokeDashoffset: 0,
-                        duration: 0.78,
-                        stagger: 0.04,
-                        ease: "power2.inOut",
-                      },
-                      0.08,
-                    );
-                  });
-                },
-                onEnterBack: (batch) => {
-                  const first = batch[0] as HTMLElement | undefined;
-                  if (first) updateActiveStage(Number(first.dataset.stageIndex ?? 0));
-                },
-              });
-            }
+              },
+            );
           }
-
-          const cta = ctaRef.current;
-          if (cta && finePointer && !reduce) {
-            const xTo = gsap.quickTo(cta, "x", {
-              duration: 0.42,
-              ease: "power3.out",
-            });
-            const yTo = gsap.quickTo(cta, "y", {
-              duration: 0.42,
-              ease: "power3.out",
-            });
-            let bounds: DOMRect | null = null;
-
-            const onEnter = () => {
-              bounds = cta.getBoundingClientRect();
-            };
-            const onMove = (event: PointerEvent) => {
-              if (!bounds) return;
-              xTo((event.clientX - bounds.left - bounds.width / 2) * 0.1);
-              yTo((event.clientY - bounds.top - bounds.height / 2) * 0.16);
-            };
-            const onLeave = () => {
-              bounds = null;
-              xTo(0);
-              yTo(0);
-            };
-
-            cta.addEventListener("pointerenter", onEnter);
-            cta.addEventListener("pointermove", onMove, { passive: true });
-            cta.addEventListener("pointerleave", onLeave);
-
-            cleanups.push(() => {
-              cta.removeEventListener("pointerenter", onEnter);
-              cta.removeEventListener("pointermove", onMove);
-              cta.removeEventListener("pointerleave", onLeave);
-              gsap.set(cta, { clearProps: "transform" });
-            });
-          }
-
-          return () => cleanups.forEach((cleanup) => cleanup());
         },
       );
     }, section);
 
     return () => {
-      visibilityObserver?.disconnect();
-      processTriggerRef.current = null;
-      media.revert();
+      media.kill();
       context.revert();
-      delete section.dataset.motionReady;
-      delete section.dataset.inView;
     };
   }, []);
 
-  const goToStage = (index: number) => {
-    const trigger = processTriggerRef.current;
-    activeStageRef.current = index;
-    setActiveStage(index);
+  // Panel widths change layout, so let ScrollTrigger re-measure after a switch.
+  useEffect(() => {
+    const id = window.setTimeout(() => ScrollTrigger.refresh(), 780);
+    return () => window.clearTimeout(id);
+  }, [activeIndex, isDesktop]);
 
-    if (trigger) {
-      const progress = index / (STAGES.length - 1);
-      const destination = trigger.start + (trigger.end - trigger.start) * progress;
-      const scroll = ScrollTrigger.getScrollFunc(window);
-      scroll(destination);
-      return;
-    }
-
-    stageRefs.current[index]?.scrollIntoView({ block: "start" });
-  };
-
-  const active = STAGES[activeStage];
+  /* --------------------------------------------------------------- render */
 
   return (
     <MotionConfig reducedMotion="user">
       <section
-        id="how-we-build"
+        id="how-we-work"
         ref={sectionRef}
         className={styles.section}
-        aria-labelledby="how-we-build-title"
-        data-in-view="false"
+        aria-labelledby="how-we-work-title"
       >
-        <div className={styles.blueprint} data-blueprint="" aria-hidden="true">
-          <span />
-          <span />
-          <span />
-        </div>
-
         <div className={styles.shell}>
-          <header className={styles.masthead} data-masthead="">
-            <p className={styles.eyebrow} data-intro-reveal="">
-              (How we build)
-            </p>
+          <header className={styles.head} data-head="">
+            <div className={styles.headMain}>
+              <p className={styles.eyebrow} data-reveal="">
+                (How we build)
+              </p>
 
-            <div className={styles.headingWrap}>
-              <h2 className={styles.title} id="how-we-build-title" data-heading-fill="">
+              <h2 className={styles.title} id="how-we-work-title" data-heading="">
                 <span className={styles.titleLine} data-heading-line="">
-                  From Business Friction
+                  How We Build
                 </span>
-                <span className={styles.titleLine} data-heading-line="">
-                  To Working Systems
+                <span
+                  className={`${styles.titleLine} ${styles.titleLineAlt}`}
+                  data-heading-line=""
+                >
+                  First Call To Compounding Value
                 </span>
               </h2>
             </div>
 
-            <div className={styles.mastCopy} data-intro-reveal="">
-              <span className={styles.mastRule} aria-hidden="true" />
-              <p>
-                JabitSoft connects strategy, product, engineering, cloud and growth
-                inside one accountable delivery system — so decisions become dependable
-                software without handoff friction.
+            <div className={styles.headAside}>
+              <p className={styles.headLead} data-reveal="">
+                JabitSoft runs one delivery system across agentic AI, cloud, mobile,
+                ERP, web and search. The stages below are the actual operating
+                rhythm of a programme — what gets decided, who is in the room, and
+                what leaves each stage as a reviewable artefact.
               </p>
-              <div className={styles.mastNote}>
-                <span>01</span>
-                <p>
-                  One senior team stays with the problem from first map to next release.
-                </p>
-              </div>
+
+              <dl className={styles.headMeta} data-reveal="">
+                <div>
+                  <dt>Engagement shape</dt>
+                  <dd>Fixed-scope discovery, then sprint-based delivery</dd>
+                </div>
+                <div>
+                  <dt>Exit points</dt>
+                  <dd>After stage 01, 03 and any sprint boundary</dd>
+                </div>
+              </dl>
             </div>
           </header>
 
-          <section className={styles.process} aria-labelledby="process-title">
-            <div className={styles.processIntro} data-process-intro="">
-              <div>
-                <p className={styles.sectionKicker}>The delivery system</p>
-                <h3 id="process-title">Five decisions. One continuous loop.</h3>
-              </div>
-              <p>
-                Every stage resolves a different kind of risk. Scroll through the system
-                to see how an initial signal becomes a product your team can operate,
-                improve and scale.
-              </p>
+          <div className={styles.stageBand} data-stageband="">
+            <div className={styles.railHeader} data-reveal="">
+              <span>Stage ledger</span>
+              <span className={styles.railHeaderRule} aria-hidden="true" />
+              <span>
+                {activeStage ? activeStage.number : "\u2014"} / {STAGES.length}
+              </span>
             </div>
 
-            <div className={styles.processFrame} data-process-frame="">
-              <aside className={styles.stageNav} aria-label="Delivery stages">
-                <div className={styles.stageNavTop}>
-                  <span>Process index</span>
-                  <span>JabitSoft / 05</span>
-                </div>
+            <div className={styles.ghostRow} aria-hidden="true">
+              <AnimatePresence initial={false} mode="wait">
+                <motion.span
+                  key={activeStage ? activeStage.key : "index"}
+                  className={styles.ghost}
+                  data-ghost=""
+                  initial={{ opacity: 0, y: "18%" }}
+                  animate={{ opacity: 1, y: "0%" }}
+                  exit={{ opacity: 0, y: "-14%" }}
+                  transition={{ duration: 0.6, ease: EASE }}
+                >
+                  {activeStage ? activeStage.spine : "Process"}
+                </motion.span>
+              </AnimatePresence>
+            </div>
 
-                <div className={styles.activeStage}>
-                  <div className={styles.activeNumber} aria-hidden="true">
-                    <AnimatePresence initial={false} mode="wait">
-                      <motion.span
-                        key={active.number}
-                        initial={{ y: "72%", opacity: 0 }}
-                        animate={{ y: "0%", opacity: 1 }}
-                        exit={{ y: "-72%", opacity: 0 }}
-                        transition={{ duration: 0.44, ease: EASE }}
-                      >
-                        {active.number}
-                      </motion.span>
-                    </AnimatePresence>
-                    <small>/ 05</small>
-                  </div>
-                  <div className={styles.activeName} aria-live="polite">
-                    <AnimatePresence initial={false} mode="wait">
-                      <motion.span
-                        key={active.key}
-                        initial={{ y: 9, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        exit={{ y: -9, opacity: 0 }}
-                        transition={{ duration: 0.38, ease: EASE }}
-                      >
-                        {active.shortTitle}
-                      </motion.span>
-                    </AnimatePresence>
-                  </div>
-                </div>
+            <ol className={styles.rail} data-rail="">
+              {STAGES.map((stage, index) => {
+                const isActive = index === activeIndex;
 
-                <div className={styles.navSequence}>
-                  <span className={styles.navProgress} aria-hidden="true">
-                    <span data-process-progress="" />
-                  </span>
-                  <ol>
-                    {STAGES.map((stage, index) => (
-                      <li key={stage.key}>
-                        <button
-                          type="button"
-                          className={
-                            index === activeStage ? styles.stageButtonActive : ""
-                          }
-                          onClick={() => goToStage(index)}
-                          aria-current={index === activeStage ? "step" : undefined}
-                          aria-controls={`build-stage-${stage.key}`}
-                        >
-                          <span className={styles.stageButtonDot} aria-hidden="true" />
-                          <span className={styles.stageButtonText}>
-                            <strong>{stage.shortTitle}</strong>
-                            <small>{stage.phase}</small>
-                          </span>
-                          <span className={styles.stageButtonNumber}>
-                            {stage.number}
-                          </span>
-                        </button>
-                      </li>
-                    ))}
-                  </ol>
-                </div>
-
-                <p className={styles.navFootnote}>
-                  Strategy, design, engineering, cloud and growth stay in the same
-                  feedback loop.
-                </p>
-              </aside>
-
-              <div className={styles.sceneViewport}>
-                {STAGES.map((stage, index) => {
-                  const isActive = index === activeStage;
-
-                  return (
-                    <article
-                      id={`build-stage-${stage.key}`}
-                      key={stage.key}
-                      ref={(node) => {
-                        stageRefs.current[index] = node;
-                      }}
-                      className={styles.stageScene}
-                      data-stage-scene=""
-                      data-stage-index={index}
-                      data-active={isActive ? "true" : "false"}
-                      aria-labelledby={`build-stage-title-${stage.key}`}
+                return (
+                  <motion.li
+                    key={stage.key}
+                    className={styles.panel}
+                    data-active={isActive ? "true" : "false"}
+                    style={isDesktop ? { flexBasis: 0 } : undefined}
+                    animate={
+                      isDesktop ? { flexGrow: isActive ? 9.4 : 1 } : { flexGrow: 0 }
+                    }
+                    transition={{ duration: 0.72, ease: EASE }}
+                    onMouseEnter={() => handleHover(index)}
+                  >
+                    <button
+                      type="button"
+                      className={styles.face}
+                      aria-expanded={isActive}
+                      aria-controls={`stage-panel-${stage.key}`}
+                      id={`stage-face-${stage.key}`}
+                      onClick={() => handleActivate(index)}
+                      onFocus={() => setActiveIndex(index)}
                     >
-                      <div
-                        className={styles.diagramPane}
-                        data-stage-piece=""
-                        data-stage-visual=""
-                        data-mobile-reveal=""
-                      >
-                        <div className={styles.diagramBar}>
-                          <span>
-                            <i aria-hidden="true" />
-                            Delivery system map
-                          </span>
-                          <span>
-                            {stage.number} / {stage.shortTitle}
-                          </span>
-                        </div>
-                        <figure className={styles.diagramFigure}>
-                          <StageDiagram stage={stage} />
-                          <figcaption className={styles.srOnly}>
-                            {stage.visualLabel}
-                          </figcaption>
-                        </figure>
-                        <div className={styles.diagramFoot}>
-                          <span>Signal / {stage.signal}</span>
-                          <span>JabitSoft delivery OS</span>
-                        </div>
-                      </div>
+                      <span className={styles.faceNumber} aria-hidden="true">
+                        {stage.number}
+                      </span>
 
-                      <div
-                        className={styles.stageCopy}
-                        data-stage-piece=""
-                        data-mobile-reveal=""
-                      >
-                        <div className={styles.stageMeta} data-copy-reveal="">
-                          <span>
-                            {stage.number} — {stage.phase}
-                          </span>
-                          <span>{stage.duration}</span>
-                        </div>
-                        <p className={styles.stageSignal} data-copy-reveal="">
-                          <span aria-hidden="true" />
-                          {stage.signal}
-                        </p>
-                        <h4 id={`build-stage-title-${stage.key}`} data-copy-reveal="">
-                          {stage.title}
-                        </h4>
-                        <p className={styles.stageSummary} data-copy-reveal="">
-                          {stage.summary}
-                        </p>
+                      <span className={styles.faceLabel}>
+                        <span className={styles.faceSpine}>{stage.spine}</span>
+                        <span className={styles.facePhase}>{stage.phase}</span>
+                      </span>
 
-                        <ul className={styles.deliverables} data-copy-reveal="">
-                          {stage.deliverables.map((item) => (
-                            <li key={item}>
-                              <span className={styles.check} aria-hidden="true">
-                                <CheckIcon />
-                              </span>
-                              <span>{item}</span>
-                            </li>
-                          ))}
-                        </ul>
+                      <span className={styles.faceFoot} aria-hidden="true">
+                        <StageGlyph stageKey={stage.key} />
+                        <motion.span
+                          className={styles.faceIndicator}
+                          animate={{ rotate: isActive ? 45 : 0 }}
+                          transition={{ duration: 0.4, ease: EASE }}
+                        >
+                          <svg viewBox="0 0 16 16" aria-hidden="true">
+                            <path d="M8 2v12M2 8h12" />
+                          </svg>
+                        </motion.span>
+                        <span className={styles.faceTicks} />
+                      </span>
+                    </button>
 
-                        <div className={styles.stageOutput} data-copy-reveal="">
-                          <span>Stage output</span>
-                          <strong>{stage.output}</strong>
-                        </div>
-                      </div>
-                    </article>
-                  );
-                })}
+                    <AnimatePresence initial={false}>
+                      {isActive ? (
+                        <motion.div
+                          key="body"
+                          id={`stage-panel-${stage.key}`}
+                          role="region"
+                          aria-labelledby={`stage-face-${stage.key}`}
+                          className={styles.body}
+                          variants={bodyVariants}
+                          initial="hidden"
+                          animate="show"
+                          exit="exit"
+                          {...(isDesktop
+                            ? {}
+                            : {
+                                style: { overflow: "hidden" },
+                                initial: { height: 0, opacity: 0 },
+                                animate: { height: "auto", opacity: 1 },
+                                exit: { height: 0, opacity: 0 },
+                                transition: { duration: 0.45, ease: EASE },
+                              })}
+                        >
+                          <div className={styles.bodyInner}>
+                            <span className={styles.bodyGhost} aria-hidden="true">
+                              {stage.number}
+                            </span>
+
+                            <motion.div
+                              className={styles.bodyHead}
+                              variants={isDesktop ? pieceVariants : undefined}
+                            >
+                              <p className={styles.bodyPhase}>{stage.phase}</p>
+                              <h3 className={styles.bodyTitle}>{stage.title}</h3>
+                              <p className={styles.bodyLead}>{stage.lead}</p>
+                            </motion.div>
+
+                            <div className={styles.bodyGrid}>
+                              {stage.columns.map((column) => (
+                                <motion.div
+                                  key={column.label}
+                                  className={styles.col}
+                                  variants={isDesktop ? pieceVariants : undefined}
+                                >
+                                  <h4 className={styles.colLabel}>{column.label}</h4>
+                                  <ul className={styles.colList}>
+                                    {column.items.map((item) => (
+                                      <li key={item}>
+                                        <span
+                                          className={styles.bullet}
+                                          aria-hidden="true"
+                                        />
+                                        {item}
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </motion.div>
+                              ))}
+                            </div>
+
+                            <motion.div
+                              className={styles.bodyFoot}
+                              variants={isDesktop ? pieceVariants : undefined}
+                            >
+                              <div className={styles.footMain}>
+                                <span className={styles.outcomeLabel}>
+                                  What this stage achieves
+                                </span>
+                                <p className={styles.outcome}>{stage.outcome}</p>
+                                <p className={styles.practices}>{stage.practices}</p>
+                              </div>
+
+                              <div className={styles.metaRow}>
+                                {stage.meta.map((entry) => (
+                                  <div key={entry.label} className={styles.metaItem}>
+                                    <span className={styles.metaLabel}>
+                                      {entry.label}
+                                    </span>
+                                    <span className={styles.metaValue}>
+                                      {entry.value}
+                                    </span>
+                                  </div>
+                                ))}
+                              </div>
+                            </motion.div>
+                          </div>
+                        </motion.div>
+                      ) : null}
+                    </AnimatePresence>
+                  </motion.li>
+                );
+              })}
+            </ol>
+          </div>
+
+          <footer className={styles.factStrip} data-reveal="">
+            {FACTS.map((fact) => (
+              <div key={fact.label} className={styles.fact}>
+                <span className={styles.factValue}>{fact.value}</span>
+                <span className={styles.factLabel}>{fact.label}</span>
               </div>
-            </div>
-          </section>
-
-          <footer className={styles.closing} data-closing="">
-            <div className={styles.closingLead}>
-              <p className={styles.sectionKicker}>Your first move</p>
-              <h3 data-closing-heading-fill="">
-                Bring us the bottleneck. We’ll map the build.
-              </h3>
-            </div>
-
-            <div className={styles.closingAction}>
-              <p>
-                A new product, an operation that needs automating, a cloud estate that
-                needs modernising, or growth that has stalled — start with the business
-                constraint.
-              </p>
-              <a className={styles.ctaButton} href="/contact" ref={ctaRef}>
-                <span>Plan your project</span>
-                <span className={styles.ctaArrow} aria-hidden="true">
-                  <ArrowIcon />
-                </span>
-              </a>
-            </div>
-
-            <dl className={styles.factStrip}>
-              {DELIVERY_FACTS.map((fact) => (
-                <div className={styles.fact} key={fact.label}>
-                  <dt>{fact.label}</dt>
-                  <dd>{fact.value}</dd>
-                </div>
-              ))}
-            </dl>
+            ))}
           </footer>
         </div>
       </section>

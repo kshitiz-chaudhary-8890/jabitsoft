@@ -1,18 +1,30 @@
 "use client"
 
+/**
+ * Problems We Solve
+ * -----------------------------------------------------------------------------
+ * Editorial two-part composition:
+ *   01 · Evidence  — the numbers that frame the problem space (clearly labelled
+ *                     as directional / illustrative, never as client claims)
+ *   02 · Problems  — a numbered ledger of business problems, each mapped to a
+ *                     JabitSoft capability. Every row opens the detail modal.
+ *
+ * The detail modal (overview → signals → response → journey → targets → outcome
+ * → relevant service) is the centre of the experience and is preserved in full.
+ */
+
 import {
 	Fragment,
 	useCallback,
 	useEffect,
 	useId,
 	useLayoutEffect,
+	useMemo,
 	useRef,
 	useState,
-	type ReactNode,
 } from "react"
 import { createPortal } from "react-dom"
 import {
-	AnimatePresence,
 	MotionConfig,
 	animate,
 	motion,
@@ -28,631 +40,722 @@ if (typeof window !== "undefined") {
 	gsap.registerPlugin(ScrollTrigger)
 }
 
-/* ------------------------------------------------------------------ *
- * data
- * ------------------------------------------------------------------ */
+const EASE_OUT: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
-type IconKey = "agent" | "cloud" | "mobile" | "erp" | "seo" | "web"
+/* ------------------------------------------------------------------ types -- */
+
+type ServiceKey = "agent" | "cloud" | "mobile" | "erp" | "seo" | "web"
+
+type Metric = {
+	value: string
+	label: string
+	/** 0–100, drives the hairline bar / dial arc only (visual weight, not a claim) */
+	fill: number
+}
 
 type Problem = {
 	id: string
-	icon: IconKey
-	/** problem headline shown in the card + diagram core */
+	icon: ServiceKey
+	/** technical reference shown in the ledger and modal */
+	code: string
 	title: string
-	/** compact service label (card) */
 	service: string
-	/** full service name (dialog) */
 	serviceFull: string
+	capability: string
 	summary: string
-	metric: { value: string; label: string }
+	/** why the problem matters commercially */
+	stake: string
+	/** headline target metric, also drives the modal dial */
+	metric: Metric
 	lead: string
 	signals: string[]
 	response: string[]
-	metrics: { value: string; label: string; fill: number }[]
+	metrics: Metric[]
+	metricsNote: string
+	/** today → what we build → what you get */
 	flow: [string, string, string]
-	trend: { points: number[]; labels: string[]; caption: string }
+	trend: {
+		labels: string[]
+		points: number[]
+		caption: string
+	}
 	outcome: string
 }
+
+type EvidenceItem = {
+	id: string
+	topic: string
+	value: string
+	copy: string
+	basis: string
+	fill: number
+}
+
+/* ------------------------------------------------------------------- data -- */
+
+const EVIDENCE: EvidenceItem[] = [
+	{
+		id: "e-01",
+		topic: "Manual coordination",
+		value: "62%",
+		copy: "of operational time is lost to repetitive coordination.",
+		basis: "Discovery conversations · directional",
+		fill: 62,
+	},
+	{
+		id: "e-02",
+		topic: "Delivery velocity",
+		value: "48%",
+		copy: "say delivery slows as systems scale without a clear plan.",
+		basis: "Market reading · directional",
+		fill: 48,
+	},
+	{
+		id: "e-03",
+		topic: "Broken journeys",
+		value: "57%",
+		copy: "of journeys break where tools, data and touchpoints disconnect.",
+		basis: "Survey inputs · directional",
+		fill: 57,
+	},
+]
 
 const PROBLEMS: Problem[] = [
 	{
 		id: "agentic-ai",
 		icon: "agent",
-		title: "Manual operations",
+		code: "AI/AGT",
+		title: "Operations that only move by hand",
 		service: "Agentic AI Development",
 		serviceFull: "Agentic AI Development",
+		capability:
+			"Agent architecture, tool integration, guardrails and human-in-the-loop review.",
 		summary:
-			"Approvals, research and follow-ups still move by hand, so output is capped by available hours.",
-		metric: { value: "3\u00d7", label: "faster task turnaround" },
-		lead: "Your team is the integration layer. Every approval, lookup and follow-up waits for a person to move it, so throughput is capped by headcount instead of demand.",
+			"Quotes, approvals, reporting and follow-ups still wait for someone to remember them. The process lives in inboxes and spreadsheets, so throughput is capped by whoever happens to be available.",
+		stake:
+			"Every manual handoff adds delay, cost and risk exactly where your margin sits — and headcount becomes the only way to grow.",
+		metric: {
+			value: "3×",
+			label: "faster task turnaround",
+			fill: 78,
+		},
+		lead: "Most teams do not lack process — they lack a system that runs it. When routine decisions still need a person to push each step forward, your best people spend the day coordinating instead of deciding.",
 		signals: [
-			"Work stalls in inboxes and spreadsheets between systems",
-			"Specialists spend the day on copy-paste coordination",
-			"No reliable trail of how a decision was actually made",
-			"Volume spikes need hiring, not configuration",
+			"The same record is re-entered across three or more tools every day.",
+			"Approvals stall for days because no one owns the next step.",
+			"Weekly reporting is assembled by hand, then only partly trusted.",
+			"New volume needs new hires before it needs new software.",
 		],
 		response: [
-			"Map high-volume workflows and isolate the agent-safe steps",
-			"Build tool-connected agents with access to your real systems",
-			"Add human review gates and full traceability on every run",
-			"Ship in stages, proving accuracy before widening scope",
+			"Map the workflow end to end and separate real decisions from busywork.",
+			"Design agents with explicit scope, tool access, guardrails and audit trails.",
+			"Connect them to the systems that already hold your data — CRM, ERP, mail, storage.",
+			"Keep humans in the loop for exceptions, with a review queue and full traceability.",
 		],
 		metrics: [
-			{ value: "62%", label: "Of hours lost to repetitive coordination", fill: 62 },
-			{ value: "44%", label: "Workflow steps that need no human", fill: 44 },
-			{ value: "3\u00d7", label: "Task turnaround after automation", fill: 78 },
+			{ value: "3×", label: "faster task turnaround", fill: 78 },
+			{ value: "60%", label: "less manual handling per request", fill: 60 },
+			{ value: "24/7", label: "unattended processing window", fill: 92 },
 		],
-		flow: ["Manual handoffs", "Agent + tool layer", "Reviewed output"],
+		metricsNote:
+			"Illustrative planning targets used to scope the work — baselined against your own numbers before anything is committed.",
+		flow: [
+			"Manual steps spread across scattered tools",
+			"Scoped agents with guardrails and audit trails",
+			"Routine work completes without chasing",
+		],
 		trend: {
-			points: [8, 19, 34, 46, 63, 78],
 			labels: ["M1", "M2", "M3", "M4", "M5", "M6"],
-			caption: "Share of workflow steps running autonomously, first six months.",
+			points: [8, 19, 34, 46, 63, 78],
+			caption:
+				"Illustrative ramp — share of routine steps running autonomously across a six-month rollout.",
 		},
 		outcome:
-			"The same team ships materially more work \u2014 with a written record behind every automated decision.",
+			"Your team stops operating the process and starts supervising it — capacity that grows without a matching rise in headcount.",
 	},
 	{
 		id: "cloud",
 		icon: "cloud",
-		title: "Fragile infrastructure",
+		code: "CLD/INF",
+		title: "Infrastructure that fights every release",
 		service: "Cloud Consulting",
-		serviceFull: "Cloud Consulting",
+		serviceFull: "Cloud Consulting & DevOps",
+		capability:
+			"Architecture review, infrastructure as code, CI/CD automation and cost guardrails.",
 		summary:
-			"Releases are risky and cost drifts because the cloud foundation grew without an architecture.",
-		metric: { value: "70%", label: "shorter deploy cycles" },
-		lead: "The platform grew feature by feature. Now releases are tense, spend drifts and scaling is a fire drill instead of a setting.",
+			"Environments have drifted, deploys are manual and nobody is certain which config is authoritative. Releases get scheduled around risk instead of readiness — and the bill grows faster than usage.",
+		stake:
+			"Slow, risky releases push every roadmap date out and make cloud spend impossible to forecast, right when you need to scale.",
+		metric: {
+			value: "70%",
+			label: "shorter deploy cycles",
+			fill: 70,
+		},
+		lead: "Platforms rarely fail loudly — they get slow and expensive. Infrastructure grown one urgent decision at a time ends up with hand-tuned servers, unclear ownership and a deployment nobody wants to run on a Friday.",
 		signals: [
-			"Deploys are manual, risky and scheduled around quiet hours",
-			"Cloud cost grows faster than usage, with no clear owner",
-			"Environments drift, so staging never predicts production",
-			"One region, one instance, no tested recovery path",
+			"Releases are batched and rehearsed because rollback is unclear.",
+			"Staging and production disagree in ways that only surface at launch.",
+			"Cloud spend climbs without a matching rise in traffic or revenue.",
+			"One or two people are the only ones who can safely deploy.",
 		],
 		response: [
-			"Audit architecture, spend and delivery pipeline in one pass",
-			"Codify infrastructure and standardise every environment",
-			"Automate CI/CD with rollbacks and observability built in",
-			"Right-size and autoscale against real traffic patterns",
+			"Audit architecture, environments, ownership and spend against the roadmap.",
+			"Codify infrastructure so environments are reproducible, not remembered.",
+			"Build CI/CD with automated tests, gated releases and instant rollback.",
+			"Add observability and cost guardrails so scaling stays a decision.",
 		],
 		metrics: [
-			{ value: "70%", label: "Shorter deploy cycle after pipeline work", fill: 70 },
-			{ value: "31%", label: "Typical cloud spend recovered", fill: 31 },
-			{ value: "99.9%", label: "Availability target we design for", fill: 92 },
+			{ value: "70%", label: "shorter deploy cycles", fill: 70 },
+			{ value: "99.9%", label: "uptime target on critical paths", fill: 95 },
+			{ value: "35%", label: "cloud spend recovered", fill: 42 },
 		],
-		flow: ["Manual releases", "Codified platform", "Safe daily delivery"],
+		metricsNote:
+			"Illustrative engineering targets. Real numbers are set after the audit, against your current baseline.",
+		flow: [
+			"Manual deploys and drifting environments",
+			"Codified infrastructure with automated pipelines",
+			"Ship on any weekday, roll back in minutes",
+		],
 		trend: {
+			labels: ["M1", "M2", "M3", "M4", "M5", "M6"],
 			points: [12, 20, 33, 48, 58, 70],
-			labels: ["W2", "W4", "W6", "W8", "W10", "W12"],
-			caption: "Deployment frequency index across a twelve-week modernization.",
+			caption:
+				"Illustrative view — release throughput as automation and test coverage land.",
 		},
 		outcome:
-			"Infrastructure that scales on purpose, ships daily and costs what it should.",
+			"Shipping becomes routine: predictable releases, a platform that scales on purpose, and infrastructure cost you can explain line by line.",
 	},
 	{
 		id: "mobile",
 		icon: "mobile",
-		title: "Leaky mobile journeys",
+		code: "MOB/APP",
+		title: "Mobile journeys that leak intent",
 		service: "Mobile App Development",
 		serviceFull: "Mobile Application Development",
+		capability:
+			"Journey instrumentation, native and cross-platform builds, API and offline hardening.",
 		summary:
-			"Users drop off mid-flow \u2014 slow screens, brittle APIs and navigation nobody can predict.",
-		metric: { value: "\u22124 steps", label: "per core journey" },
-		lead: "People install the app, then leave mid-task. Slow screens, brittle APIs and unclear navigation quietly send your users back to the browser.",
+			"The app works, but the path from install to value is longer than it needs to be. Every extra screen, slow call or unexplained permission quietly removes someone who was ready to buy.",
+		stake:
+			"Mobile is where most customers meet you first. A broken flow reads as a broken company and silently caps retention.",
+		metric: {
+			value: "−4",
+			label: "steps removed from the core journey",
+			fill: 66,
+		},
+		lead: "Drop-off is rarely one bad screen. It is a sequence — onboarding that asks too early, a form that repeats known data, a network call with no feedback. Each is survivable alone and fatal together.",
 		signals: [
-			"Drop-off concentrated on two or three key screens",
-			"Cold start and list rendering lag on mid-range devices",
-			"Offline and weak-network states are unhandled",
-			"Feature parity gaps between iOS and Android",
+			"Installs look healthy, but activation and day-7 retention do not.",
+			"Support hears the same three confusions after every release.",
+			"Key actions take too many taps, or fail silently on weak networks.",
+			"Android and iOS behave differently enough to erode trust.",
 		],
 		response: [
-			"Instrument the funnel and find exactly where intent dies",
-			"Rebuild core journeys with fewer steps and clearer state",
-			"Harden the API layer with caching, retries and offline queues",
-			"Ship one codebase where it fits, native where it matters",
+			"Instrument the real journey and find where intent is lost, screen by screen.",
+			"Rebuild the critical path first: onboarding, core action, payment, notifications.",
+			"Ship a shared design system with native performance budgets per platform.",
+			"Harden APIs, offline behaviour and error states so weak networks stay usable.",
 		],
 		metrics: [
-			{ value: "\u22124", label: "Steps removed from the primary journey", fill: 64 },
-			{ value: "1.8s", label: "Target time to first useful screen", fill: 74 },
-			{ value: "38%", label: "Lift in task completion after redesign", fill: 38 },
+			{ value: "−4", label: "steps in the core journey", fill: 66 },
+			{ value: "2×", label: "activation inside day one", fill: 72 },
+			{ value: "<1.5s", label: "to first meaningful screen", fill: 84 },
 		],
-		flow: ["Confused flow", "Rebuilt journey", "Completed task"],
+		metricsNote:
+			"Illustrative product targets we design toward, confirmed against your analytics during discovery.",
+		flow: [
+			"Long journeys and unclear failure states",
+			"Rebuilt critical path, instrumented end to end",
+			"Users reach value in the first session",
+		],
 		trend: {
+			labels: ["R1", "R2", "R3", "R4", "R5", "R6"],
 			points: [22, 29, 38, 47, 55, 61],
-			labels: ["M1", "M2", "M3", "M4", "M5", "M6"],
-			caption: "Task completion rate on the primary mobile journey.",
+			caption:
+				"Illustrative view — completion rate of the primary journey across release cycles.",
 		},
 		outcome:
-			"A mobile product people finish tasks in \u2014 on the devices they actually own.",
+			"A mobile product where the fastest path is the intended path — measurable activation, fewer support threads and releases guided by evidence.",
 	},
 	{
 		id: "erp",
 		icon: "erp",
-		title: "Disconnected systems",
+		code: "ERP/OPS",
+		title: "Systems that disagree with each other",
 		service: "ERP Services",
-		serviceFull: "ERP Services",
+		serviceFull: "ERP Implementation & Integration",
+		capability:
+			"Process modelling, ERP configuration, systems integration and data migration.",
 		summary:
-			"Finance, inventory and delivery live in separate tools, so every report is rebuilt by hand.",
-		metric: { value: "40%", label: "faster month-end close" },
-		lead: "Finance, inventory, delivery and support each hold a version of the truth \u2014 so every report is rebuilt by hand and fully trusted by nobody.",
+			"Finance, inventory, sales and delivery each keep their own version of the truth. Month-end turns into an investigation, and decisions wait for someone to reconcile the numbers.",
+		stake:
+			"Decisions made on numbers nobody trusts arrive late — and reconciliation work grows faster than the business does.",
+		metric: {
+			value: "40%",
+			label: "faster month-end close",
+			fill: 62,
+		},
+		lead: "Disconnected systems do not just create admin — they create disagreement. When two reports can both be defended, planning slows to the speed of the argument.",
 		signals: [
-			"The same record is re-entered in three different tools",
-			"Month-end close depends on one person's spreadsheet",
-			"Stock, invoices and delivery status disagree",
-			"Decisions wait days for a number people believe",
+			"The same order exists in three systems with three different states.",
+			"Month-end close depends on spreadsheets and specific people.",
+			"Stock, cash and pipeline figures are trusted only after manual checks.",
+			"Reporting looks backwards because live data is too fragmented to use.",
 		],
 		response: [
-			"Model the real process before configuring any module",
-			"Implement ERP around one source of truth per entity",
-			"Integrate the systems you keep, retire the ones you don't",
-			"Roll out by function with training and parallel-run checks",
+			"Model the real process first — order to cash, procure to pay, plan to deliver.",
+			"Configure the ERP around those flows instead of the default template.",
+			"Integrate the systems that stay, with one clear owner per data object.",
+			"Migrate in stages, run parallel, and train the people who live in it daily.",
 		],
 		metrics: [
-			{ value: "40%", label: "Faster month-end close", fill: 40 },
-			{ value: "1", label: "Source of truth per business entity", fill: 88 },
-			{ value: "5h", label: "Manual reporting removed each week", fill: 56 },
+			{ value: "40%", label: "faster month-end close", fill: 62 },
+			{ value: "1", label: "source of truth per record", fill: 100 },
+			{ value: "90%", label: "reports produced automatically", fill: 88 },
 		],
-		flow: ["Siloed tools", "Connected ERP", "One live report"],
+		metricsNote:
+			"Illustrative operational targets. Scope, modules and sequencing are agreed after process mapping.",
+		flow: [
+			"Parallel records and manual reconciliation",
+			"Modelled processes on one integrated core",
+			"One number, agreed and current",
+		],
 		trend: {
+			labels: ["M1", "M2", "M3", "M4", "M5", "M6"],
 			points: [10, 24, 39, 52, 64, 74],
-			labels: ["P1", "P2", "P3", "P4", "P5", "P6"],
-			caption: "Share of business processes running on connected data.",
+			caption:
+				"Illustrative view — share of operational reporting produced without manual reconciliation.",
 		},
 		outcome:
-			"One dependable operating picture \u2014 planned, sold and reported from the same numbers.",
+			"One operational core the whole company can quote from: faster close, cleaner audits and planning that starts from data instead of debate.",
 	},
 	{
 		id: "seo",
 		icon: "seo",
-		title: "Invisible in search",
+		code: "SEO/GRW",
+		title: "Demand you never show up for",
 		service: "SEO / Digital Marketing",
-		serviceFull: "SEO / Digital Marketing",
+		serviceFull: "SEO & Digital Marketing",
+		capability:
+			"Technical SEO, intent mapping, content architecture and pipeline measurement.",
 		summary:
-			"Demand exists, but weak technical SEO hands high-intent queries to competitors.",
-		metric: { value: "2\u00d7", label: "qualified organic traffic" },
-		lead: "Demand for what you sell already exists. Weak technical foundations and thin content hand those high-intent queries to your competitors.",
+			"Buyers are already searching for what you do — and finding competitors. The site has pages, but not the technical health, structure or intent coverage that earns those positions.",
+		stake:
+			"Search demand is the one channel you do not have to create. Staying invisible means paying for attention your competitors get for free.",
+		metric: {
+			value: "2×",
+			label: "qualified organic traffic",
+			fill: 74,
+		},
+		lead: "Ranking is an engineering problem before it is a content problem. Crawlability, page structure, internal links and speed decide whether good content is ever considered at all.",
 		signals: [
-			"Crawl, indexing and Core Web Vitals issues suppress pages",
-			"Content targets vocabulary buyers never search for",
-			"No mapped path from query to conversion",
-			"Spend reported in clicks instead of pipeline",
+			"Branded search works; nobody arrives from problem-led queries.",
+			"Several pages compete with each other for the same term.",
+			"Slow templates, thin pages and broken canonicals cap every campaign.",
+			"Paid spend carries the pipeline because organic contributes almost nothing.",
 		],
 		response: [
-			"Fix crawlability, speed, schema and internal linking first",
-			"Build a keyword-to-intent map across the full funnel",
-			"Publish content that answers real evaluation questions",
-			"Report qualified pipeline, not vanity traffic",
+			"Audit technical health, crawl paths, indexation and Core Web Vitals.",
+			"Map the buying journey to real query intent, then design the architecture for it.",
+			"Build depth on the topics that convert, with internal links that pass authority.",
+			"Report on qualified sessions and pipeline, not vanity keyword counts.",
 		],
 		metrics: [
-			{ value: "2\u00d7", label: "Qualified organic traffic in two quarters", fill: 72 },
-			{ value: "3.1\u00d7", label: "More indexed pages earning impressions", fill: 64 },
-			{ value: "\u221228%", label: "Cost per qualified lead", fill: 44 },
+			{ value: "2×", label: "qualified organic sessions", fill: 74 },
+			{ value: "3×", label: "indexed intent coverage", fill: 66 },
+			{ value: "−45%", label: "cost per qualified lead", fill: 58 },
 		],
-		flow: ["Invisible pages", "Technical + content fix", "High-intent traffic"],
+		metricsNote:
+			"Illustrative growth targets. Search outcomes depend on competition and baseline authority, so we agree them per market.",
+		flow: [
+			"Invisible on the queries that matter",
+			"Technical fixes plus intent-led architecture",
+			"Compounding organic pipeline",
+		],
 		trend: {
-			points: [14, 21, 32, 45, 58, 72],
 			labels: ["M1", "M2", "M3", "M4", "M5", "M6"],
-			caption: "Qualified organic sessions index over two quarters.",
+			points: [14, 21, 32, 45, 58, 72],
+			caption:
+				"Illustrative view — qualified organic sessions as technical and content work compound.",
 		},
 		outcome:
-			"Search that compounds \u2014 measurable pipeline instead of impressions.",
+			"A search presence that compounds: the right pages for the right intent, and a pipeline that no longer stops when ad spend does.",
 	},
 	{
 		id: "web",
 		icon: "web",
-		title: "Passive website",
+		code: "WEB/CVR",
+		title: "A website that explains but never convinces",
 		service: "Website Solutions",
-		serviceFull: "Website Solutions",
+		serviceFull: "Website Design & Development",
+		capability:
+			"Conversion-focused design, performance engineering and CMS enablement.",
 		summary:
-			"The site explains the company but never converts \u2014 slow, generic and hard to navigate.",
-		metric: { value: "25%", label: "higher conversion rate" },
-		lead: "The site describes the company but never persuades. Slow pages, generic structure and unclear next steps leak the traffic you already paid for.",
+			"The site describes the company accurately and still loses the visit. Slow pages, unclear proof and a buried next step turn genuine interest into a tab that gets closed.",
+		stake:
+			"Every campaign, email and referral points here. Weak conversion quietly taxes everything you spend on demand.",
+		metric: {
+			value: "25%",
+			label: "higher conversion rate",
+			fill: 60,
+		},
+		lead: "Most sites fail on sequence, not aesthetics. A visitor needs to understand the offer, believe it, and find one obvious next step — in that order, within a few seconds.",
 		signals: [
-			"Healthy traffic, weak enquiry rate",
-			"Key pages fail performance and accessibility checks",
-			"Message hierarchy buries the actual offer",
-			"Every content change needs a developer",
+			"Traffic is fine; enquiries are not.",
+			"Mobile performance scores are low and bounce is high.",
+			"Marketing cannot publish a page without a developer.",
+			"The strongest proof sits below the fold, or nowhere at all.",
 		],
 		response: [
-			"Rebuild the narrative around one clear decision per page",
-			"Design a fast, accessible, conversion-focused system",
-			"Move copy into a CMS the marketing team owns",
-			"Test structure and messaging against real behaviour",
+			"Rebuild the narrative: problem, capability, proof, next step.",
+			"Design a section system marketing can compose, not one-off pages.",
+			"Engineer for speed and Core Web Vitals on real devices, not lab scores.",
+			"Instrument the funnel and test the few moments that decide the outcome.",
 		],
 		metrics: [
-			{ value: "25%", label: "Higher conversion rate after rebuild", fill: 25 },
-			{ value: "95+", label: "Lighthouse performance target", fill: 95 },
-			{ value: "WCAG AA", label: "Accessibility baseline we build to", fill: 82 },
+			{ value: "25%", label: "higher enquiry conversion", fill: 60 },
+			{ value: "90+", label: "Lighthouse performance target", fill: 90 },
+			{ value: "−50%", label: "time to publish a new page", fill: 70 },
 		],
-		flow: ["Passive brochure", "Conversion-focused build", "Qualified enquiry"],
+		metricsNote:
+			"Illustrative conversion targets used for planning — measured against your current funnel, not presented as past results.",
+		flow: [
+			"A brochure that describes the company",
+			"Narrative, proof and speed engineered together",
+			"Visits that turn into conversations",
+		],
 		trend: {
+			labels: ["W2", "W4", "W6", "W8", "W10", "W12"],
 			points: [18, 26, 35, 44, 52, 58],
-			labels: ["W1", "W3", "W5", "W7", "W9", "W11"],
-			caption: "Enquiry conversion index after launch.",
+			caption:
+				"Illustrative view — enquiry conversion after narrative, performance and testing work.",
 		},
 		outcome:
-			"A website that carries its weight: fast, accessible and built to convert.",
+			"A site that carries its weight: fast on real devices, clear about value, editable by the team and measured by conversations started.",
 	},
 ]
 
-const EVIDENCE = [
-	{
-		value: "62%",
-		copy: "Of operational hours go to repetitive coordination that software should already be handling.",
-		source: "From user interviews",
-	},
-	{
-		value: "48%",
-		copy: "Of growth-stage teams ship slower every quarter because infrastructure scaled without a strategy.",
-		source: "From market research",
-	},
-	{
-		value: "57%",
-		copy: "Of customer journeys break where apps, data and digital touchpoints stay disconnected.",
-		source: "From survey",
-	},
-]
+const DIALOG_STEPS = [
+	{ id: "snapshot", label: "Overview" },
+	{ id: "diagnosis", label: "Diagnosis" },
+	{ id: "journey", label: "Journey" },
+	{ id: "impact", label: "Outcome" },
+] as const
 
-/* ------------------------------------------------------------------ *
- * geometry
- * ------------------------------------------------------------------ */
+const PIPE_STATES = ["Today", "What we build", "What you get"] as const
 
-const roundSvg = (value: number) => Math.round(value * 10000) / 10000
+/* ------------------------------------------------------------ svg helpers -- */
 
-const VIEW = 560
-const C = 280
-const R_ORBIT = 176
-const NODE_R = 24
-const TICKS = 96
-const TICK_IN = 200
-const TICK_OUT = 226
-const TICK_OUT_MAJ = 236
-const R_PROG = 248
-const R_HAIR = 268
-const R_EXIT = 276
-const PROG_LEN = roundSvg(2 * Math.PI * R_PROG)
-const STEP = 360 / PROBLEMS.length
-const CYCLE = 5.2
-const WIRE_ANGLES = [200, 180, 160]
-const EASE_OUT: [number, number, number, number] = [0.22, 1, 0.36, 1]
-
-const polar = (r: number, deg: number) => {
-	const a = (deg * Math.PI) / 180
-	return {
-		x: roundSvg(C + r * Math.cos(a)),
-		y: roundSvg(C + r * Math.sin(a)),
-	}
+const ICON_PATHS: Record<ServiceKey, string[]> = {
+	agent: [
+		"M12 3.5v2.75M12 17.75v2.75M3.5 12h2.75M17.75 12h2.75",
+		"M5.95 5.95 7.9 7.9M16.1 16.1l1.95 1.95M18.05 5.95 16.1 7.9M7.9 16.1l-1.95 1.95",
+		"M9 9h6v6H9z",
+	],
+	cloud: [
+		"M7.2 18.25h9.1a3.7 3.7 0 0 0 .45-7.37 5.25 5.25 0 0 0-10.02-1.1A4.05 4.05 0 0 0 7.2 18.25Z",
+		"M12 15.8v-5.1",
+		"M9.9 12.75 12 10.65l2.1 2.1",
+	],
+	mobile: [
+		"M8.2 3.25h7.6a2 2 0 0 1 2 2v13.5a2 2 0 0 1-2 2H8.2a2 2 0 0 1-2-2V5.25a2 2 0 0 1 2-2Z",
+		"M10 6h4",
+		"M10.5 17.75h3",
+	],
+	erp: [
+		"M4 5h6v5H4zM14 5h6v5h-6zM4 14h6v5H4zM14 14h6v5h-6z",
+		"M10 7.5h4M7 10v4M17 10v4M10 16.5h4",
+	],
+	seo: [
+		"M10.2 4.5a5.7 5.7 0 1 0 0 11.4 5.7 5.7 0 0 0 0-11.4Z",
+		"M14.5 14.5 20 20",
+		"M7.8 12.6 10 10.4l2 1.8 2.6-3",
+	],
+	web: [
+		"M3.5 5h17v14h-17z",
+		"M3.5 8.75h17",
+		"M6.2 6.9h.01M8.7 6.9h.01",
+		"M9.2 12.1 7.3 14l1.9 1.9M14.8 12.1l1.9 1.9-1.9 1.9M12.9 11.8l-1.8 4.4",
+	],
 }
 
-/** rounded H -> V -> H connector, so wires read like a circuit board */
-function elbow(
-	x0: number,
-	y0: number,
-	x1: number,
-	y1: number,
-	split: number,
-): string {
-	const dx = x1 - x0
-	const dy = y1 - y0
-	const mx = x0 + dx * split
-	const dirX = Math.sign(dx) || 1
-	const dirY = Math.sign(dy) || 1
-	const r = Math.min(16, Math.abs(dy) / 2, Math.abs(mx - x0), Math.abs(x1 - mx))
-	if (!Number.isFinite(r) || r < 1) {
-		return `M ${x0.toFixed(1)} ${y0.toFixed(1)} L ${x1.toFixed(1)} ${y1.toFixed(1)}`
-	}
-	return (
-		`M ${x0.toFixed(1)} ${y0.toFixed(1)}` +
-		` H ${(mx - dirX * r).toFixed(1)}` +
-		` Q ${mx.toFixed(1)} ${y0.toFixed(1)} ${mx.toFixed(1)} ${(y0 + dirY * r).toFixed(1)}` +
-		` V ${(y1 - dirY * r).toFixed(1)}` +
-		` Q ${mx.toFixed(1)} ${y1.toFixed(1)} ${(mx + dirX * r).toFixed(1)} ${y1.toFixed(1)}` +
-		` H ${x1.toFixed(1)}`
-	)
-}
-
-/* ------------------------------------------------------------------ *
- * icons
- * ------------------------------------------------------------------ */
-
-const ICON_PATHS: Record<IconKey, ReactNode> = {
-	agent: (
-		<>
-			<path d="M12 3.5v3M12 17.5v3M3.5 12h3M17.5 12h3" />
-			<path d="m6.2 6.2 2.1 2.1M15.7 15.7l2.1 2.1M17.8 6.2l-2.1 2.1M8.3 15.7l-2.1 2.1" />
-			<circle cx="12" cy="12" r="3.35" />
-			<circle cx="12" cy="12" r="1.05" fill="currentColor" stroke="none" />
-		</>
-	),
-	cloud: (
-		<>
-			<path d="M7.2 18h9.3a3.5 3.5 0 0 0 .2-7 5.2 5.2 0 0 0-9.9-.7A3.8 3.8 0 0 0 7.2 18Z" />
-			<path d="M9.2 14.2h5.6M12 11.5v5.2" />
-		</>
-	),
-	mobile: (
-		<>
-			<rect x="7.2" y="2.8" width="9.6" height="18.4" rx="2.35" />
-			<path d="M10.2 5.8h3.6M10.1 17.8h3.8" />
-			<circle cx="12" cy="19.1" r=".45" fill="currentColor" stroke="none" />
-		</>
-	),
-	erp: (
-		<>
-			<rect x="3.6" y="4" width="6.4" height="6.1" rx="1.45" />
-			<rect x="14" y="4" width="6.4" height="6.1" rx="1.45" />
-			<rect x="3.6" y="13.9" width="6.4" height="6.1" rx="1.45" />
-			<rect x="14" y="13.9" width="6.4" height="6.1" rx="1.45" />
-			<path d="M10 7.05h4M6.8 10.1v3.8M17.2 10.1v3.8M10 16.95h4" />
-		</>
-	),
-	seo: (
-		<>
-			<circle cx="10.6" cy="10.6" r="5.8" />
-			<path d="m15 15 4.4 4.4M8.1 12.8V10M10.6 12.8V8.4M13.1 12.8v-1.9" />
-		</>
-	),
-	web: (
-		<>
-			<rect x="3" y="4.2" width="18" height="15.6" rx="2.35" />
-			<path d="M3 8.6h18M6 6.4h.01M8.5 6.4h.01M11 6.4h.01" />
-			<path d="M7 12.2h4.2M7 15.3h7.8" />
-		</>
-	),
-}
-
-function ServiceIcon({ name, size = 18 }: { name: IconKey; size?: number }) {
+function ServiceIcon({ name, size = 17 }: { name: ServiceKey; size?: number }) {
 	return (
 		<svg
-			viewBox="0 0 24 24"
 			width={size}
 			height={size}
+			viewBox="0 0 24 24"
 			fill="none"
 			stroke="currentColor"
-			strokeWidth={1.6}
+			strokeWidth={1.55}
 			strokeLinecap="round"
 			strokeLinejoin="round"
 			aria-hidden="true"
+			focusable="false"
 		>
-			{ICON_PATHS[name]}
+			{ICON_PATHS[name].map((d) => (
+				<path key={d} d={d} />
+			))}
 		</svg>
 	)
 }
 
-function ArrowIcon({ size = 14 }: { size?: number }) {
+function ArrowIcon({ size = 16 }: { size?: number }) {
 	return (
 		<svg
-			viewBox="0 0 16 16"
 			width={size}
 			height={size}
+			viewBox="0 0 24 24"
 			fill="none"
 			stroke="currentColor"
 			strokeWidth={1.7}
 			strokeLinecap="round"
 			strokeLinejoin="round"
 			aria-hidden="true"
+			focusable="false"
 		>
-			<path d="M2.8 8h10.4" />
-			<path d="m9.4 4.2 3.8 3.8-3.8 3.8" />
+			<path d="M5 12h13" />
+			<path d="m12.5 6 5.5 6-5.5 6" />
 		</svg>
 	)
 }
 
-function CloseIcon() {
+function CloseIcon({ size = 16 }: { size?: number }) {
 	return (
 		<svg
-			viewBox="0 0 16 16"
-			width={15}
-			height={15}
+			width={size}
+			height={size}
+			viewBox="0 0 24 24"
 			fill="none"
 			stroke="currentColor"
-			strokeWidth={1.8}
+			strokeWidth={1.7}
 			strokeLinecap="round"
 			aria-hidden="true"
+			focusable="false"
 		>
-			<path d="m4 4 8 8M12 4l-8 8" />
+			<path d="M6 6l12 12" />
+			<path d="M18 6L6 18" />
 		</svg>
 	)
 }
 
-function SparkIcon() {
+function SparkIcon({ size = 18 }: { size?: number }) {
 	return (
 		<svg
+			width={size}
+			height={size}
 			viewBox="0 0 24 24"
-			width={19}
-			height={19}
 			fill="none"
 			stroke="currentColor"
-			strokeWidth={1.6}
+			strokeWidth={1.7}
 			strokeLinecap="round"
 			strokeLinejoin="round"
 			aria-hidden="true"
+			focusable="false"
 		>
-			<path d="M12 3.5l1.9 4.7 4.7 1.8-4.7 1.9L12 16.6l-1.9-4.7L5.4 10l4.7-1.8z" />
-			<path d="M18.5 16.5l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z" />
+			<path d="M12 3.5l1.9 4.9 4.9 1.9-4.9 1.9L12 17.1l-1.9-4.9-4.9-1.9 4.9-1.9L12 3.5Z" />
+			<path d="M18.5 16.5l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8.8-2Z" />
 		</svg>
 	)
 }
 
-/* ------------------------------------------------------------------ *
- * small pieces
- * ------------------------------------------------------------------ */
+const roundSvg = (n: number) => Math.round(n * 100) / 100
+
+/** Catmull-Rom style smoothing, kept gentle so the data stays readable. */
+function smoothPath(points: Array<{ x: number; y: number }>) {
+	if (points.length < 2) return ""
+	let d = `M ${roundSvg(points[0].x)} ${roundSvg(points[0].y)}`
+	for (let i = 0; i < points.length - 1; i += 1) {
+		const p0 = points[i - 1] ?? points[i]
+		const p1 = points[i]
+		const p2 = points[i + 1]
+		const p3 = points[i + 2] ?? p2
+		const t = 0.18
+		const c1x = p1.x + (p2.x - p0.x) * t
+		const c1y = p1.y + (p2.y - p0.y) * t
+		const c2x = p2.x - (p3.x - p1.x) * t
+		const c2y = p2.y - (p3.y - p1.y) * t
+		d += ` C ${roundSvg(c1x)} ${roundSvg(c1y)}, ${roundSvg(c2x)} ${roundSvg(c2y)}, ${roundSvg(p2.x)} ${roundSvg(p2.y)}`
+	}
+	return d
+}
+
+/* ---------------------------------------------------------------- counter -- */
 
 function Counter({
 	value,
 	play,
-	duration = 1.4,
+	duration = 1.1,
 }: {
 	value: string
 	play: boolean
 	duration?: number
 }) {
-	const [display, setDisplay] = useState(value)
+	const ref = useRef<HTMLSpanElement>(null)
+	const reduced = useReducedMotion()
+	const parts = useMemo(() => {
+		const match = value.match(/^(\D*)(\d+(?:\.\d+)?)(.*)$/)
+		if (!match) return null
+		return {
+			prefix: match[1],
+			number: Number(match[2]),
+			decimals: match[2].includes(".") ? match[2].split(".")[1].length : 0,
+			suffix: match[3],
+		}
+	}, [value])
 
 	useEffect(() => {
-		const match = value.match(/^(\D*)(\d+(?:\.\d+)?)(.*)$/)
-		if (!play || !match) {
-			setDisplay(value)
-			return
-		}
-		const [, prefix, digits, suffix] = match
-		const target = Number.parseFloat(digits)
-		const decimals = digits.includes(".") ? digits.split(".")[1].length : 0
-		const controls = animate(0, target, {
+		const el = ref.current
+		if (!el || !parts || !play || reduced) return
+		const controls = animate(0, parts.number, {
 			duration,
 			ease: EASE_OUT,
-			onUpdate: (v) => setDisplay(`${prefix}${v.toFixed(decimals)}${suffix}`),
+			onUpdate: (latest) => {
+				el.textContent = `${parts.prefix}${latest.toFixed(parts.decimals)}${parts.suffix}`
+			},
+			onComplete: () => {
+				el.textContent = value
+			},
 		})
-		return () => controls.stop()
-	}, [value, play, duration])
+		return () => {
+			controls.stop()
+			el.textContent = value
+		}
+	}, [parts, play, reduced, duration, value])
 
-	return <>{display}</>
+	/* renders the final value by default — nothing depends on JS to be legible */
+	return <span ref={ref}>{value}</span>
 }
 
-/* ------------------------------------------------------------------ *
- * dialog — geometry, helpers, sub-diagrams
- * ------------------------------------------------------------------ */
+/* ------------------------------------------------------------------- dial -- */
 
-const DIALOG_STEPS = [
-	{ id: "snapshot", label: "Snapshot" },
-	{ id: "diagnosis", label: "Diagnosis" },
-	{ id: "journey", label: "Journey" },
-	{ id: "impact", label: "Impact" },
-] as const
-
-type DialogStepId = (typeof DIALOG_STEPS)[number]["id"]
-
-const PIPE_STATES = ["Today", "What we build", "What you get"]
-
-/* dial geometry (rail signature diagram) */
 const DIAL_VIEW = 200
-const DIAL_C = 100
+const DIAL_C = DIAL_VIEW / 2
 const DIAL_R = 74
-const DIAL_LEN = roundSvg(2 * Math.PI * DIAL_R)
 const DIAL_TICKS = 48
 const DIAL_TICK_IN = 86
 const DIAL_TICK_OUT = 94
 
-/* chart geometry */
-const CH_W = 640
-const CH_H = 208
-const CH_PAD_X = 30
-const CH_PAD_T = 30
-const CH_PAD_B = 36
-
-/** cardinal spline through the points, so the trend reads as a curve */
-function smoothPath(pts: { x: number; y: number }[], tension = 0.2): string {
-	if (pts.length === 0) return ""
-	if (pts.length === 1) return `M ${pts[0].x.toFixed(1)} ${pts[0].y.toFixed(1)}`
-	let d = `M ${pts[0].x.toFixed(1)} ${pts[0].y.toFixed(1)}`
-	for (let i = 0; i < pts.length - 1; i += 1) {
-		const p0 = pts[i - 1] ?? pts[i]
-		const p1 = pts[i]
-		const p2 = pts[i + 1]
-		const p3 = pts[i + 2] ?? p2
-		const c1x = p1.x + (p2.x - p0.x) * tension
-		const c1y = p1.y + (p2.y - p0.y) * tension
-		const c2x = p2.x - (p3.x - p1.x) * tension
-		const c2y = p2.y - (p3.y - p1.y) * tension
-		d +=
-			` C ${c1x.toFixed(1)} ${c1y.toFixed(1)},` +
-			` ${c2x.toFixed(1)} ${c2y.toFixed(1)},` +
-			` ${p2.x.toFixed(1)} ${p2.y.toFixed(1)}`
-	}
-	return d
-}
-
-/* ---- rail signature: ticked progress dial ---- */
-
 function SignatureDial({
 	value,
 	fill,
+	play,
 }: {
 	value: string
 	fill: number
+	play: boolean
 }) {
-	const clamped = Math.max(0, Math.min(100, fill))
+	const ticks = useMemo(
+		() =>
+			Array.from({ length: DIAL_TICKS }, (_, i) => {
+				const angle = (i / DIAL_TICKS) * Math.PI * 2 - Math.PI / 2
+				const major = i % 4 === 0
+				const inner = major ? DIAL_TICK_IN - 4 : DIAL_TICK_IN
+				return {
+					key: i,
+					major,
+					x1: roundSvg(DIAL_C + Math.cos(angle) * inner),
+					y1: roundSvg(DIAL_C + Math.sin(angle) * inner),
+					x2: roundSvg(DIAL_C + Math.cos(angle) * DIAL_TICK_OUT),
+					y2: roundSvg(DIAL_C + Math.sin(angle) * DIAL_TICK_OUT),
+				}
+			}),
+		[],
+	)
+	const ratio = Math.max(0, Math.min(1, fill / 100))
+
 	return (
 		<div className={styles.dial}>
 			<svg
 				className={styles.dialSvg}
 				viewBox={`0 0 ${DIAL_VIEW} ${DIAL_VIEW}`}
 				aria-hidden="true"
+				focusable="false"
 			>
-				<g data-dial-ticks>
-					{Array.from({ length: DIAL_TICKS }, (_, i) => {
-						const deg = (360 / DIAL_TICKS) * i
-						const rad = (deg * Math.PI) / 180
-						const major = i % 6 === 0
-						const out = major ? DIAL_TICK_OUT + 4 : DIAL_TICK_OUT
-						const x1 = roundSvg(DIAL_C + DIAL_TICK_IN * Math.cos(rad))
-						const y1 = roundSvg(DIAL_C + DIAL_TICK_IN * Math.sin(rad))
-						const x2 = roundSvg(DIAL_C + out * Math.cos(rad))
-						const y2 = roundSvg(DIAL_C + out * Math.sin(rad))
-						return (
-							<line
-								key={`dial-tick-${i}`}
-								className={`${styles.dialTick} ${major ? styles.dialTickMajor : ""}`}
-								x1={x1}
-								y1={y1}
-								x2={x2}
-								y2={y2}
-							/>
-						)
-					})}
+				<g>
+					{ticks.map((tick) => (
+						<line
+							key={tick.key}
+							data-dial-tick=""
+							className={`${styles.dialTick} ${tick.major ? styles.dialTickMajor : ""}`}
+							x1={tick.x1}
+							y1={tick.y1}
+							x2={tick.x2}
+							y2={tick.y2}
+						/>
+					))}
 				</g>
-				<circle className={styles.dialTrack} cx={DIAL_C} cy={DIAL_C} r={DIAL_R} />
 				<circle
-					className={styles.dialArc}
-					data-dial-arc={clamped}
+					className={styles.dialTrack}
 					cx={DIAL_C}
 					cy={DIAL_C}
 					r={DIAL_R}
-					transform={`rotate(-90 ${DIAL_C} ${DIAL_C})`}
-					strokeDasharray={DIAL_LEN}
-					strokeDashoffset={DIAL_LEN * (1 - clamped / 100)}
 				/>
-				<circle className={styles.dialCore} cx={DIAL_C} cy={DIAL_C} r={54} />
+				<circle
+					data-arc=""
+					data-arc-target={ratio}
+					className={styles.dialArc}
+					cx={DIAL_C}
+					cy={DIAL_C}
+					r={DIAL_R}
+					pathLength={1}
+					strokeDasharray="1 1"
+					style={{
+						strokeDashoffset: 1 - ratio,
+						transform: `rotate(-90deg)`,
+						transformOrigin: "50% 50%",
+					}}
+				/>
+				<circle
+					className={styles.dialCore}
+					cx={DIAL_C}
+					cy={DIAL_C}
+					r={DIAL_R - 16}
+				/>
 			</svg>
-			<span className={styles.dialInner}>
-				<span className={styles.dialValue} data-count={value}>
-					{value}
+			<div className={styles.dialInner}>
+				<span className={styles.dialValue}>
+					<Counter value={value} play={play} duration={1.2} />
 				</span>
-			</span>
+			</div>
 		</div>
 	)
 }
 
-/* ---- journey diagram: today → build → outcome ---- */
+/* ---------------------------------------------------------------- journey -- */
 
 function JourneyDiagram({ flow }: { flow: [string, string, string] }) {
 	return (
-		<div className={styles.pipe} role="list">
-			{flow.map((step, index) => (
-				<Fragment key={step}>
+		<div className={styles.pipe}>
+			{flow.map((label, i) => (
+				<Fragment key={label}>
 					<div
-						role="listitem"
-						data-pipe-node
-						className={`${styles.pipeNode} ${
-							index === flow.length - 1 ? styles.pipeNodeActive : ""
-						}`}
+						data-pipe-node=""
+						className={`${styles.pipeNode} ${i === 2 ? styles.pipeNodeActive : ""}`}
 					>
-						<span className={styles.pipeState}>{PIPE_STATES[index]}</span>
-						<span className={styles.pipeLabel}>{step}</span>
+						<span className={styles.pipeState}>{PIPE_STATES[i]}</span>
+						<span className={styles.pipeLabel}>{label}</span>
 						<span className={styles.pipeIndex}>
-							{String(index + 1).padStart(2, "0")}
+							{String(i + 1).padStart(2, "0")}
 						</span>
 					</div>
-					{index < flow.length - 1 ? (
-						<span className={styles.pipeLink} aria-hidden="true">
+					{i < flow.length - 1 ? (
+						<div className={styles.pipeLink} aria-hidden="true">
 							<svg
 								className={styles.pipeLinkSvg}
-								viewBox="0 0 120 12"
+								viewBox="0 0 100 14"
 								preserveAspectRatio="none"
+								focusable="false"
 							>
-								<path className={styles.pipeTrack} d="M 1 6 H 119" />
-								<path className={styles.pipeFlow} data-pipe-flow d="M 1 6 H 119" />
+								<path className={styles.pipeTrack} d="M0 7 H100" />
+								<path
+									data-pipe-flow=""
+									className={styles.pipeFlow}
+									d="M0 7 H100"
+								/>
 							</svg>
-							<span className={styles.pipePacket} data-pipe-packet />
-						</span>
+							<span data-pipe-packet="" className={styles.pipePacket} />
+						</div>
 					) : null}
 				</Fragment>
 			))}
@@ -660,749 +763,803 @@ function JourneyDiagram({ flow }: { flow: [string, string, string] }) {
 	)
 }
 
-/* ---- impact chart: gradient area + drawn curve ---- */
+/* ------------------------------------------------------------------ chart -- */
+
+const CH_W = 640
+const CH_H = 208
+const CH_PAD_X = 32
+const CH_PAD_T = 26
+const CH_PAD_B = 34
 
 function ImpactChart({
-	points,
-	labels,
-	caption,
+	trend,
 }: {
-	points: number[]
-	labels: string[]
-	caption: string
+	trend: { labels: string[]; points: number[]; caption: string }
 }) {
-	const uid = useId().replace(/[^a-zA-Z0-9-]/g, "")
-	const max = Math.max(...points)
-	const min = Math.min(...points)
-	const span = Math.max(1, max - min)
-	const plotH = CH_H - CH_PAD_T - CH_PAD_B
-	const baseline = CH_H - CH_PAD_B
+	const uid = useId().replace(/[:]/g, "")
+	const areaId = `pws-area-${uid}`
+	const lineId = `pws-line-${uid}`
 
-	const coords = points.map((p, i) => ({
-		x: CH_PAD_X + (i * (CH_W - CH_PAD_X * 2)) / Math.max(1, points.length - 1),
-		y: CH_PAD_T + (1 - (p - min) / span) * plotH,
-		v: p,
-	}))
-	const line = smoothPath(coords)
-	const last = coords[coords.length - 1]
-	const first = coords[0]
-	const area = `${line} L ${last.x.toFixed(1)} ${baseline} L ${first.x.toFixed(1)} ${baseline} Z`
+	const geo = useMemo(() => {
+		const plotW = CH_W - CH_PAD_X * 2
+		const plotH = CH_H - CH_PAD_T - CH_PAD_B
+		const count = Math.max(trend.points.length - 1, 1)
+		const pts = trend.points.map((v, i) => ({
+			x: CH_PAD_X + (i / count) * plotW,
+			y: CH_PAD_T + (1 - Math.max(0, Math.min(100, v)) / 100) * plotH,
+			value: v,
+		}))
+		const line = smoothPath(pts)
+		const baseline = CH_PAD_T + plotH
+		const area = `${line} L ${roundSvg(pts[pts.length - 1].x)} ${baseline} L ${roundSvg(pts[0].x)} ${baseline} Z`
+		return { pts, line, area, baseline, plotH }
+	}, [trend.points])
+
+	const last = geo.pts[geo.pts.length - 1]
 
 	return (
-		<figure className={styles.chart}>
-			<figcaption className={styles.chartHead}>
+		<figure className={styles.chart} data-chart="">
+			<div className={styles.chartHead}>
 				<span className={styles.chartRange}>
-					<b>{points[0]}</b>
-					<ArrowIcon size={13} />
-					<b className={styles.chartRangeEnd}>{points[points.length - 1]}</b>
+					{trend.points[0]}
+					<ArrowIcon size={15} />
+					<span className={styles.chartRangeEnd}>
+						{trend.points[trend.points.length - 1]}
+					</span>
 				</span>
-				<span className={styles.chartScale}>index · {labels[0]}–{labels[labels.length - 1]}</span>
-			</figcaption>
-
+				<span className={styles.chartScale}>Relative index · 0–100</span>
+			</div>
 			<svg
 				className={styles.chartSvg}
 				viewBox={`0 0 ${CH_W} ${CH_H}`}
 				role="img"
-				aria-label={caption}
+				aria-label={trend.caption}
 			>
 				<defs>
-					<linearGradient id={`fill-${uid}`} x1="0" y1="0" x2="0" y2="1">
-						<stop offset="0%" stopColor="var(--pws-accent)" stopOpacity="0.26" />
-						<stop offset="100%" stopColor="var(--pws-accent)" stopOpacity="0" />
+					<linearGradient id={areaId} x1="0" y1="0" x2="0" y2="1">
+						<stop offset="0%" stopColor="rgba(69,102,232,0.22)" />
+						<stop offset="100%" stopColor="rgba(69,102,232,0)" />
 					</linearGradient>
-					<linearGradient id={`stroke-${uid}`} x1="0" y1="0" x2="1" y2="0">
-						<stop offset="0%" stopColor="var(--pws-accent-deep)" />
-						<stop offset="100%" stopColor="var(--pws-accent)" />
+					<linearGradient id={lineId} x1="0" y1="0" x2="1" y2="0">
+						<stop offset="0%" stopColor="#7f96f2" />
+						<stop offset="100%" stopColor="#3450c7" />
 					</linearGradient>
-					<clipPath id={`clip-${uid}`}>
-						<rect data-chart-clip x="0" y="0" width={CH_W} height={CH_H} />
-					</clipPath>
 				</defs>
 
-				{[0, 1, 2, 3].map((i) => {
-					const y = CH_PAD_T + (i * plotH) / 3
+				{[100, 75, 50, 25, 0].map((level) => {
+					const y = CH_PAD_T + (1 - level / 100) * geo.plotH
 					return (
 						<line
-							key={`grid-${i}`}
-							className={`${styles.chartGrid} ${i === 3 ? styles.chartAxis : ""}`}
-							x1={CH_PAD_X - 8}
-							x2={CH_W - CH_PAD_X + 8}
-							y1={y}
-							y2={y}
+							key={level}
+							className={`${styles.chartGrid} ${level === 0 ? styles.chartAxis : ""}`}
+							x1={CH_PAD_X}
+							y1={roundSvg(y)}
+							x2={CH_W - CH_PAD_X}
+							y2={roundSvg(y)}
 						/>
 					)
 				})}
 
-				<g clipPath={`url(#clip-${uid})`}>
-					<path className={styles.chartArea} d={area} fill={`url(#fill-${uid})`} />
-					<path
-						className={styles.chartLine}
-						d={line}
-						stroke={`url(#stroke-${uid})`}
-					/>
-				</g>
-
+				<path
+					data-chart-area=""
+					className={styles.chartArea}
+					d={geo.area}
+					fill={`url(#${areaId})`}
+				/>
 				<line
+					data-chart-marker=""
 					className={styles.chartMarker}
-					data-chart-marker
-					x1={last.x}
-					x2={last.x}
-					y1={last.y}
-					y2={baseline}
+					x1={roundSvg(last.x)}
+					y1={roundSvg(last.y)}
+					x2={roundSvg(last.x)}
+					y2={roundSvg(geo.baseline)}
+				/>
+				<path
+					data-chart-line=""
+					className={styles.chartLine}
+					d={geo.line}
+					stroke={`url(#${lineId})`}
+					pathLength={1}
 				/>
 
-				{coords.map((c, i) => (
+				{geo.pts.map((point, i) => (
 					<circle
-						key={`dot-${i}`}
-						data-chart-dot
+						key={`${point.x}-${point.y}`}
+						data-chart-dot=""
 						className={`${styles.chartDot} ${
-							i === coords.length - 1 ? styles.chartDotLast : ""
+							i === geo.pts.length - 1 ? styles.chartDotLast : ""
 						}`}
-						cx={c.x}
-						cy={c.y}
-						r={i === coords.length - 1 ? 5 : 3.6}
+						cx={roundSvg(point.x)}
+						cy={roundSvg(point.y)}
+						r={i === geo.pts.length - 1 ? 5.4 : 4}
 					/>
 				))}
 
-				{coords.map((c, i) => (
+				{geo.pts.map((point, i) => (
 					<text
-						key={`label-${i}`}
+						key={trend.labels[i] ?? i}
 						className={styles.chartLabel}
-						x={c.x}
-						y={CH_H - 12}
+						x={roundSvg(point.x)}
+						y={CH_H - 10}
 						textAnchor="middle"
 					>
-						{labels[i]}
+						{trend.labels[i] ?? ""}
 					</text>
 				))}
 			</svg>
-
-			<p className={styles.chartCaption}>{caption}</p>
+			<figcaption className={styles.chartCaption}>{trend.caption}</figcaption>
 		</figure>
 	)
 }
 
-/* ------------------------------------------------------------------ *
- * dialog
- * ------------------------------------------------------------------ */
+/* ------------------------------------------------------------- the modal -- */
+
+const pad = (n: number) => String(n).padStart(2, "0")
+
+const FOCUSABLE =
+	'button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+
+type ProblemDialogProps = {
+	problem: Problem
+	index: number
+	total: number
+	onClose: () => void
+	onNavigate: (direction: 1 | -1) => void
+}
 
 function ProblemDialog({
 	problem,
 	index,
 	total,
 	onClose,
-	onSelect,
-}: {
-	problem: Problem
-	index: number
-	total: number
-	onClose: () => void
-	onSelect: (next: number) => void
-}) {
-	const titleId = useId()
+	onNavigate,
+}: ProblemDialogProps) {
 	const reduced = useReducedMotion()
-
-	const overlayRef = useRef<HTMLDivElement | null>(null)
-	const scrimRef = useRef<HTMLDivElement | null>(null)
-	const dialogRef = useRef<HTMLDivElement | null>(null)
-	const scrollRef = useRef<HTMLDivElement | null>(null)
-	const contentRef = useRef<HTMLDivElement | null>(null)
-	const progressRef = useRef<HTMLSpanElement | null>(null)
-	const closeRef = useRef<HTMLButtonElement | null>(null)
-	const pressTargetRef = useRef<EventTarget | null>(null)
+	const overlayRef = useRef<HTMLDivElement>(null)
+	const scrimRef = useRef<HTMLDivElement>(null)
+	const dialogRef = useRef<HTMLDivElement>(null)
+	const scrollRef = useRef<HTMLDivElement>(null)
+	const progressRef = useRef<HTMLSpanElement>(null)
 	const closingRef = useRef(false)
+	const stepRefs = useRef<Record<string, HTMLElement | null>>({})
 
-	const [step, setStep] = useState<DialogStepId>("snapshot")
+	const [activeStep, setActiveStep] = useState<string>(DIALOG_STEPS[0].id)
+	const [countersOn, setCountersOn] = useState(false)
 
-	/* ---- animated close, then unmount ---- */
+	const rawId = useId().replace(/[^a-zA-Z0-9-_]/g, "")
+	const dialogId = `pws-dialog-${rawId}`
+
+	const stepRefSetters = useMemo(() => {
+		const setters: Record<string, (el: HTMLElement | null) => void> = {}
+		DIALOG_STEPS.forEach((step) => {
+			setters[step.id] = (el) => {
+				stepRefs.current[step.id] = el
+			}
+		})
+		return setters
+	}, [])
+
+	/* ---- close (animated) ---- */
 	const requestClose = useCallback(() => {
 		if (closingRef.current) return
 		closingRef.current = true
-		if (reduced || !dialogRef.current) {
+		const dialog = dialogRef.current
+		const scrim = scrimRef.current
+		if (reduced || !dialog || !scrim) {
 			onClose()
 			return
 		}
 		gsap
 			.timeline({ onComplete: onClose })
-			.to(dialogRef.current, {
+			.to(dialog, {
 				opacity: 0,
-				y: 20,
+				y: 22,
 				scale: 0.975,
-				duration: 0.3,
+				duration: 0.26,
 				ease: "power2.in",
 			})
-			.to(scrimRef.current, { opacity: 0, duration: 0.28 }, 0.04)
+			.to(scrim, { opacity: 0, duration: 0.22, ease: "power1.in" }, 0.04)
 	}, [onClose, reduced])
 
-	/* ---- scroll lock that survives iOS + smooth-scroll wrappers ---- */
+	/* ---- scroll lock: Lenis-safe, keeps the page at its current position ---- */
 	useEffect(() => {
-		const doc = document.documentElement
-		const body = document.body
-		const offsetY = window.scrollY || doc.scrollTop || 0
-		const barWidth = window.innerWidth - doc.clientWidth
+		const { body, documentElement } = document
+		const scrollbarWidth = Math.max(
+			0,
+			window.innerWidth - documentElement.clientWidth,
+		)
+
 		const previous = {
-			position: body.style.position,
-			top: body.style.top,
-			left: body.style.left,
-			right: body.style.right,
-			width: body.style.width,
-			overflow: body.style.overflow,
-			paddingRight: body.style.paddingRight,
-			scrollBehavior: doc.style.scrollBehavior,
+			bodyOverflow: body.style.overflow,
+			bodyPaddingRight: body.style.paddingRight,
+			htmlOverflow: documentElement.style.overflow,
 		}
 
-		doc.style.scrollBehavior = "auto"
-		body.style.position = "fixed"
-		body.style.top = `-${offsetY}px`
-		body.style.left = "0"
-		body.style.right = "0"
-		body.style.width = "100%"
+		/*
+		 * Do not use `position: fixed` + negative `top` here.
+		 * With Lenis that temporarily makes the document report scrollY = 0,
+		 * which is why opening the modal can visually jump back to the hero.
+		 */
 		body.style.overflow = "hidden"
-		if (barWidth > 0) body.style.paddingRight = `${barWidth}px`
+		documentElement.style.overflow = "hidden"
+
+		// Avoid a horizontal layout shift when the browser scrollbar disappears.
+		if (scrollbarWidth > 0) {
+			const currentPadding =
+				Number.parseFloat(window.getComputedStyle(body).paddingRight) || 0
+			body.style.paddingRight = `${currentPadding + scrollbarWidth}px`
+		}
 
 		return () => {
-			body.style.position = previous.position
-			body.style.top = previous.top
-			body.style.left = previous.left
-			body.style.right = previous.right
-			body.style.width = previous.width
-			body.style.overflow = previous.overflow
-			body.style.paddingRight = previous.paddingRight
-			window.scrollTo(0, offsetY)
-			doc.style.scrollBehavior = previous.scrollBehavior
+			body.style.overflow = previous.bodyOverflow
+			body.style.paddingRight = previous.bodyPaddingRight
+			documentElement.style.overflow = previous.htmlOverflow
 		}
 	}, [])
 
-	/* ---- focus trap + keyboard ---- */
-	useEffect(() => {
-		const previouslyFocused = document.activeElement as HTMLElement | null
-		const focusTimer = window.setTimeout(() => closeRef.current?.focus(), 60)
-
-		const onKeyDown = (event: KeyboardEvent) => {
-			if (event.key === "Escape") {
-				event.stopPropagation()
-				event.preventDefault()
-				requestClose()
-				return
-			}
-			if (event.key === "ArrowRight" && total > 1) {
-				event.preventDefault()
-				onSelect((index + 1) % total)
-				return
-			}
-			if (event.key === "ArrowLeft" && total > 1) {
-				event.preventDefault()
-				onSelect((index - 1 + total) % total)
-				return
-			}
-			if (event.key !== "Tab" || !dialogRef.current) return
-			const focusable = Array.from(
-				dialogRef.current.querySelectorAll<HTMLElement>(
-					'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-				),
-			).filter((element) => !element.hasAttribute("disabled"))
-			if (focusable.length === 0) return
-			const first = focusable[0]
-			const last = focusable[focusable.length - 1]
-			if (event.shiftKey && document.activeElement === first) {
-				event.preventDefault()
-				last.focus()
-			} else if (!event.shiftKey && document.activeElement === last) {
-				event.preventDefault()
-				first.focus()
-			}
-		}
-
-		window.addEventListener("keydown", onKeyDown)
-		return () => {
-			window.clearTimeout(focusTimer)
-			window.removeEventListener("keydown", onKeyDown)
-			previouslyFocused?.focus?.()
-		}
-	}, [requestClose, onSelect, index, total])
-
-	/* ---- entrance (runs once per open) ---- */
+	/* ---- entrance ---- */
 	useLayoutEffect(() => {
 		const dialog = dialogRef.current
 		const scrim = scrimRef.current
 		if (!dialog || !scrim) return
 		if (reduced) {
-			gsap.set([scrim, dialog], { opacity: 1, clearProps: "transform,filter" })
+			gsap.set([scrim, dialog], { opacity: 1, y: 0, scale: 1 })
 			return
 		}
-
-		const ctx = gsap.context(() => {
-			gsap
-				.timeline()
-				.fromTo(scrim, { opacity: 0 }, { opacity: 1, duration: 0.42, ease: "power2.out" })
-				.fromTo(
-					dialog,
-					{ opacity: 0, y: 40, scale: 0.955 },
-					{ opacity: 1, y: 0, scale: 1, duration: 0.78, ease: "expo.out" },
-					0.04,
-				)
-		})
-		return () => ctx.revert()
+		const tl = gsap.timeline()
+		tl.fromTo(
+			scrim,
+			{ opacity: 0 },
+			{ opacity: 1, duration: 0.38, ease: "power2.out" },
+		).fromTo(
+			dialog,
+			{ opacity: 0, y: 40, scale: 0.955 },
+			{ opacity: 1, y: 0, scale: 1, duration: 0.62, ease: "expo.out" },
+			0.06,
+		)
+		return () => {
+			tl.kill()
+		}
 	}, [reduced])
 
-	/* ---- content choreography, re-runs when the problem changes ---- */
+	/* ---- initial focus ---- */
+	useEffect(() => {
+		const id = window.setTimeout(() => {
+			scrollRef.current?.focus({ preventScroll: true })
+		}, 60)
+		return () => window.clearTimeout(id)
+	}, [])
+
+	/* ---- keyboard: escape, prev/next, focus trap ---- */
+	useEffect(() => {
+		const handleKey = (event: KeyboardEvent) => {
+			if (event.key === "Escape") {
+				event.preventDefault()
+				requestClose()
+				return
+			}
+			if (event.key === "ArrowRight") {
+				event.preventDefault()
+				onNavigate(1)
+				return
+			}
+			if (event.key === "ArrowLeft") {
+				event.preventDefault()
+				onNavigate(-1)
+				return
+			}
+			if (event.key !== "Tab") return
+			const dialog = dialogRef.current
+			if (!dialog) return
+			const focusables = Array.from(
+				dialog.querySelectorAll<HTMLElement>(FOCUSABLE),
+			).filter((el) => el.offsetParent !== null)
+			if (!focusables.length) return
+			const first = focusables[0]
+			const last = focusables[focusables.length - 1]
+			const active = document.activeElement as HTMLElement | null
+			if (event.shiftKey && (active === first || !dialog.contains(active))) {
+				event.preventDefault()
+				last.focus()
+			} else if (!event.shiftKey && active === last) {
+				event.preventDefault()
+				first.focus()
+			}
+		}
+		document.addEventListener("keydown", handleKey)
+		return () => document.removeEventListener("keydown", handleKey)
+	}, [onNavigate, requestClose])
+
+	/* ---- per-problem intro choreography ---- */
 	useLayoutEffect(() => {
 		const root = dialogRef.current
+		if (!root) return
 		const scroller = scrollRef.current
-		const content = contentRef.current
-		if (!root || !scroller || !content) return
-
-		scroller.scrollTop = 0
-		setStep("snapshot")
-
-		const counters = gsap.utils.toArray<HTMLElement>("[data-count]", root)
-		const runCounter = (el: HTMLElement, delay: number) => {
-			const raw = el.dataset.count ?? el.textContent ?? ""
-			const match = raw.match(/^(\D*)(\d+(?:\.\d+)?)(.*)$/)
-			if (!match) return null
-			const [, prefix, digits, suffix] = match
-			const target = Number.parseFloat(digits)
-			const decimals = digits.includes(".") ? digits.split(".")[1].length : 0
-			const proxy = { v: 0 }
-			el.textContent = `${prefix}${(0).toFixed(decimals)}${suffix}`
-			return gsap.to(proxy, {
-				v: target,
-				duration: 1.15,
-				delay,
-				ease: "power2.out",
-				onUpdate: () => {
-					el.textContent = `${prefix}${proxy.v.toFixed(decimals)}${suffix}`
-				},
-			})
-		}
-
+		if (scroller) scroller.scrollTop = 0
+		setActiveStep(DIALOG_STEPS[0].id)
+		setCountersOn(false)
+		const start = window.setTimeout(() => setCountersOn(true), 220)
 		if (reduced) {
-			counters.forEach((el) => {
-				el.textContent = el.dataset.count ?? el.textContent
-			})
-			return
+			return () => window.clearTimeout(start)
 		}
-
 		const ctx = gsap.context(() => {
-			const pick = <T extends Element>(selector: string) =>
-				gsap.utils.toArray<T>(selector, root)
-			const st = (trigger: Element, start = "top 88%") => ({
-				scroller,
-				trigger,
-				start,
-				once: true,
-			})
-
-			/* header + rail intro */
-			gsap
-				.timeline({ defaults: { ease: "power3.out" } })
-				.fromTo(
-					pick("[data-intro]"),
-					{ opacity: 0, y: 18 },
-					{ opacity: 1, y: 0, duration: 0.62, stagger: 0.06 },
-					0.08,
-				)
-				.fromTo(
-					pick("[data-jump]"),
-					{ opacity: 0, y: 10 },
-					{ opacity: 1, y: 0, duration: 0.4, stagger: 0.04 },
-					0.3,
-				)
-
-			/* dial: ticks bloom, arc sweeps */
-			gsap.fromTo(
-				pick("[data-dial-ticks] line"),
-				{ opacity: 0 },
-				{ opacity: 1, duration: 0.5, stagger: { each: 0.012, from: "start" }, delay: 0.2 },
+			const tl = gsap.timeline({ delay: 0.08 })
+			tl.fromTo(
+				"[data-intro]",
+				{ opacity: 0, y: 14 },
+				{
+					opacity: 1,
+					y: 0,
+					duration: 0.5,
+					ease: "power3.out",
+					stagger: 0.07,
+				},
 			)
-			pick<SVGCircleElement>("[data-dial-arc]").forEach((arc) => {
-				const pct = Number(arc.dataset.dialArc ?? 0)
-				gsap.fromTo(
-					arc,
-					{ strokeDashoffset: DIAL_LEN },
-					{
-						strokeDashoffset: DIAL_LEN * (1 - pct / 100),
-						duration: 1.5,
-						ease: "power3.inOut",
-						delay: 0.24,
-					},
-				)
-			})
-
-			/* section reveals, driven by the modal's own scroller */
-			pick<HTMLElement>("[data-reveal]").forEach((block, i) => {
-				gsap.fromTo(
-					block,
-					{ opacity: 0, y: 26 },
+				.fromTo(
+					"[data-jump]",
+					{ opacity: 0, x: -8 },
 					{
 						opacity: 1,
-						y: 0,
-						duration: 0.66,
-						ease: "power3.out",
-						delay: i === 0 ? 0.16 : 0,
-						scrollTrigger: st(block, "top 92%"),
+						x: 0,
+						duration: 0.4,
+						ease: "power2.out",
+						stagger: 0.05,
 					},
+					0.18,
 				)
-				const rows = gsap.utils.toArray<HTMLElement>("[data-stagger]", block)
-				if (rows.length) {
+				.fromTo(
+					"[data-dial-tick]",
+					{ opacity: 0 },
+					{ opacity: 1, duration: 0.3, ease: "none", stagger: 0.012 },
+					0.14,
+				)
+
+			const arc = root.querySelector<SVGCircleElement>("[data-arc]")
+			if (arc) {
+				const target = Number(arc.dataset.arcTarget ?? "1")
+				tl.fromTo(
+					arc,
+					{ strokeDashoffset: 1 },
+					{
+						strokeDashoffset: 1 - target,
+						duration: 1.15,
+						ease: "power3.out",
+					},
+					0.2,
+				)
+			}
+		}, root)
+		return () => {
+			window.clearTimeout(start)
+			ctx.revert()
+		}
+	}, [problem.id, reduced])
+
+	/* ---- per-block reveals inside the modal scroller ---- */
+	useEffect(() => {
+		const root = dialogRef.current
+		const scroller = scrollRef.current
+		if (!root || !scroller || reduced) return
+		const blocks = Array.from(
+			root.querySelectorAll<HTMLElement>("[data-reveal]"),
+		)
+		if (!blocks.length) return
+
+		const tweens: Array<gsap.core.Tween> = []
+		const played = new WeakSet<HTMLElement>()
+
+		const reveal = (block: HTMLElement) => {
+			if (played.has(block)) return
+			played.add(block)
+
+			tweens.push(
+				gsap.fromTo(
+					block,
+					{ opacity: 0, y: 18 },
+					{ opacity: 1, y: 0, duration: 0.6, ease: "power3.out" },
+				),
+			)
+
+			const items = block.querySelectorAll<HTMLElement>("[data-stagger]")
+			if (items.length) {
+				tweens.push(
 					gsap.fromTo(
-						rows,
-						{ opacity: 0, y: 14 },
+						items,
+						{ opacity: 0, y: 10 },
+						{
+							opacity: 1,
+							y: 0,
+							duration: 0.45,
+							ease: "power2.out",
+							stagger: 0.06,
+							delay: 0.1,
+						},
+					),
+				)
+			}
+
+			block.querySelectorAll<HTMLElement>("[data-bar]").forEach((bar, i) => {
+				const target = Number(bar.dataset.bar ?? "100") / 100
+				tweens.push(
+					gsap.fromTo(
+						bar,
+						{ scaleX: 0 },
+						{
+							scaleX: target,
+							duration: 0.95,
+							ease: "power3.out",
+							delay: 0.18 + i * 0.08,
+						},
+					),
+				)
+			})
+
+			const nodes = block.querySelectorAll<HTMLElement>("[data-pipe-node]")
+			if (nodes.length) {
+				tweens.push(
+					gsap.fromTo(
+						nodes,
+						{ opacity: 0, y: 12 },
 						{
 							opacity: 1,
 							y: 0,
 							duration: 0.5,
+							ease: "power3.out",
+							stagger: 0.12,
+						},
+					),
+				)
+				block
+					.querySelectorAll<SVGPathElement>("[data-pipe-flow]")
+					.forEach((flow) => {
+						tweens.push(
+							gsap.to(flow, {
+								strokeDashoffset: -24,
+								duration: 1.6,
+								ease: "none",
+								repeat: -1,
+							}),
+						)
+					})
+				block
+					.querySelectorAll<HTMLElement>("[data-pipe-packet]")
+					.forEach((packet, i) => {
+						tweens.push(
+							gsap.fromTo(
+								packet,
+								{ left: "0%", opacity: 0 },
+								{
+									left: "100%",
+									opacity: 1,
+									duration: 1.5,
+									ease: "power1.inOut",
+									repeat: -1,
+									repeatDelay: 0.7,
+									delay: 0.4 + i * 0.45,
+								},
+							),
+						)
+					})
+			}
+
+			const line = block.querySelector<SVGPathElement>("[data-chart-line]")
+			if (line) {
+				tweens.push(
+					gsap.fromTo(
+						line,
+						{ strokeDasharray: "1 1", strokeDashoffset: 1 },
+						{
+							strokeDashoffset: 0,
+							duration: 1.25,
 							ease: "power2.out",
-							stagger: 0.07,
-							delay: i === 0 ? 0.26 : 0.08,
-							scrollTrigger: st(block, "top 90%"),
+							delay: 0.12,
+							clearProps: "strokeDasharray,strokeDashoffset",
 						},
-					)
-				}
-			})
-
-			/* metric bars */
-			pick<HTMLElement>("[data-bar]").forEach((bar) => {
-				const pct = Number(bar.dataset.bar ?? 0)
-				gsap.fromTo(
-					bar,
-					{ scaleX: 0 },
-					{
-						scaleX: Math.max(0, Math.min(100, pct)) / 100,
-						transformOrigin: "0% 50%",
-						duration: 1.05,
-						ease: "power3.out",
-						delay: 0.2,
-						scrollTrigger: st(bar, "top 96%"),
-					},
-				)
-			})
-
-			/* counters */
-			counters.forEach((el) => {
-				const tween = runCounter(el, 0)
-				if (!tween) return
-				tween.pause()
-				ScrollTrigger.create({
-					scroller,
-					trigger: el,
-					start: "top 96%",
-					once: true,
-					onEnter: () => tween.play(),
-				})
-			})
-
-			/* journey diagram */
-			const nodes = pick<HTMLElement>("[data-pipe-node]")
-			if (nodes.length) {
-				gsap.fromTo(
-					nodes,
-					{ opacity: 0, y: 18, scale: 0.94 },
-					{
-						opacity: 1,
-						y: 0,
-						scale: 1,
-						duration: 0.6,
-						ease: "back.out(1.7)",
-						stagger: 0.12,
-						scrollTrigger: st(nodes[0], "top 92%"),
-					},
+					),
 				)
 			}
-			const flows = pick<SVGPathElement>("[data-pipe-flow]")
-			if (flows.length) {
-				gsap.to(flows, {
-					strokeDashoffset: -28,
-					duration: 1.1,
-					ease: "none",
-					repeat: -1,
-				})
+			const area = block.querySelector<SVGPathElement>("[data-chart-area]")
+			if (area) {
+				tweens.push(
+					gsap.fromTo(
+						area,
+						{ opacity: 0 },
+						{ opacity: 1, duration: 0.9, ease: "power2.out", delay: 0.35 },
+					),
+				)
 			}
-			pick<HTMLElement>("[data-pipe-packet]").forEach((packet, i) => {
-				gsap
-					.timeline({ repeat: -1, delay: i * 0.55 })
-					.fromTo(
-						packet,
-						{ left: "0%", opacity: 0 },
-						{ opacity: 1, duration: 0.24, ease: "power1.out" },
-					)
-					.to(packet, { left: "100%", duration: 1.7, ease: "none" }, 0)
-					.to(packet, { opacity: 0, duration: 0.3 }, 1.4)
-			})
-
-			/* chart draw */
-			const charts = pick<HTMLElement>("[data-chart]")
-			charts.forEach((chart) => {
-				const clip = chart.querySelector<SVGRectElement>("[data-chart-clip]")
-				const dots = gsap.utils.toArray<SVGCircleElement>("[data-chart-dot]", chart)
-				const marker = chart.querySelector<SVGLineElement>("[data-chart-marker]")
-				const tl = gsap.timeline({
-					paused: true,
-					defaults: { ease: "power3.out" },
-				})
-				if (clip) {
-					tl.fromTo(
-						clip,
-						{ attr: { width: 0 } },
-						{ attr: { width: CH_W }, duration: 1.35, ease: "power2.inOut" },
-						0,
-					)
-				}
-				if (dots.length) {
-					tl.fromTo(
+			const dots = block.querySelectorAll<SVGCircleElement>("[data-chart-dot]")
+			if (dots.length) {
+				tweens.push(
+					gsap.fromTo(
 						dots,
-						{ scale: 0, transformOrigin: "50% 50%" },
-						{ scale: 1, duration: 0.42, ease: "back.out(2.6)", stagger: 0.11 },
-						0.25,
-					)
-				}
-				if (marker) {
-					tl.fromTo(marker, { opacity: 0 }, { opacity: 1, duration: 0.4 }, 0.95)
-				}
-				ScrollTrigger.create({
-					scroller,
-					trigger: chart,
-					start: "top 90%",
-					once: true,
-					onEnter: () => tl.play(),
-				})
-			})
-
-			/* read-progress bar */
-			const bar = progressRef.current
-			if (bar && scroller.scrollHeight - scroller.clientHeight > 16) {
-				gsap.fromTo(
-					bar,
-					{ scaleX: 0 },
-					{
-						scaleX: 1,
-						ease: "none",
-						transformOrigin: "0% 50%",
-						scrollTrigger: {
-							scroller,
-							trigger: content,
-							start: "top top",
-							end: "bottom bottom",
-							scrub: 0.35,
+						{ opacity: 0 },
+						{
+							opacity: 1,
+							duration: 0.28,
+							ease: "power2.out",
+							stagger: 0.09,
+							delay: 0.5,
 						},
-					},
+					),
 				)
 			}
+			const marker = block.querySelector<SVGLineElement>("[data-chart-marker]")
+			if (marker) {
+				tweens.push(
+					gsap.fromTo(
+						marker,
+						{ opacity: 0 },
+						{ opacity: 1, duration: 0.4, ease: "power2.out", delay: 1 },
+					),
+				)
+			}
+		}
 
-			/* scroll spy for the jump rail */
-			DIALOG_STEPS.forEach(({ id }) => {
-				const target = content.querySelector<HTMLElement>(`[data-step="${id}"]`)
-				if (!target) return
-				ScrollTrigger.create({
-					scroller,
-					trigger: target,
-					start: "top 42%",
-					end: "bottom 42%",
-					onToggle: (self) => {
-						if (self.isActive) setStep(id)
-					},
+		const observer = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						reveal(entry.target as HTMLElement)
+						observer.unobserve(entry.target)
+					}
 				})
-			})
+			},
+			{ root: scroller, threshold: 0.12 },
+		)
+		blocks.forEach((block) => observer.observe(block))
 
-			/*
-			 * the open animation scales the dialog, so measurements taken
-			 * during it are slightly off — re-measure only our own triggers
-			 * once the entrance has settled.
-			 */
-			gsap.delayedCall(0.95, () => {
-				ScrollTrigger.getAll().forEach((instance) => {
-					if (instance.scroller === scroller) instance.refresh()
-				})
-			})
-		}, root)
-
-		return () => ctx.revert()
+		return () => {
+			observer.disconnect()
+			tweens.forEach((tween) => tween.kill())
+		}
 	}, [problem.id, reduced])
 
-	const goToStep = useCallback((id: DialogStepId) => {
+	/* ---- read progress + section spy ---- */
+	useEffect(() => {
 		const scroller = scrollRef.current
-		const content = contentRef.current
-		if (!scroller || !content) return
-		const target = content.querySelector<HTMLElement>(`[data-step="${id}"]`)
-		if (!target) return
-		const top =
-			target.getBoundingClientRect().top -
-			scroller.getBoundingClientRect().top +
-			scroller.scrollTop -
-			14
-		scroller.scrollTo({ top, behavior: "smooth" })
-		setStep(id)
-	}, [])
+		if (!scroller) return
+		const handleScroll = () => {
+			const max = scroller.scrollHeight - scroller.clientHeight
+			const ratio = max > 0 ? Math.min(1, Math.max(0, scroller.scrollTop / max)) : 0
+			if (progressRef.current) {
+				progressRef.current.style.transform = `scaleX(${ratio})`
+			}
+			const probe = scroller.scrollTop + scroller.clientHeight * 0.3
+			let current = DIALOG_STEPS[0].id
+			DIALOG_STEPS.forEach((step) => {
+				const el = stepRefs.current[step.id]
+				if (el && el.offsetTop <= probe) current = step.id
+			})
+			setActiveStep((prev) => (prev === current ? prev : current))
+		}
+		handleScroll()
+		scroller.addEventListener("scroll", handleScroll, { passive: true })
+		window.addEventListener("resize", handleScroll)
+		return () => {
+			scroller.removeEventListener("scroll", handleScroll)
+			window.removeEventListener("resize", handleScroll)
+		}
+	}, [problem.id])
 
-	const headline = problem.metrics[0]
+	const goToStep = useCallback(
+		(stepId: string) => {
+			const scroller = scrollRef.current
+			const target = stepRefs.current[stepId]
+			if (!scroller || !target) return
+			scroller.scrollTo({
+				top: Math.max(0, target.offsetTop - 10),
+				behavior: reduced ? "auto" : "smooth",
+			})
+			setActiveStep(stepId)
+		},
+		[reduced],
+	)
 
 	if (typeof document === "undefined") return null
 
 	return createPortal(
 		<div
-			className={styles.overlay}
 			ref={overlayRef}
+			className={styles.overlay}
+			role="presentation"
+			data-lenis-prevent=""
 			onPointerDown={(event) => {
-				pressTargetRef.current = event.target
-			}}
-			onClick={(event) => {
 				if (
-					event.target === event.currentTarget &&
-					pressTargetRef.current === event.currentTarget
+					event.target === overlayRef.current ||
+					event.target === scrimRef.current
 				) {
 					requestClose()
 				}
 			}}
 		>
-			<div className={styles.scrim} ref={scrimRef} aria-hidden="true" />
+			<div ref={scrimRef} className={styles.scrim} aria-hidden="true" />
 
 			<div
 				ref={dialogRef}
 				className={styles.dialog}
 				role="dialog"
 				aria-modal="true"
-				aria-labelledby={titleId}
+				aria-labelledby={`${dialogId}-title`}
 			>
 				<div className={styles.dialogTop}>
-					<span className={styles.topTag} data-intro>
-						<span className={styles.topDot} />
+					<span className={styles.topTag}>
+						<span className={styles.topDot} aria-hidden="true" />
 						{problem.serviceFull}
 					</span>
-
 					<div className={styles.topActions}>
-						<span className={styles.topCount} data-intro>
-							{String(index + 1).padStart(2, "0")}
-							<i>/{String(total).padStart(2, "0")}</i>
+						<span className={styles.topCount}>
+							{pad(index + 1)}
+							<i> / {pad(total)}</i>
 						</span>
-						<span className={styles.topNav}>
+						<div className={styles.topNav}>
 							<button
 								type="button"
 								className={`${styles.navBtn} ${styles.navPrev}`}
-								onClick={() => onSelect((index - 1 + total) % total)}
+								onClick={() => onNavigate(-1)}
 								aria-label="Previous problem"
 							>
-								<ArrowIcon size={13} />
+								<ArrowIcon size={15} />
 							</button>
 							<button
 								type="button"
 								className={styles.navBtn}
-								onClick={() => onSelect((index + 1) % total)}
+								onClick={() => onNavigate(1)}
 								aria-label="Next problem"
 							>
-								<ArrowIcon size={13} />
+								<ArrowIcon size={15} />
 							</button>
-						</span>
+						</div>
 						<button
-							ref={closeRef}
 							type="button"
 							className={styles.close}
 							onClick={requestClose}
-							aria-label="Close details"
+							aria-label="Close"
 						>
 							<CloseIcon />
 						</button>
 					</div>
-
-					<span className={styles.dialogProgress} aria-hidden="true">
-						<span className={styles.dialogProgressBar} ref={progressRef} />
-					</span>
+					<div className={styles.dialogProgress} aria-hidden="true">
+						<span ref={progressRef} className={styles.dialogProgressBar} />
+					</div>
 				</div>
 
 				<div
-					className={styles.dialogScroll}
 					ref={scrollRef}
-					data-lenis-prevent
+					className={styles.dialogScroll}
 					tabIndex={-1}
+					data-lenis-prevent=""
 				>
-					<div className={styles.dialogGrid} ref={contentRef}>
-						<aside className={styles.rail}>
+					<div className={styles.dialogGrid}>
+						{/* ---------------- sticky rail ---------------- */}
+						<div className={styles.rail}>
 							<div className={styles.railSticky}>
-								<h3 className={styles.railTitle} id={titleId} data-intro>
+								<p className={styles.railCode} data-intro="">
+									<span aria-hidden="true" />
+									{problem.code} · Entry {pad(index + 1)}
+								</p>
+								<h3
+									id={`${dialogId}-title`}
+									className={styles.railTitle}
+									data-intro=""
+								>
 									{problem.title}
 								</h3>
-								<p className={styles.railLead} data-intro>
+								<p className={styles.railLead} data-intro="">
 									{problem.lead}
 								</p>
-
-								<div className={styles.railDial} data-intro>
+								<p className={styles.railStake} data-intro="">
+									<span className={styles.railStakeLabel}>Why it matters</span>
+									{problem.stake}
+								</p>
+								<div className={styles.railDial} data-intro="">
 									<SignatureDial
-										value={headline.value}
-										fill={headline.fill}
+										value={problem.metric.value}
+										fill={problem.metric.fill}
+										play={countersOn && !reduced}
 									/>
-									<p className={styles.railDialLabel}>{headline.label}</p>
+									<p className={styles.railDialLabel}>
+										<span className={styles.railDialTag}>
+											Headline target · illustrative
+										</span>
+										{problem.metric.label}
+									</p>
 								</div>
-
-								<nav className={styles.jump} aria-label="Sections">
-									{DIALOG_STEPS.map(({ id, label }) => (
+								<nav className={styles.jump} aria-label="Jump to a section">
+									{DIALOG_STEPS.map((step) => (
 										<button
-											key={id}
+											key={step.id}
 											type="button"
-											data-jump
+											data-jump=""
 											className={`${styles.jumpBtn} ${
-												step === id ? styles.jumpBtnActive : ""
+												activeStep === step.id ? styles.jumpBtnActive : ""
 											}`}
-											onClick={() => goToStep(id)}
-											aria-current={step === id}
+											onClick={() => goToStep(step.id)}
+											aria-current={activeStep === step.id ? "true" : undefined}
 										>
-											<span className={styles.jumpRule} />
-											{label}
+											<span className={styles.jumpRule} aria-hidden="true" />
+											{step.label}
 										</button>
 									))}
 								</nav>
 							</div>
-						</aside>
+						</div>
 
+						{/* ---------------- body ---------------- */}
 						<div className={styles.body}>
-							<section className={styles.block} data-step="snapshot" data-reveal>
-								<p className={styles.blockTitle}>What the data shows</p>
+							{/* 01 overview + target metrics */}
+							<section
+								id={`${dialogId}-snapshot`}
+								ref={stepRefSetters.snapshot}
+								className={styles.block}
+								data-reveal=""
+								aria-label="Overview"
+							>
+								<p className={styles.overview} data-stagger="">
+									{problem.summary}
+								</p>
+								<div className={styles.blockHead}>
+									<h4 className={styles.blockTitle}>Target metrics</h4>
+									<p className={styles.blockNote}>Illustrative · not a client result</p>
+								</div>
 								<div className={styles.metrics}>
 									{problem.metrics.map((metric, i) => (
-										<div className={styles.metric} key={metric.label} data-stagger>
-											<span className={styles.metricRank}>
-												{String(i + 1).padStart(2, "0")}
-											</span>
-											<span className={styles.metricValue} data-count={metric.value}>
-												{metric.value}
+										<div key={metric.label} className={styles.metric}>
+											<span className={styles.metricRank}>T{pad(i + 1)}</span>
+											<span className={styles.metricValue}>
+												<Counter
+													value={metric.value}
+													play={countersOn && !reduced}
+												/>
 											</span>
 											<span className={styles.metricLabel}>{metric.label}</span>
-											<span className={styles.metricBar}>
+											<span className={styles.metricBar} aria-hidden="true">
 												<span
 													className={styles.metricBarFill}
 													data-bar={metric.fill}
-													style={{
-														transform: `scaleX(${
-															Math.max(0, Math.min(100, metric.fill)) / 100
-														})`,
-													}}
+													style={{ transform: `scaleX(${metric.fill / 100})` }}
 												/>
 											</span>
 										</div>
 									))}
 								</div>
+								<p className={styles.metricsNote}>{problem.metricsNote}</p>
 							</section>
 
-							<section className={styles.block} data-step="diagnosis" data-reveal>
+							{/* 02 signals + response */}
+							<section
+								id={`${dialogId}-diagnosis`}
+								ref={stepRefSetters.diagnosis}
+								className={styles.block}
+								data-reveal=""
+								aria-label="Diagnosis"
+							>
+								<div className={styles.blockHead}>
+									<h4 className={styles.blockTitle}>Diagnosis</h4>
+									<p className={styles.blockNote}>{problem.code}</p>
+								</div>
 								<div className={styles.columns}>
 									<div className={styles.column}>
-										<p className={styles.blockTitle}>Signals we hear</p>
+										<h5 className={styles.blockTitle}>Signals we hear</h5>
 										<ul className={styles.list}>
 											{problem.signals.map((signal) => (
-												<li className={styles.listItem} key={signal} data-stagger>
-													<span className={styles.bullet} />
-													<span>{signal}</span>
+												<li
+													key={signal}
+													className={styles.listItem}
+													data-stagger=""
+												>
+													<span className={styles.bullet} aria-hidden="true" />
+													{signal}
 												</li>
 											))}
 										</ul>
 									</div>
-
 									<div className={styles.column}>
-										<p className={styles.blockTitle}>How we solve it</p>
+										<h5 className={styles.blockTitle}>What JabitSoft does</h5>
 										<ol className={styles.steps}>
 											{problem.response.map((item, i) => (
-												<li className={styles.step} key={item} data-stagger>
-													<span className={styles.stepIndex}>
-														{String(i + 1).padStart(2, "0")}
-													</span>
+												<li key={item} className={styles.step} data-stagger="">
+													<span className={styles.stepIndex}>{pad(i + 1)}</span>
 													<span className={styles.stepText}>{item}</span>
 												</li>
 											))}
@@ -1411,28 +1568,61 @@ function ProblemDialog({
 								</div>
 							</section>
 
-							<section className={styles.block} data-step="journey" data-reveal>
-								<p className={styles.blockTitle}>The journey we run</p>
+							{/* 03 journey */}
+							<section
+								id={`${dialogId}-journey`}
+								ref={stepRefSetters.journey}
+								className={styles.block}
+								data-reveal=""
+								aria-label="Implementation journey"
+							>
+								<div className={styles.blockHead}>
+									<h4 className={styles.blockTitle}>Implementation journey</h4>
+									<p className={styles.blockNote}>
+										Today → what we build → what you get
+									</p>
+								</div>
 								<JourneyDiagram flow={problem.flow} />
 							</section>
 
-							<section className={styles.block} data-step="impact" data-reveal>
-								<p className={styles.blockTitle}>Measured impact</p>
-								<div data-chart>
-									<ImpactChart
-										points={problem.trend.points}
-										labels={problem.trend.labels}
-										caption={problem.trend.caption}
-									/>
+							{/* 04 outcome + service */}
+							<section
+								id={`${dialogId}-impact`}
+								ref={stepRefSetters.impact}
+								className={styles.block}
+								data-reveal=""
+								aria-label="Outcome"
+							>
+								<div className={styles.blockHead}>
+									<h4 className={styles.blockTitle}>Illustrative trajectory</h4>
+									<p className={styles.blockNote}>
+										Shape of progress, not a promised result
+									</p>
 								</div>
-
+								<ImpactChart trend={problem.trend} />
 								<div className={styles.outcome}>
-									<span className={styles.outcomeIcon}>
+									<span className={styles.outcomeIcon} aria-hidden="true">
 										<SparkIcon />
 									</span>
+									<p className={styles.outcomeText}>
+										<span className={styles.outcomeTag}>Final outcome</span>
+										{problem.outcome}
+									</p>
+								</div>
+								<div className={styles.serviceNote}>
+									<span className={styles.serviceNoteIcon} aria-hidden="true">
+										<ServiceIcon name={problem.icon} size={18} />
+									</span>
 									<div>
-										<span className={styles.outcomeTag}>Outcome</span>
-										<p className={styles.outcomeText}>{problem.outcome}</p>
+										<span className={styles.serviceNoteLabel}>
+											Relevant service
+										</span>
+										<span className={styles.serviceNoteValue}>
+											{problem.serviceFull}
+										</span>
+										<span className={styles.serviceNoteText}>
+											{problem.capability}
+										</span>
 									</div>
 								</div>
 							</section>
@@ -1445,724 +1635,289 @@ function ProblemDialog({
 	)
 }
 
-/* ------------------------------------------------------------------ *
- * section
- * ------------------------------------------------------------------ */
+/* ---------------------------------------------------------------- section -- */
 
 export default function ProblemsWeSolve() {
 	const reduced = useReducedMotion()
-
-	const sectionRef = useRef<HTMLElement | null>(null)
-	const stageRef = useRef<HTMLDivElement | null>(null)
-	const hubRef = useRef<HTMLDivElement | null>(null)
-	const hubSvgRef = useRef<SVGSVGElement | null>(null)
-	const layerRef = useRef<SVGSVGElement | null>(null)
-	const coreCardRef = useRef<HTMLButtonElement | null>(null)
-	const tickGroupRef = useRef<SVGGElement | null>(null)
-	const orbitRingRef = useRef<SVGCircleElement | null>(null)
-	const cometRef = useRef<SVGGElement | null>(null)
-	const anchorPulseRef = useRef<SVGCircleElement | null>(null)
-	const progressRef = useRef<SVGCircleElement | null>(null)
-	const nodeRefs = useRef<Array<SVGGElement | null>>([])
-	const cardRefs = useRef<Array<HTMLButtonElement | null>>([])
-	const railRefs = useRef<Array<HTMLSpanElement | null>>([])
-	const wirePathRefs = useRef<Array<SVGPathElement | null>>([])
-	const wireCapRefs = useRef<Array<SVGCircleElement | null>>([])
-	const livePathRef = useRef<SVGPathElement | null>(null)
-	const flowPathRef = useRef<SVGPathElement | null>(null)
-	const liveCapRef = useRef<SVGCircleElement | null>(null)
-	const cycleRef = useRef<gsap.core.Tween | null>(null)
-	const ambientTweensRef = useRef<gsap.core.Tween[]>([])
-	const flowTweenRef = useRef<gsap.core.Tween | null>(null)
-	const angleRef = useRef(0)
-
-	const [active, setActive] = useState(0)
+	const sectionRef = useRef<HTMLElement>(null)
+	const headerRef = useRef<HTMLDivElement>(null)
+	const statsRef = useRef<HTMLUListElement>(null)
+	const headerInView = useInView(headerRef, { once: true, amount: 0.4 })
+	const statsInView = useInView(statsRef, { once: true, amount: 0.25 })
 	const [openIndex, setOpenIndex] = useState<number | null>(null)
-	const [held, setHeld] = useState(false)
-	const [wired, setWired] = useState(false)
 
-	const inView = useInView(sectionRef, { amount: 0.28 })
-	const paused = !inView || held || openIndex !== null || Boolean(reduced)
-
-	/* ---- website heading fill: faded -> dark on scroll ---- */
+	/* grey → dark, left to right, scrubbed by scroll (site-wide heading behaviour) */
 	useLayoutEffect(() => {
 		const root = sectionRef.current
 		if (!root) return
-
 		const heading = root.querySelector<HTMLElement>("[data-heading-fill]")
 		if (!heading) return
-
 		if (reduced) {
 			gsap.set(heading, { backgroundSize: "100% 100%, 100% 100%" })
 			return
 		}
-
-		const ctx = gsap.context(() => {
-			gsap.fromTo(
-				heading,
-				{ backgroundSize: "100% 100%, 0% 100%" },
-				{
-					backgroundSize: "100% 100%, 100% 100%",
-					ease: "none",
-					scrollTrigger: {
-						trigger: heading,
-						start: "top 92%",
-						end: "top 38%",
-						scrub: 0.7,
-						invalidateOnRefresh: true,
-					},
+		const tween = gsap.fromTo(
+			heading,
+			{ backgroundSize: "100% 100%, 0% 100%" },
+			{
+				backgroundSize: "100% 100%, 100% 100%",
+				ease: "none",
+				scrollTrigger: {
+					trigger: heading,
+					start: "top 92%",
+					end: "top 38%",
+					scrub: 0.7,
+					invalidateOnRefresh: true,
 				},
-			)
-		}, root)
+			},
+		)
+		return () => {
+			tween.scrollTrigger?.kill()
+			tween.kill()
+		}
+	}, [reduced])
 
+	/* stat reveals, meter fills and ledger entrance */
+	useLayoutEffect(() => {
+		const root = sectionRef.current
+		if (!root || reduced) return
+		const ctx = gsap.context(() => {
+			const stats = gsap.utils.toArray<HTMLElement>("[data-stat]")
+			if (stats.length) {
+				gsap.from(stats, {
+					opacity: 0,
+					y: 24,
+					duration: 0.75,
+					ease: "power3.out",
+					stagger: 0.12,
+					scrollTrigger: { trigger: stats[0], start: "top 88%", once: true },
+				})
+			}
+
+			gsap.utils.toArray<HTMLElement>("[data-meter]").forEach((meter) => {
+				const target = Number(meter.dataset.meter ?? "100") / 100
+				gsap.fromTo(
+					meter,
+					{ scaleX: 0 },
+					{
+						scaleX: target,
+						duration: 1.1,
+						ease: "power3.out",
+						scrollTrigger: { trigger: meter, start: "top 96%", once: true },
+					},
+				)
+			})
+
+			const entries = gsap.utils.toArray<HTMLElement>("[data-entry]")
+			if (entries.length) {
+				gsap.from(entries, {
+					opacity: 0,
+					y: 26,
+					duration: 0.7,
+					ease: "power3.out",
+					stagger: 0.07,
+					scrollTrigger: { trigger: entries[0], start: "top 86%", once: true },
+				})
+			}
+		}, root)
 		return () => ctx.revert()
 	}, [reduced])
 
-	/* ---- orbit node placement ---- */
-	const layoutNodes = useCallback((base: number) => {
-		nodeRefs.current.forEach((node, index) => {
-			if (!node) return
-			const point = polar(R_ORBIT, base - index * STEP)
-			gsap.set(node, { x: point.x, y: point.y })
-		})
-	}, [])
-
-	/* ---- clockwise 360-degree snap to the active service ---- */
-	useEffect(() => {
-		const current = angleRef.current
-		const delta = (((active * STEP - current) % 360) + 360) % 360
-		const target = current + delta
-
-		if (reduced || delta === 0) {
-			angleRef.current = target
-			layoutNodes(target)
-			return
-		}
-
-		const proxy = { value: current }
-		const tween = gsap.to(proxy, {
-			value: target,
-			duration: 1.15,
-			ease: "power3.inOut",
-			onUpdate: () => {
-				angleRef.current = proxy.value
-				layoutNodes(proxy.value)
-			},
-		})
-		return () => {
-			tween.kill()
-		}
-	}, [active, reduced, layoutNodes])
-
-	/* ---- continuous rotation + scroll entrance ---- */
-	useEffect(() => {
-		const root = sectionRef.current
-		if (!root) return
-		layoutNodes(angleRef.current)
-		if (reduced) return
-
-		const ambient: gsap.core.Tween[] = []
-
-		const ctx = gsap.context(() => {
-			if (tickGroupRef.current) {
-				ambient.push(
-					gsap.to(tickGroupRef.current, {
-						rotation: 360,
-						duration: 62,
-						ease: "none",
-						repeat: -1,
-						svgOrigin: `${C} ${C}`,
-					}),
-				)
-			}
-			if (orbitRingRef.current) {
-				ambient.push(
-					gsap.to(orbitRingRef.current, {
-						rotation: -360,
-						duration: 95,
-						ease: "none",
-						repeat: -1,
-						svgOrigin: `${C} ${C}`,
-					}),
-				)
-			}
-			if (cometRef.current) {
-				ambient.push(
-					gsap.to(cometRef.current, {
-						rotation: 360,
-						duration: 15,
-						ease: "none",
-						repeat: -1,
-						svgOrigin: `${C} ${C}`,
-					}),
-				)
-			}
-			if (anchorPulseRef.current) {
-				ambient.push(
-					gsap.to(anchorPulseRef.current, {
-						scale: 1.16,
-						opacity: 0.22,
-						duration: 1.5,
-						ease: "sine.inOut",
-						repeat: -1,
-						yoyo: true,
-						svgOrigin: `${C + R_ORBIT} ${C}`,
-					}),
-				)
-			}
-
-			ambientTweensRef.current = ambient
-
-			const timeline = gsap.timeline({
-				scrollTrigger: { trigger: root, start: "top 78%", once: true },
-			})
-			if (hubSvgRef.current) {
-				timeline.from(
-					hubSvgRef.current,
-					{ opacity: 0, scale: 0.92, duration: 1.1, ease: "power3.out", svgOrigin: `${C} ${C}` },
-					0,
-				)
-			}
-			timeline.from(
-				`.${styles.tick}`,
-				{ opacity: 0, duration: 0.5, stagger: { each: 0.006, from: "random" } },
-				0.1,
-			)
-			if (coreCardRef.current) {
-				timeline.from(
-					coreCardRef.current,
-					{ opacity: 0, scale: 0.86, duration: 0.75, ease: "power3.out" },
-					0.2,
-				)
-			}
-			const nodes = nodeRefs.current.filter(Boolean) as SVGGElement[]
-			if (nodes.length) {
-				timeline.from(
-					nodes,
-					{
-						opacity: 0,
-						scale: 0.4,
-						duration: 0.6,
-						ease: "back.out(2)",
-						stagger: 0.07,
-						transformOrigin: "50% 50%",
-					},
-					0.3,
-				)
-			}
-		}, root)
-
-		return () => {
-			ambientTweensRef.current = []
-			ctx.revert()
-		}
-	}, [reduced, layoutNodes])
-
-	useEffect(() => {
-		const shouldPause = !inView || openIndex !== null
-		ambientTweensRef.current.forEach((tween) => {
-			if (shouldPause) tween.pause()
-			else tween.resume()
-		})
-	}, [inView, openIndex])
-
-	/* ---- progress ring drives the auto-advance ---- */
-	useEffect(() => {
-		const arc = progressRef.current
-		if (!arc) return
-		gsap.set(arc, { strokeDasharray: PROG_LEN, strokeDashoffset: PROG_LEN })
-		if (reduced) return
-
-		const tween = gsap.to(arc, {
-			strokeDashoffset: 0,
-			duration: CYCLE,
-			ease: "none",
-			paused: true,
-			onComplete: () => setActive((current) => (current + 1) % PROBLEMS.length),
-		})
-		cycleRef.current = tween
-		return () => {
-			tween.kill()
-			cycleRef.current = null
-		}
-	}, [active, reduced])
-
-	useEffect(() => {
-		const tween = cycleRef.current
-		if (!tween) return
-		if (paused) tween.pause()
-		else tween.play()
-	}, [paused, active])
-
-	/* ---- wire layer (desktop only) ---- */
-	useEffect(() => {
-		const query = window.matchMedia("(min-width: 1181px)")
-		const apply = () => setWired(query.matches)
-		apply()
-		query.addEventListener("change", apply)
-		return () => query.removeEventListener("change", apply)
-	}, [])
-
-	const drawWires = useCallback(() => {
-		const stage = stageRef.current
-		const hub = hubRef.current
-		const layer = layerRef.current
-		if (!stage || !hub || !layer) return
-
-		const stageRect = stage.getBoundingClientRect()
-		const hubRect = hub.getBoundingClientRect()
-		if (!stageRect.width || !hubRect.width) return
-		layer.setAttribute("viewBox", `0 0 ${stageRect.width} ${stageRect.height}`)
-
-		const scale = hubRect.width / VIEW
-		const toStage = (x: number, y: number) => ({
-			x: hubRect.left - stageRect.left + x * scale,
-			y: hubRect.top - stageRect.top + y * scale,
-		})
-
-		WIRE_ANGLES.forEach((angle, index) => {
-			const dot = railRefs.current[index]
-			const path = wirePathRefs.current[index]
-			const cap = wireCapRefs.current[index]
-			if (!dot || !path || !cap) return
-			const dotRect = dot.getBoundingClientRect()
-			const point = polar(R_HAIR + 4, angle)
-			const end = toStage(point.x, point.y)
-			path.setAttribute(
-				"d",
-				elbow(
-					dotRect.left - stageRect.left + dotRect.width / 2,
-					dotRect.top - stageRect.top + dotRect.height / 2,
-					end.x,
-					end.y,
-					0.56,
-				),
-			)
-			cap.setAttribute("cx", end.x.toFixed(1))
-			cap.setAttribute("cy", end.y.toFixed(1))
-		})
-
-		const card = cardRefs.current[active]
-		const live = livePathRef.current
-		const flow = flowPathRef.current
-		const cap = liveCapRef.current
-		if (!card || !live || !flow || !cap) return
-		const cardRect = card.getBoundingClientRect()
-		const start = toStage(C + R_EXIT, C)
-		const endX = cardRect.left - stageRect.left - 7
-		const endY = cardRect.top - stageRect.top + Math.min(37, cardRect.height / 2)
-		const path = elbow(start.x, start.y, endX, endY, 0.46)
-		live.setAttribute("d", path)
-		flow.setAttribute("d", path)
-		cap.setAttribute("cx", endX.toFixed(1))
-		cap.setAttribute("cy", endY.toFixed(1))
-	}, [active])
-
-	useEffect(() => {
-		if (!wired) return
-
-		let frame = 0
-		const scheduleDraw = () => {
-			cancelAnimationFrame(frame)
-			frame = requestAnimationFrame(drawWires)
-		}
-
-		scheduleDraw()
-
-		const observer = new ResizeObserver(scheduleDraw)
-		const observed = [
-			stageRef.current,
-			hubRef.current,
-			...cardRefs.current,
-			...railRefs.current,
-		].filter(Boolean) as Element[]
-
-		observed.forEach((element) => observer.observe(element))
-		window.addEventListener("resize", scheduleDraw, { passive: true })
-
-		return () => {
-			cancelAnimationFrame(frame)
-			observer.disconnect()
-			window.removeEventListener("resize", scheduleDraw)
-		}
-	}, [wired, drawWires])
-
-	useEffect(() => {
-		if (!wired || reduced) return
-		const flow = flowPathRef.current
-		if (!flow) return
-
-		const tween = gsap.fromTo(
-			flow,
-			{ strokeDashoffset: 0 },
-			{ strokeDashoffset: -16, duration: 0.9, ease: "none", repeat: -1 },
+	const closeProblem = useCallback(() => setOpenIndex(null), [])
+	const navigate = useCallback((direction: 1 | -1) => {
+		setOpenIndex((prev) =>
+			prev === null
+				? prev
+				: (prev + direction + PROBLEMS.length) % PROBLEMS.length,
 		)
-		flowTweenRef.current = tween
-
-		return () => {
-			tween.kill()
-			if (flowTweenRef.current === tween) flowTweenRef.current = null
-		}
-	}, [wired, reduced])
-
-	useEffect(() => {
-		const tween = flowTweenRef.current
-		if (!tween) return
-		if (!inView || openIndex !== null) tween.pause()
-		else tween.resume()
-	}, [inView, openIndex, wired])
-
-	const select = useCallback((index: number) => {
-		setActive(index)
 	}, [])
 
-	const activeProblem = PROBLEMS[active]
-	const openProblem = openIndex === null ? null : PROBLEMS[openIndex]
+	const activeProblem = openIndex === null ? null : PROBLEMS[openIndex]
 
 	return (
 		<MotionConfig reducedMotion="user">
 			<section
-				id="problems"
 				ref={sectionRef}
+				id="problems"
 				className={styles.section}
 				aria-labelledby="problems-we-solve-title"
 			>
 				<div className={styles.inner}>
+					{/* ---------------- header ---------------- */}
 					<header className={styles.header}>
 						<motion.div
+							ref={headerRef}
 							className={styles.headerText}
-							initial={{ opacity: 0, y: 22 }}
-							animate={inView ? { opacity: 1, y: 0 } : undefined}
+							initial={{ opacity: 0, y: 20 }}
+							animate={headerInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
 							transition={{ duration: 0.7, ease: EASE_OUT }}
 						>
 							<p className={styles.eyebrow}>(Problems we solve)</p>
-							<h2 className={styles.title} id="problems-we-solve-title" data-heading-fill="">
-								We solve the bottlenecks that{" "}
-								<span className={styles.titleAccent}>
-									slow growth.
-								</span>
+							<h2
+								id="problems-we-solve-title"
+								className={styles.title}
+								data-heading-fill=""
+							>
+								Friction slows{" "}
+								<span className={styles.titleAccent}>growth.</span>
 							</h2>
 							<p className={styles.subtitle}>
-								JabitSoft turns operational friction, disconnected systems and weak digital journeys
-								into scalable software, automation and growth systems.
+								We remove the bottlenecks that slow teams down — across systems,
+								operations and digital journeys.
 							</p>
 						</motion.div>
-
 					</header>
 
-					<div className={styles.stage} ref={stageRef}>
-						{wired ? (
-							<svg className={styles.linkLayer} ref={layerRef} aria-hidden="true">
-								{WIRE_ANGLES.map((angle, index) => (
-									<g key={`wire-${angle}`}>
-										<path
-											className={styles.link}
-											ref={(element) => {
-												wirePathRefs.current[index] = element
-											}}
-										/>
-										<circle
-											className={styles.linkCap}
-											r={2.6}
-											opacity={0.55}
-											ref={(element) => {
-												wireCapRefs.current[index] = element
-											}}
-										/>
-									</g>
-								))}
-								<path className={styles.linkLive} ref={livePathRef} />
-								<path className={styles.linkFlow} ref={flowPathRef} />
-								<circle className={styles.linkCap} r={3.2} ref={liveCapRef} />
-							</svg>
-						) : null}
+					{/* ---------------- 01 · evidence ---------------- */}
+					<div className={styles.evidence}>
+						<div className={styles.evidenceHead}>
+							<p className={styles.partLabel}>
+								<b>01</b> Evidence
+								<span className={styles.partRule} aria-hidden="true" />
+								Directional
+							</p>
+							<div className={styles.evidenceIntro}>
+								<p className={styles.evidenceStatement}>
+									Three patterns we keep seeing.
+								</p>
+								<p className={styles.evidenceNote}>
+									Illustrative signals, not client benchmarks.
+								</p>
+							</div>
+						</div>
 
-						<div className={styles.evidence}>
-							{EVIDENCE.map((item, index) => (
-								<motion.div
-									className={styles.stat}
-									key={item.source}
-									initial={{ opacity: 0, y: 20 }}
-									animate={inView ? { opacity: 1, y: 0 } : undefined}
-									transition={{ duration: 0.6, delay: 0.1 * index, ease: EASE_OUT }}
-								>
-									<span
-										className={styles.railDot}
-										ref={(element) => {
-											railRefs.current[index] = element
-										}}
-									/>
-									<div className={styles.statText}>
+						<div className={styles.evidenceData}>
+							<ul ref={statsRef} className={styles.stats}>
+								{EVIDENCE.map((item, i) => (
+									<li
+										key={item.id}
+										data-stat=""
+										className={styles.stat}
+									>
+										<span className={styles.statTopic}>{item.topic}</span>
 										<span className={styles.statValue}>
-											<Counter value={item.value} play={inView} />
+											<Counter
+												value={item.value}
+												play={statsInView && !reduced}
+												duration={1.3}
+											/>
+										</span>
+										<span className={styles.statMeter} aria-hidden="true">
+											<span
+												className={styles.statMeterFill}
+												data-meter={item.fill}
+												style={{ transform: `scaleX(${item.fill / 100})` }}
+											/>
 										</span>
 										<p className={styles.statCopy}>{item.copy}</p>
-										<span className={styles.statSource}>
-											<span className={styles.statSourceDot} />
-											{item.source}
-										</span>
-									</div>
-								</motion.div>
-							))}
+										<span className={styles.srOnly}>{item.basis}</span>
+									</li>
+								))}
+							</ul>
+						</div>
+					</div>
+
+					{/* ---------------- 02 · problem ledger ---------------- */}
+					<div className={styles.ledger}>
+						<div className={styles.ledgerHead}>
+							<div className={styles.ledgerHeadMain}>
+								<p className={styles.partLabel}>
+									<b>02</b> Problems we solve
+									<span className={styles.partRule} aria-hidden="true" />
+									{pad(PROBLEMS.length)} entries
+								</p>
+								<h3 className={styles.ledgerTitle}>
+									Six bottlenecks we are built to remove.
+								</h3>
+							</div>
+							<p className={styles.ledgerLead}>
+								Each entry is a real business problem mapped to a JabitSoft
+								capability. <b>Open an entry</b> for the full diagnosis, the work
+								involved, the implementation journey and the metrics we design
+								toward.
+							</p>
 						</div>
 
-						<div className={styles.hubCol}>
-							<div
-								className={styles.hub}
-								ref={hubRef}
-								onMouseEnter={() => setHeld(true)}
-								onMouseLeave={() => setHeld(false)}
-							>
-								<div className={styles.glow} />
-
-								<svg
-									className={styles.hubSvg}
-									ref={hubSvgRef}
-									viewBox={`0 0 ${VIEW} ${VIEW}`}
-									aria-hidden="true"
-								>
-									<circle className={styles.hairline} cx={C} cy={C} r={R_HAIR} />
-									<circle
-										className={styles.hairline}
-										cx={C}
-										cy={C}
-										r={R_ORBIT - NODE_R - 12}
-										opacity={0.7}
-									/>
-									<circle
-										className={styles.orbitRing}
-										ref={orbitRingRef}
-										cx={C}
-										cy={C}
-										r={R_ORBIT}
-									/>
-
-									<g ref={tickGroupRef}>
-										{Array.from({ length: TICKS }, (_, index) => {
-											const deg = (360 / TICKS) * index
-											const major = index % 8 === 0
-											const from = polar(TICK_IN, deg)
-											const to = polar(major ? TICK_OUT_MAJ : TICK_OUT, deg)
-											return (
-												<line
-													key={`tick-${index}`}
-													className={`${styles.tick} ${major ? styles.tickMajor : ""}`}
-													x1={from.x}
-													y1={from.y}
-													x2={to.x}
-													y2={to.y}
-												/>
-											)
-										})}
-									</g>
-
-									<circle className={styles.progressTrack} cx={C} cy={C} r={R_PROG} />
-									<circle
-										className={styles.progressArc}
-										ref={progressRef}
-										cx={C}
-										cy={C}
-										r={R_PROG}
-										transform={`rotate(-90 ${C} ${C})`}
-										strokeDasharray={PROG_LEN}
-										strokeDashoffset={PROG_LEN}
-									/>
-
-									<g ref={cometRef}>
-										<circle className={styles.comet} cx={C + R_HAIR} cy={C} r={3} />
-									</g>
-
-									<circle
-										className={styles.anchorPulse}
-										ref={anchorPulseRef}
-										cx={C + R_ORBIT}
-										cy={C}
-										r={38}
-									/>
-									<circle
-										className={styles.anchor}
-										cx={C + R_ORBIT}
-										cy={C}
-										r={33}
-									/>
-									<line
-										className={styles.lead}
-										x1={C + R_ORBIT + NODE_R + 4}
-										y1={C}
-										x2={C + R_EXIT}
-										y2={C}
-									/>
-									<circle
-										className={styles.leadDot}
-										cx={C + R_EXIT}
-										cy={C}
-										r={3.4}
-									/>
-
-									{PROBLEMS.map((problem, index) => (
-										<g
-											key={problem.id}
-											className={`${styles.node} ${
-												index === active ? styles.nodeActive : ""
-											}`}
-											ref={(element) => {
-												nodeRefs.current[index] = element
-											}}
-											onMouseEnter={() => select(index)}
-											onClick={() => setOpenIndex(index)}
-										>
-											<circle className={styles.nodeShadow} r={NODE_R + 7} />
-											<circle className={styles.nodeDisc} r={NODE_R} />
-											<g
-												className={styles.nodeIcon}
-												transform="translate(-10 -10) scale(0.833)"
-											>
-												{ICON_PATHS[problem.icon]}
-											</g>
-										</g>
-									))}
-								</svg>
-
-								<div className={styles.core}>
+						<ul className={styles.entries}>
+							{PROBLEMS.map((problem, i) => (
+								<li key={problem.id} className={styles.entry}>
 									<button
 										type="button"
-										ref={coreCardRef}
-										className={styles.coreCard}
-										onClick={() => setOpenIndex(active)}
-										aria-label={`See how we solve ${activeProblem.title}`}
-									>
-										<AnimatePresence mode="wait" initial={false}>
-											<motion.span
-												className={styles.coreBody}
-												key={activeProblem.id}
-												initial={{ opacity: 0, y: 10 }}
-												animate={{ opacity: 1, y: 0 }}
-												exit={{ opacity: 0, y: -10 }}
-												transition={{ duration: 0.32, ease: EASE_OUT }}
-											>
-												<span className={styles.coreKicker}>
-													Problem {String(active + 1).padStart(2, "0")} /{" "}
-													{String(PROBLEMS.length).padStart(2, "0")}
-												</span>
-												<span className={styles.coreTitle}>{activeProblem.title}</span>
-												<span className={styles.coreHint}>
-													<ArrowIcon size={13} />
-													See how we solve it
-												</span>
-											</motion.span>
-										</AnimatePresence>
-									</button>
-								</div>
-							</div>
-
-							<div className={styles.hubFooter}>
-								<span className={styles.hubHint}>
-									Auto-cycling · select a service to hold
-								</span>
-								<span className={styles.hubDots}>
-									{PROBLEMS.map((problem, index) => (
-										<button
-											key={`dot-${problem.id}`}
-											type="button"
-											className={`${styles.hubDot} ${
-												index === active ? styles.hubDotActive : ""
-											}`}
-											onClick={() => select(index)}
-											aria-label={`Show ${problem.title}`}
-											aria-current={index === active}
-										/>
-									))}
-								</span>
-							</div>
-						</div>
-
-						<div className={styles.cards}>
-							<p className={styles.cardsLabel}>Where we step in</p>
-							{PROBLEMS.map((problem, index) => {
-								const isActive = index === active
-								return (
-									<motion.button
-										key={problem.id}
-										type="button"
-										ref={(element) => {
-											cardRefs.current[index] = element
-										}}
-										className={`${styles.card} ${isActive ? styles.cardActive : ""}`}
-										initial={{ opacity: 0, y: 16 }}
-										animate={inView ? { opacity: 1, y: 0 } : undefined}
-										transition={{ duration: 0.5, delay: 0.06 * index, ease: EASE_OUT }}
-										whileHover={{ y: -1 }}
-										whileTap={{ scale: 0.994 }}
-										onMouseEnter={() => {
-											select(index)
-											setHeld(true)
-										}}
-										onMouseLeave={() => setHeld(false)}
-										onFocus={() => {
-											select(index)
-											setHeld(true)
-										}}
-										onBlur={() => setHeld(false)}
-										onClick={() => setOpenIndex(index)}
+										data-entry=""
+										className={styles.entryBtn}
+										onClick={() => setOpenIndex(i)}
 										aria-haspopup="dialog"
-										aria-current={isActive}
+										aria-label={`Open the detailed breakdown: ${problem.title} — ${problem.serviceFull}`}
 									>
-										<span className={styles.cardIndex}>
-											{String(index + 1).padStart(2, "0")}
+										<span className={styles.entryIndex}>
+											<span className={styles.entryNum}>{pad(i + 1)}</span>
+											<span className={styles.entryTick} aria-hidden="true" />
+											<span className={styles.entryCode}>{problem.code}</span>
 										</span>
-										<span className={styles.cardIcon}>
-											<ServiceIcon name={problem.icon} />
+
+										<span className={styles.entryLead}>
+											<span className={styles.entryService}>
+												<span className={styles.entryServiceIcon}>
+													<ServiceIcon name={problem.icon} />
+												</span>
+												<span className={styles.entryServiceText}>
+													{problem.service}
+												</span>
+											</span>
+											<span className={styles.entryTitle}>{problem.title}</span>
+											<span className={styles.entrySummary}>
+												{problem.summary}
+											</span>
 										</span>
-										<span className={styles.cardMain}>
-											<span className={styles.cardTitle}>{problem.title}</span>
-											<span className={styles.cardService}>{problem.service}</span>
-											<AnimatePresence initial={false}>
-												{isActive ? (
-													<motion.span
-														key="reveal"
-														className={styles.cardReveal}
-														initial={{ height: 0, opacity: 0 }}
-														animate={{ height: "auto", opacity: 1 }}
-														exit={{ height: 0, opacity: 0 }}
-														transition={{
-															height: { duration: 0.42, ease: EASE_OUT },
-															opacity: { duration: 0.26 },
-														}}
-													>
-														<span className={styles.cardRevealInner}>
-															<span className={styles.cardSummary}>
-																{problem.summary}
-															</span>
-															<span className={styles.cardMetric}>
-																<b className={styles.cardMetricValue}>
-																	{problem.metric.value}
-																</b>
-																<span className={styles.cardMetricLabel}>
-																	{problem.metric.label}
-																</span>
-															</span>
-														</span>
-													</motion.span>
-												) : null}
-											</AnimatePresence>
+
+										<span className={styles.entryWhy}>
+											<span className={styles.entryLabel}>Why it matters</span>
+											<span className={styles.entryWhyText}>{problem.stake}</span>
+											<span className={styles.entryCapability}>
+												<b>Capability</b> · {problem.capability}
+											</span>
 										</span>
-										<span className={styles.cardArrow}>
-											<ArrowIcon />
+
+										<span className={styles.entryMetric}>
+											<span className={styles.entryLabel}>Target</span>
+											<span className={styles.entryMetricValue}>
+												{problem.metric.value}
+											</span>
+											<span className={styles.entryMetricLabel}>
+												{problem.metric.label}
+											</span>
 										</span>
-									</motion.button>
-								)
-							})}
-						</div>
+
+										<span className={styles.entryCta}>
+											<span className={styles.entryCtaText}>Open breakdown</span>
+											<span className={styles.entryCtaIcon} aria-hidden="true">
+												<ArrowIcon size={16} />
+											</span>
+										</span>
+									</button>
+								</li>
+							))}
+						</ul>
+
+						<p className={styles.ledgerFoot}>
+							<span className={styles.ledgerFootMark} aria-hidden="true">
+								†
+							</span>
+							Target figures in the entries and modals are illustrative planning
+							numbers used to scope work — not client-verified outcomes. We
+							baseline your own numbers during discovery, then agree targets in
+							writing before delivery starts.
+						</p>
 					</div>
 				</div>
 
-				{openProblem ? (
+				{activeProblem ? (
 					<ProblemDialog
-						problem={openProblem}
+						problem={activeProblem}
 						index={openIndex ?? 0}
 						total={PROBLEMS.length}
-						onClose={() => setOpenIndex(null)}
-						onSelect={setOpenIndex}
+						onClose={closeProblem}
+						onNavigate={navigate}
 					/>
 				) : null}
 			</section>
