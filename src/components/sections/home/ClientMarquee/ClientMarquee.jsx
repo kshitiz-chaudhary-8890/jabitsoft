@@ -221,7 +221,7 @@ export default function ClientMarquee() {
           overflow: hidden;
           padding: clamp(86px, 8.6vw, 136px) 0 clamp(58px, 6vw, 92px);
           background: #ffffff;
-          color: #151922;
+          color: var(--ink);
         }
 
         .trust-showcase__inner {
@@ -235,14 +235,14 @@ export default function ClientMarquee() {
           justify-content: center;
           gap: 12px;
           margin: 0 auto 22px;
-          color: #596170;
+          color: var(--ink-secondary);
           font-size: 13px;
           line-height: 1.3;
           text-align: center;
         }
 
         .trust-showcase__proof strong {
-          color: #343a44;
+          color: var(--ink);
           font-weight: 650;
         }
 

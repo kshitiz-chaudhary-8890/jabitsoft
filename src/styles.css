@@ -24,17 +24,19 @@
 :root {
   color-scheme: light;
   --paper: #ffffff;
-  --paper-card: #fafafa;
+  --paper-card: #fbfaf7;
   --paper-light: #ffffff;
-  --ink: #131313;
-  --ink-secondary: #5c5c5c;
-  --ink-muted: #888888;
-  --orange: #00AAFF;
-  --orange-hover: #0088CC;
-  --orange-light: #e6f6ff;
-  --dark-surface: #111111;
-  --dark-card: #181818;
-  --line-light: rgba(0, 0, 0, 0.08);
+  --surface-cool: #e6ebf2;
+  --surface-cool-strong: #dbe3ed;
+  --ink: #111827;
+  --ink-secondary: #4b5565;
+  --ink-muted: #6b7280;
+  --orange: #2563eb;
+  --orange-hover: #1d4ed8;
+  --orange-light: #e7eeff;
+  --dark-surface: #111827;
+  --dark-card: #1b2433;
+  --line-light: rgba(17, 24, 39, 0.12);
   --line-dark: rgba(255, 255, 255, 0.12);
   --radius-sm: 10px;
   --radius-md: 18px;
@@ -99,13 +101,13 @@
 html {
   scroll-behavior: smooth;
   overflow-x: hidden;
-  background: #ffffff;
+  background: var(--paper);
 }
 
 body {
   min-width: 320px;
   overflow-x: hidden;
-  background: #ffffff;
+  background: var(--paper);
   color: var(--ink);
   font-family: "Inter", "DM Sans", -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -115,7 +117,7 @@ body {
 
 #root,
 main {
-  background: #ffffff;
+  background: var(--paper);
 }
 
 @layer base {
@@ -143,12 +145,12 @@ main {
 }
 
 :focus-visible {
-  outline: 2px solid #00AAFF;
+  outline: 2px solid var(--brand-accent);
   outline-offset: 3px;
 }
 
 ::selection {
-  background: #00AAFF;
+  background: var(--brand-accent);
   color: #fff;
 }
 
@@ -506,6 +508,7 @@ main {
   height: calc(clamp(260px, 56.25vw, 675px) + 42vh);
   margin-top: 10px;
   margin-bottom: 0;
+  background: #ffffff;
 }
 
 .showcase-inner {
@@ -2129,7 +2132,7 @@ html.lenis {
   overflow: hidden;
   min-height: calc(100svh - 108px);
   padding: 92px 24px 66px;
-  background: #fff;
+  background: #ffffff;
 }
 
 .hero-reference .shader-frame {

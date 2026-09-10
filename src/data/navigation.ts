@@ -1,5 +1,5 @@
 export const headerNavigation = [
-  { label: "About", href: "#about" },
+  { label: "About", href: "/about-us" },
   { label: "Portfolio", href: "#works" },
   { label: "Services", href: "#services", hasDropdown: true },
   { label: "Careers", href: "#careers" },

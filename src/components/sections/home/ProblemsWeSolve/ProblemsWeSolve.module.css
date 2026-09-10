@@ -4,18 +4,18 @@
    ============================================================ */
 
 .section {
-  --pws-bg: #fbfaf8;
-  --pws-bg-deep: #f4f1ed;
-  --pws-surface: #ffffff;
-  --pws-ink: #171615;
-  --pws-muted: #5f5a55;
-  --pws-faint: #89817a;
-  --pws-line: #e7e1db;
-  --pws-line-soft: #f0ebe6;
-  --pws-accent: #4566e8;
-  --pws-accent-deep: #3450c7;
-  --pws-accent-ink: #2942a6;
-  --pws-accent-soft: #eef2ff;
+  --pws-bg: #ffffff;
+  --pws-bg-deep: #ffffff;
+  --pws-surface: #fbfaf7;
+  --pws-ink: #111827;
+  --pws-muted: #4b5565;
+  --pws-faint: #6b7280;
+  --pws-line: #d7d3cb;
+  --pws-line-soft: #e5e1d9;
+  --pws-accent: #2563eb;
+  --pws-accent-deep: #1d4ed8;
+  --pws-accent-ink: #173ca4;
+  --pws-accent-soft: #e7eeff;
   --pws-sh-1: 0 1px 2px rgba(23, 22, 21, 0.04);
   --pws-sh-2: 0 18px 44px rgba(23, 22, 21, 0.07);
   --pws-sh-accent: 0 14px 30px rgba(69, 102, 232, 0.18);
@@ -26,10 +26,7 @@
   isolation: isolate;
   overflow: hidden;
   padding: clamp(64px, 7vw, 116px) 0 clamp(60px, 6vw, 104px);
-  background:
-    radial-gradient(120% 80% at 88% 2%, rgba(69, 102, 232, 0.075), transparent 60%),
-    radial-gradient(90% 70% at 2% 98%, rgba(106, 129, 223, 0.05), transparent 58%),
-    linear-gradient(180deg, var(--pws-bg) 0%, var(--pws-bg-deep) 100%);
+  background: #ffffff;
   color: var(--pws-ink);
   font-family: var(--font-inter), Inter, sans-serif;
 }

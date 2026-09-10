@@ -12,18 +12,18 @@
 }
 
 .section {
-  --jw-canvas: #fbfaf8;
+  --jw-canvas: #ffffff;
   --jw-surface: #ffffff;
-  --jw-surface-2: #f6f4f1;
-  --jw-surface-3: #efebe7;
-  --jw-ink: #131313;
-  --jw-ink-soft: #5c5c5c;
-  --jw-ink-faint: #8a8580;
-  --jw-line: #e7e2dd;
-  --jw-line-strong: #d8d2cc;
-  --jw-accent: #4566e8;
-  --jw-accent-deep: #3450c7;
-  --jw-accent-soft: #eef2ff;
+  --jw-surface-2: #f0eee8;
+  --jw-surface-3: #e4e8ee;
+  --jw-ink: #111827;
+  --jw-ink-soft: #4b5565;
+  --jw-ink-faint: #697386;
+  --jw-line: #d9d6cf;
+  --jw-line-strong: #c9ced7;
+  --jw-accent: #2563eb;
+  --jw-accent-deep: #1d4ed8;
+  --jw-accent-soft: #e7eeff;
   --jw-face: 96px;
   --jw-display: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", sans-serif;
   --jw-sans: var(--font-inter), Inter, sans-serif;
@@ -33,7 +33,7 @@
   isolation: isolate;
   overflow-x: clip;
   padding: clamp(72px, 10vw, 140px) 0;
-  background: #fbfaf8;
+  background: var(--jw-canvas);
   color: var(--jw-ink);
   font-family: var(--jw-sans);
   -webkit-font-smoothing: antialiased;

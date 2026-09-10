@@ -7,7 +7,7 @@ import { Header } from "./Header";
 afterEach(cleanup);
 
 describe("Header", () => {
-  it("preserves the approved navigation labels and hash destinations", () => {
+  it("preserves the approved navigation labels and destinations", () => {
     render(<Header />);
 
     expect(screen.getByRole("link", { name: "JabitSoft home" })).toHaveAttribute("href", "/");
@@ -25,14 +25,14 @@ describe("Header", () => {
     ]);
     expect(
       [...navigation.querySelectorAll<HTMLAnchorElement>("a[data-nav-item]")].map(
-        ({ textContent, hash }) => [textContent, hash],
+        ({ textContent, pathname, hash }) => [textContent, pathname, hash],
       ),
     ).toEqual([
-      ["About", "#about"],
-      ["Portfolio", "#works"],
-      ["Careers", "#careers"],
-      ["Blog", "#blog"],
-      ["Contact", "#contact"],
+      ["About", "/about-us", ""],
+      ["Portfolio", "/", "#works"],
+      ["Careers", "/", "#careers"],
+      ["Blog", "/", "#blog"],
+      ["Contact", "/", "#contact"],
     ]);
     expect(screen.queryByRole("link", { name: "Home" })).not.toBeInTheDocument();
     expect(

@@ -1,0 +1,27 @@
+/* ==========================================================================
+   JabitSoft — About page / page-level tokens
+   Shared surface variables for every About section. Sections own their styles.
+   ========================================================================== */
+
+.aboutPage {
+  --about-bg: #ffffff;
+  --about-surface: #f6f7f9;
+  --about-surface-strong: #eef1f5;
+
+  --about-ink: #131313;
+  --about-text: #5c5c5c;
+  --about-muted: #8a8a8a;
+
+  --about-line: #e5e7eb;
+  --about-line-strong: #d8dde5;
+
+  --about-blue: #4566e8;
+  --about-blue-deep: #3450c7;
+  --about-blue-soft: #eef2ff;
+
+  --about-dark: #101216;
+  --about-dark-text: #f7f8fa;
+
+  background: var(--about-bg);
+  color: var(--about-ink);
+}

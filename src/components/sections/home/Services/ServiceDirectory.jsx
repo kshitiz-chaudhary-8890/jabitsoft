@@ -222,14 +222,14 @@ export default function ServiceDirectory() {
         }
 
         .service-directory {
-          --service-blue: #0071e3;
-          --diagram-accent: #4da3ff;
+          --service-blue: var(--brand-accent);
+          --diagram-accent: #3f78ee;
           position: relative;
           width: 100%;
           padding: clamp(56px, 5.5vw, 84px) 0 clamp(84px, 7vw, 112px);
           overflow: clip;
           background: #ffffff;
-          color: #131313;
+          color: var(--ink);
           font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         }
 

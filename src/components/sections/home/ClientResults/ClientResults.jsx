@@ -589,8 +589,8 @@ export default function ClientResults() {
           position: relative;
           padding: clamp(92px, 9vw, 150px) 0;
           overflow: hidden;
-          background: #f3f3f1;
-          color: #111111;
+          background: #ffffff;
+          color: var(--ink);
         }
 
         .cr-shell {

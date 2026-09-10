@@ -285,18 +285,12 @@ export default function FAQ() {
         }
 
         .faq-ref {
-          --faq-blue: #00aaff;
+          --faq-blue: var(--brand-accent);
           width: 100%;
           padding: 88px 0 102px;
           overflow: hidden;
-          background:
-            linear-gradient(
-              180deg,
-              #ffffff 0%,
-              #fbfbfa 26%,
-              #f4f4f2 100%
-            );
-          color: #131313;
+          background: #ffffff;
+          color: var(--ink);
         }
 
         .faq-ref__shell {

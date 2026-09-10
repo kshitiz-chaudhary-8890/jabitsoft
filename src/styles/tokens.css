@@ -2,17 +2,21 @@
   color-scheme: light;
 
   --paper: #ffffff;
-  --paper-card: #fafafa;
+  --paper-card: #fbfaf7;
   --paper-light: #ffffff;
-  --ink: #131313;
-  --ink-secondary: #5c5c5c;
-  --ink-muted: #888888;
-  --brand-accent: #00aaff;
-  --brand-accent-hover: #0088cc;
-  --brand-accent-light: #e6f6ff;
-  --dark-surface: #111111;
-  --dark-card: #181818;
-  --line-light: rgb(0 0 0 / 8%);
+  --surface-cool: #e6ebf2;
+  --surface-cool-strong: #dbe3ed;
+  --ink: #111827;
+  --ink-secondary: #4b5565;
+  --ink-muted: #6b7280;
+  --brand-accent: #2563eb;
+  --brand-accent-hover: #1d4ed8;
+  --brand-accent-light: #e7eeff;
+  --brand-cyan: #0e7490;
+  --brand-warm: #d98b2b;
+  --dark-surface: #111827;
+  --dark-card: #1b2433;
+  --line-light: rgb(17 24 39 / 12%);
   --line-dark: rgb(255 255 255 / 12%);
 
   --radius-sm: 10px;

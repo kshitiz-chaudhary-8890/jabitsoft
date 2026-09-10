@@ -257,7 +257,7 @@ export default function Footer() {
         .jabit-footer {
           width: 100%;
           overflow: hidden;
-          background: #f5f5f3;
+          background: #ffffff;
           color: #131313;
           font-family: "Inter", sans-serif;
         }
@@ -270,13 +270,7 @@ export default function Footer() {
           overflow: hidden;
           border: 1px solid rgba(19, 19, 19, 0.08);
           border-radius: 34px;
-          background:
-            linear-gradient(
-              135deg,
-              rgba(255,255,255,0.96) 0%,
-              rgba(248,249,249,0.98) 54%,
-              rgba(241,248,252,0.98) 100%
-            );
+          background: #ffffff;
           box-shadow:
             0 24px 70px rgba(0,0,0,0.055),
             inset 0 1px 0 rgba(255,255,255,0.92);
@@ -478,7 +472,7 @@ export default function Footer() {
         .jabit-footer__body {
           position: relative;
           padding: 78px 0 0;
-          background: #f5f5f3;
+          background: #ffffff;
         }
 
         .jabit-footer__card {

@@ -1,6 +1,6 @@
 .section {
-  --ink: #111318;
-  --muted: #5f6670;
+  --ink: #111827;
+  --muted: #4b5565;
   --action: #2563eb;
 
   position: relative;
@@ -28,9 +28,9 @@
   min-height: 42px;
   margin-bottom: 26px;
   padding: 6px 15px 6px 7px;
-  border: 1px solid #e6e6e3;
+  border: 1px solid #d8d4cc;
   border-radius: 999px;
-  color: #5d6470;
+  color: var(--muted);
   font-family: var(--font-inter), Inter, sans-serif;
   font-size: 12px;
   font-weight: 550;
@@ -42,7 +42,7 @@
   height: 28px;
   place-items: center;
   border-radius: 50%;
-  background: #e7f0ff;
+  background: var(--brand-accent-light);
   color: var(--action);
 }
 
@@ -53,7 +53,7 @@
   font-weight: 700;
   line-height: 54px;
   letter-spacing: normal;
-  color: rgb(19, 19, 19);
+  color: var(--ink);
   text-wrap: balance;
 }
 
@@ -64,8 +64,8 @@
   -webkit-background-clip: text;
   background-clip: text;
   background-image:
-    linear-gradient(rgba(19, 19, 19, 0.14), rgba(19, 19, 19, 0.14)),
-    linear-gradient(rgb(19, 19, 19), rgb(19, 19, 19));
+    linear-gradient(rgba(17, 24, 39, 0.16), rgba(17, 24, 39, 0.16)),
+    linear-gradient(var(--ink), var(--ink));
   background-repeat: no-repeat;
   background-position: left center, left center;
   background-size: 100% 100%, 0% 100%;

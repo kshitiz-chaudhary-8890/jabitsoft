@@ -128,7 +128,7 @@ export default function DualMarquee() {
           top: clamp(74px, 7vw, 94px);
           z-index: 1;
           color: #ffffff;
-          background: #151922;
+          background: var(--dark-surface);
           transform: rotate(-4.5deg);
         }
 
@@ -136,7 +136,7 @@ export default function DualMarquee() {
           top: clamp(74px, 7vw, 94px);
           z-index: 2;
           color: #ffffff;
-          background: linear-gradient(90deg, #5569c4 0%, #3a83da 54%, #0099ff 100%);
+          background: linear-gradient(90deg, #2147b7 0%, #2563eb 56%, #0e7490 100%);
           transform: rotate(4.5deg);
         }
 

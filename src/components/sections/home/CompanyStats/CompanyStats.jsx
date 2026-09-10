@@ -307,7 +307,7 @@ export default function CompanyStats() {
           width: 100%;
           padding: 96px 0 56px;
           background: #ffffff;
-          color: #131313;
+          color: var(--ink);
         }
 
         .company-stats-clean__shell {
@@ -336,8 +336,8 @@ export default function CompanyStats() {
           align-items: center;
           gap: 7px;
           border-radius: 999px;
-          background: #f5f5f3;
-          color: #5c5c5c;
+          background: var(--paper-light);
+          color: var(--ink-secondary);
           font-family: Inter, sans-serif;
           font-size: 12px;
           font-weight: 500;
@@ -345,7 +345,7 @@ export default function CompanyStats() {
         }
 
         .company-stats-clean__badge span {
-          color: #00aaff;
+          color: var(--brand-accent);
           font-size: 10px;
         }
 

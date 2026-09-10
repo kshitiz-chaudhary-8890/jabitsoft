@@ -517,7 +517,7 @@ export default function RecentWorks() {
           padding: 86px 0 70px;
           overflow: visible;
           background: #ffffff;
-          color: #131313;
+          color: var(--ink);
           isolation: isolate;
         }
 

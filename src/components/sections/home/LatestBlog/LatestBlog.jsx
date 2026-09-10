@@ -279,21 +279,14 @@ export default function LatestBlog() {
         }
 
         .latest-blog {
-          --blog-blue: #00aaff;
+          --blog-blue: var(--brand-accent);
           position: relative;
           width: 100%;
           margin-top: -1px;
           padding: 54px 0 118px;
           overflow: hidden;
-          background:
-            linear-gradient(
-              180deg,
-              #ffffff 0%,
-              #ffffff 12%,
-              #fafaf8 34%,
-              #f7f7f5 100%
-            );
-          color: #131313;
+          background: #ffffff;
+          color: var(--ink);
         }
 
         .latest-blog__shell {
