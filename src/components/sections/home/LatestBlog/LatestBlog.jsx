@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -81,35 +81,6 @@ export default function LatestBlog() {
   const sectionRef = useRef(null);
   const visiblePosts = posts.slice(0, 3);
 
-  useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return undefined;
-
-    const reduced = window.matchMedia?.(
-      "(prefers-reduced-motion: reduce)",
-    )?.matches;
-
-    if (reduced || !("IntersectionObserver" in window)) {
-      section.classList.add("latest-blog--visible");
-      return undefined;
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        section.classList.add("latest-blog--visible");
-        observer.unobserve(section);
-      },
-      {
-        threshold: 0.12,
-        rootMargin: "0px 0px -8% 0px",
-      },
-    );
-
-    observer.observe(section);
-    return () => observer.disconnect();
-  }, []);
-
   useLayoutEffect(() => {
     const section = sectionRef.current;
     if (!section) return undefined;
@@ -120,6 +91,42 @@ export default function LatestBlog() {
     gsap.registerPlugin(ScrollTrigger);
 
     const ctx = gsap.context(() => {
+      const header = section.querySelector(".latest-blog__header");
+      const cards = gsap.utils.toArray(".latest-blog__card", section);
+
+      const entrance = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: "top 82%",
+          once: true,
+          invalidateOnRefresh: true,
+        },
+        defaults: { ease: "power4.out" },
+      });
+
+      if (header) {
+        entrance.fromTo(
+          header,
+          { autoAlpha: 0, y: 34 },
+          { autoAlpha: 1, y: 0, duration: 0.66 },
+        );
+      }
+
+      if (cards.length) {
+        entrance.fromTo(
+          cards,
+          { autoAlpha: 0, y: 46, scale: 0.985 },
+          {
+            autoAlpha: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.72,
+            stagger: 0.075,
+          },
+          "-=0.3",
+        );
+      }
+
       const headingFill = section.querySelector(".section-heading-fill");
       if (headingFill) {
         gsap.fromTo(
@@ -232,7 +239,14 @@ export default function LatestBlog() {
               >
                 <a className="latest-blog__image-wrap" href="#blog">
                   <div className="latest-blog__image-media">
-                    <img src={post.image} alt="" loading="lazy" />
+                    <img
+                      src={post.image}
+                      alt={`${post.title} article cover`}
+                      width="1400"
+                      height="933"
+                      loading="lazy"
+                      decoding="async"
+                    />
                   </div>
                   <span className="latest-blog__category">{post.category}</span>
 
@@ -292,14 +306,6 @@ export default function LatestBlog() {
           grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.65fr);
           gap: clamp(54px, 8vw, 140px);
           align-items: end;
-          opacity: 0;
-          transform: translate3d(0, 42px, 0);
-          transition:
-            opacity 700ms cubic-bezier(0.16, 1, 0.3, 1),
-            transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .latest-blog--visible .latest-blog__header {
           opacity: 1;
           transform: translate3d(0, 0, 0);
         }
@@ -388,14 +394,6 @@ export default function LatestBlog() {
 
         .latest-blog__card {
           min-width: 0;
-          opacity: 0;
-          transform: translate3d(0, 70px, 0);
-          transition:
-            opacity 700ms cubic-bezier(0.16, 1, 0.3, 1) var(--blog-delay),
-            transform 1s cubic-bezier(0.16, 1, 0.3, 1) var(--blog-delay);
-        }
-
-        .latest-blog--visible .latest-blog__card {
           opacity: 1;
           transform: translate3d(0, 0, 0);
         }

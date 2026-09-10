@@ -25,24 +25,87 @@ export default function ClientMarquee() {
 
     gsap.registerPlugin(ScrollTrigger);
 
-const ctx = gsap.context(() => {
-        gsap.from(".trust-showcase__proof", {
-          y: 40,
-          autoAlpha: 0,
-          duration: 0.8,
-          ease: "power3.out",
-          scrollTrigger: { trigger: section, start: "top 80%", once: true },
-        });
+    const ctx = gsap.context(() => {
+      ScrollTrigger.create({
+        trigger: section,
+        start: "top bottom",
+        end: "bottom top",
+        onEnter: () => section.classList.add("is-logo-active"),
+        onEnterBack: () => section.classList.add("is-logo-active"),
+        onLeave: () => section.classList.remove("is-logo-active"),
+        onLeaveBack: () => section.classList.remove("is-logo-active"),
+      });
 
-        gsap.from(".trust-showcase__header", {
-          y: 60,
-          autoAlpha: 0,
-          duration: 0.9,
-          ease: "power3.out",
-          scrollTrigger: { trigger: section, start: "top 80%", once: true },
-        });
+      const introTimeline = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: "top 82%",
+          once: true,
+        },
+        defaults: { ease: "power3.out" },
+      });
 
-        const headingFill = section.querySelector(".section-heading-fill");
+      introTimeline
+        .fromTo(
+          ".trust-showcase__proof",
+          { y: 28, autoAlpha: 0 },
+          { y: 0, autoAlpha: 1, duration: 0.62 },
+        )
+        .fromTo(
+          ".trust-showcase__copy",
+          { y: 34, autoAlpha: 0 },
+          { y: 0, autoAlpha: 1, duration: 0.72 },
+          0.18,
+        )
+        .fromTo(
+          ".trust-showcase__button",
+          { y: 24, autoAlpha: 0, scale: 0.975 },
+          { y: 0, autoAlpha: 1, scale: 1, duration: 0.58 },
+          0.34,
+        )
+        .fromTo(
+          ".trust-showcase__logos-label",
+          { y: 18, autoAlpha: 0 },
+          { y: 0, autoAlpha: 1, duration: 0.5 },
+          0.42,
+        )
+        .fromTo(
+          ".client-logo-item",
+          { y: 26, autoAlpha: 0 },
+          {
+            y: 0,
+            autoAlpha: 1,
+            duration: 0.54,
+            stagger: { each: 0.035, from: "center" },
+          },
+          0.48,
+        );
+
+      gsap.to(".trust-showcase__decor--left", {
+        yPercent: -16,
+        rotation: 2,
+        ease: "none",
+        scrollTrigger: {
+          trigger: section,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 0.9,
+        },
+      });
+
+      gsap.to(".trust-showcase__decor--right", {
+        yPercent: 16,
+        rotation: -2,
+        ease: "none",
+        scrollTrigger: {
+          trigger: section,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 0.9,
+        },
+      });
+
+      const headingFill = section.querySelector(".section-heading-fill");
       if (headingFill) {
         gsap.fromTo(
           headingFill,
@@ -62,7 +125,10 @@ const ctx = gsap.context(() => {
       }
     }, section);
 
-    return () => ctx.revert();
+    return () => {
+      section.classList.remove("is-logo-active");
+      ctx.revert();
+    };
   }, []);
 
   return (
@@ -135,7 +201,8 @@ const ctx = gsap.context(() => {
                     <div className="client-logo-item" key={`${group}-${index}`}>
                       <img
                         src={logo}
-                        alt={group === 0 ? `Client logo ${index + 1}` : ""}
+                        alt=""
+                        aria-hidden="true"
                         loading="lazy"
                       />
                     </div>
@@ -303,7 +370,12 @@ const ctx = gsap.context(() => {
           width: max-content;
           align-items: center;
           animation: trust-logo-flow 34s linear infinite;
+          animation-play-state: paused;
           will-change: transform;
+        }
+
+        .trust-showcase.is-logo-active .client-logo-track {
+          animation-play-state: running;
         }
 
         .trust-showcase .client-logo-group {

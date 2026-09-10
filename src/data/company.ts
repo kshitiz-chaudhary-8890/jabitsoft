@@ -2,8 +2,18 @@ export const company = {
   name: "JabitSoft",
   legalName: "JabitSoft",
   siteUrl: "https://jabitsoft.com",
-  title: "JabitSoft — Software Engineering Agency",
+  title: "Software Development Company | JabitSoft",
   description:
-    "JabitSoft is a full-cycle software engineering agency building robust platforms, cloud infrastructure, and intelligent systems for startups, enterprises, and government clients worldwide.",
+    "JabitSoft builds AI solutions, cloud platforms, mobile apps, ERP systems, SEO programs, and high-performing websites for ambitious organizations worldwide.",
   locale: "en_US",
+  language: "en",
+  email: "hello@jabitsoft.com",
+  services: [
+    "Agentic AI Development",
+    "Cloud Consulting",
+    "Mobile Application Development",
+    "ERP Services",
+    "SEO and Digital Marketing",
+    "Website Solutions",
+  ],
 } as const;

@@ -197,13 +197,13 @@ export default function ClientResults() {
 
       gsap.set(headingChildren, { y: 44, opacity: 0 });
       gsap.set(cards, {
-        y: 70,
+        y: 44,
         opacity: 0,
-        scale: 0.97,
+        scale: 0.985,
         transformOrigin: "50% 50%",
       });
-      gsap.set(stars, { opacity: 0, scale: 0.55, rotation: -12 });
-      gsap.set(logos, { opacity: 0, scale: 0.75, rotation: -6 });
+      gsap.set(stars, { opacity: 0, scale: 0.72 });
+      gsap.set(logos, { opacity: 0, scale: 0.88 });
       gsap.set(metricValues, { y: 28, opacity: 0 });
 
       if (image) {
@@ -215,7 +215,7 @@ export default function ClientResults() {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
-          start: "top 75%",
+          start: "top 82%",
           once: true,
           invalidateOnRefresh: true,
         },
@@ -225,8 +225,8 @@ export default function ClientResults() {
       tl.to(headingChildren, {
         y: 0,
         opacity: 1,
-        duration: 0.7,
-        stagger: 0.09,
+        duration: 0.62,
+        stagger: 0.075,
       })
         .to(
           cards,
@@ -234,8 +234,8 @@ export default function ClientResults() {
             y: 0,
             opacity: 1,
             scale: 1,
-            duration: 0.92,
-            stagger: 0.1,
+            duration: 0.72,
+            stagger: 0.07,
           },
           "-=0.25",
         )
@@ -244,10 +244,9 @@ export default function ClientResults() {
           {
             opacity: 1,
             scale: 1,
-            rotation: 0,
-            duration: 0.22,
-            stagger: 0.018,
-            ease: "back.out(1.8)",
+            duration: 0.3,
+            stagger: 0.014,
+            ease: "power3.out",
           },
           "-=0.48",
         )
@@ -256,10 +255,9 @@ export default function ClientResults() {
           {
             opacity: 1,
             scale: 1,
-            rotation: 0,
-            duration: 0.34,
-            stagger: 0.04,
-            ease: "back.out(1.5)",
+            duration: 0.42,
+            stagger: 0.035,
+            ease: "power4.out",
           },
           "-=0.4",
         )
@@ -283,6 +281,22 @@ export default function ClientResults() {
             ease: "power2.out",
           },
           "-=0.8",
+        );
+
+        gsap.fromTo(
+          image,
+          { yPercent: -3.5 },
+          {
+            yPercent: 3.5,
+            ease: "none",
+            scrollTrigger: {
+              trigger: ".cr-featured-media",
+              start: "top bottom",
+              end: "bottom top",
+              scrub: 0.9,
+              invalidateOnRefresh: true,
+            },
+          },
         );
       }
 
@@ -473,7 +487,14 @@ export default function ClientResults() {
             <StarRating count={featured.rating} />
 
             <div className="cr-featured-media">
-              <img src={featured.image} alt="" loading="lazy" />
+              <img
+                src={featured.image}
+                alt={`${featured.company} team collaborating on its ${featured.service.toLowerCase()} project`}
+                width="1400"
+                height="933"
+                loading="lazy"
+                decoding="async"
+              />
               <span className="cr-media-tag">{featured.service}</span>
             </div>
 

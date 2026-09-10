@@ -207,9 +207,8 @@ export default function RecentWorks() {
           },
         });
 
-        // Match the Skiper17 interaction:
-        // current card recedes + rotates slightly while the next card slides
-        // upward and its content settles into place.
+        // Keep the transition restrained: the outgoing work recedes while the
+        // next case study travels up and settles into focus.
         for (let index = 0; index < cards.length - 1; index += 1) {
           const currentCard = cards[index];
           const nextCard = cards[index + 1];
@@ -221,8 +220,8 @@ export default function RecentWorks() {
             .to(
               currentCard,
               {
-                scale: 0.82,
-                rotation: 2.5,
+                scale: 0.88,
+                rotation: 1.35,
                 duration: 1,
                 ease: "none",
               },
@@ -231,8 +230,8 @@ export default function RecentWorks() {
             .to(
               currentContent,
               {
-                y: 30,
-                autoAlpha: 0.35,
+                y: 24,
+                autoAlpha: 0.18,
                 duration: 1,
                 ease: "none",
               },
@@ -251,7 +250,7 @@ export default function RecentWorks() {
           if (nextContent) {
             timeline.fromTo(
               nextContent,
-              { y: 60, autoAlpha: 0 },
+              { y: 42, autoAlpha: 0 },
               {
                 y: 0,
                 autoAlpha: 1,
@@ -306,6 +305,50 @@ export default function RecentWorks() {
               invalidateOnRefresh: true,
             },
           }
+        );
+      }
+
+      const supportingCopy = gsap.utils.toArray(
+        ".recent-works__eyebrow, .recent-works__subhead",
+        section,
+      );
+
+      if (supportingCopy.length) {
+        gsap.fromTo(
+          supportingCopy,
+          { autoAlpha: 0, y: 26 },
+          {
+            autoAlpha: 1,
+            y: 0,
+            duration: 0.68,
+            stagger: 0.1,
+            ease: "power4.out",
+            scrollTrigger: {
+              trigger: ".recent-works__head",
+              start: "top 88%",
+              once: true,
+            },
+          },
+        );
+      }
+
+      const firstCard = section.querySelector(".recent-work-card");
+      if (firstCard) {
+        gsap.fromTo(
+          firstCard,
+          { autoAlpha: 0, y: 42, scale: 0.985 },
+          {
+            autoAlpha: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.78,
+            ease: "power4.out",
+            scrollTrigger: {
+              trigger: firstCard,
+              start: "top 90%",
+              once: true,
+            },
+          },
         );
       }
 

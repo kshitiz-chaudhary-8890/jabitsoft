@@ -1,21 +1,32 @@
 import { Fragment, useEffect, useLayoutEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Hero from "./components/sections/home/Hero/Hero.jsx";
 import ClientMarquee from "./components/sections/home/ClientMarquee/ClientMarquee.jsx";
 import DualMarquee from "./components/sections/home/DualMarquee/DualMarquee.jsx";
 import Intro from "./components/sections/home/Intro/intro";
-import ServiceCardCarousel from "./components/ServiceCardCarousel.jsx";
-import ClientResults from "./components/sections/home/ClientResults/ClientResults.jsx";
-import CompanyStats from "./components/sections/home/CompanyStats/CompanyStats.jsx";
 import RecentWorks from "./components/sections/home/RecentWorks/RecentWorks.jsx";
 import ServiceDirectory from "./components/sections/home/Services/ServiceDirectory.jsx";
-import ProblemsWeSolve from "./components/sections/home/ProblemsWeSolve/ProblemsWeSolve";
-import HowWeBuild from "./components/sections/home/HowWeBuild/HowWeBuild";
-import FAQ from "./components/sections/home/FAQ/FAQ.jsx";
 import Footer from "./components/layout/Footer/Footer.jsx";
-import LatestBlog from "./components/sections/home/LatestBlog/LatestBlog.jsx";
 import jabitLogo from "./assets/jabit-logo.png";
+
+const ClientResults = dynamic(() =>
+  import("./components/sections/home/ClientResults/ClientResults.jsx"),
+);
+const HowWeBuild = dynamic(() =>
+  import("./components/sections/home/HowWeBuild/HowWeBuild"),
+);
+const CompanyStats = dynamic(() =>
+  import("./components/sections/home/CompanyStats/CompanyStats.jsx"),
+);
+const ProblemsWeSolve = dynamic(() =>
+  import("./components/sections/home/ProblemsWeSolve/ProblemsWeSolve"),
+);
+const LatestBlog = dynamic(() =>
+  import("./components/sections/home/LatestBlog/LatestBlog.jsx"),
+);
+const FAQ = dynamic(() => import("./components/sections/home/FAQ/FAQ.jsx"));
 
 const media = {
   founders: [
@@ -120,15 +131,7 @@ function usePageMotion() {
     const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
     const groups = [
       [".showcase", "showcase-in", 0],
-      [".client-logos", "rise", 0],
-      [".ribbon-layer", "rise", 0],
-      [".intro .script-eyebrow, .service-pills", "rise", 0],
-      [".section-title > :not([data-reveal-heading]):not(.section-heading-fill)", "title-rise", 0],
-      [".testimonial-grid", "rise", 0],
-      [".founder-portrait", "slide-left", 0],
-      [".founder-copy", "rise", 0],
-      [".faq-item", "rise", 45],
-      [".contact-inner > *, .footer-bottom", "rise", 55],
+      [".contact-inner > *, .footer-bottom", "rise", 48],
     ];
 
     const items = groups.flatMap(([selector, motion, stagger]) =>

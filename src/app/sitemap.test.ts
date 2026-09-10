@@ -7,8 +7,6 @@ describe("sitemap", () => {
     expect(sitemap()).toEqual([
       {
         url: "https://jabitsoft.com/",
-        changeFrequency: "monthly",
-        priority: 1,
       },
     ]);
   });

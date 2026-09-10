@@ -140,7 +140,15 @@ export default function Footer() {
             <div className="jabit-footer__top">
               <div className="jabit-footer__brand-block">
                 <a className="jabit-footer__brand" href="#top" aria-label="JabitSoft home">
-                  <img className="jabit-footer__brand-logo" src={jabitLogo} alt="" />
+                  <img
+                    className="jabit-footer__brand-logo"
+                    src={jabitLogo.src}
+                    alt="JabitSoft"
+                    width="781"
+                    height="200"
+                    loading="lazy"
+                    decoding="async"
+                  />
                 </a>
 
                 <p>
@@ -359,8 +367,8 @@ export default function Footer() {
           opacity: 0;
           transform: translate3d(0, 44px, 0);
           transition:
-            opacity 700ms cubic-bezier(0.16, 1, 0.3, 1),
-            transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
+            opacity 660ms cubic-bezier(0.16, 1, 0.3, 1),
+            transform 660ms cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .jabit-footer--visible .jabit-footer__cta-inner {
@@ -749,8 +757,8 @@ export default function Footer() {
         .jabit-footer__wordmark {
           position: absolute;
           left: 50%;
-          bottom: -0.16em;
-          transform: translateX(-50%);
+          top: 50%;
+          transform: translate(-50%, -50%);
           color: rgba(19,19,19,0.07);
           font-family: "Plus Jakarta Sans", "Inter", sans-serif;
           font-style: normal;
@@ -855,7 +863,7 @@ export default function Footer() {
           }
 
           .jabit-footer__wordmark-wrap {
-            height: 150px;
+            height: clamp(130px, 24vw, 170px);
             margin-top: 22px;
           }
 

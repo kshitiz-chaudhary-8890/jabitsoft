@@ -530,7 +530,7 @@ export default function HowWeBuild() {
             {
               y: 0,
               opacity: 1,
-              duration: 0.85,
+              duration: 0.66,
               stagger: 0.08,
               ease: "power3.out",
               clearProps: "transform,opacity",
@@ -549,7 +549,7 @@ export default function HowWeBuild() {
             {
               y: 0,
               opacity: 1,
-              duration: 0.95,
+              duration: 0.72,
               ease: "power3.out",
               clearProps: "transform,opacity",
               scrollTrigger: {

@@ -43,6 +43,51 @@
   --shell: min(1200px, calc(100vw - 48px));
   --shell-wide: min(1360px, calc(100vw - 32px));
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Homepage system: one shared rhythm across every content section. */
+  --home-shell-width: min(1360px, calc(100% - 64px));
+  --home-section-space: clamp(72px, 5vw, 88px);
+  --home-heading-size: 50px;
+  --home-heading-line: 54px;
+  --home-eyebrow-size: 15px;
+  --home-eyebrow-line: 23px;
+  --home-body-size: 16px;
+  --home-body-line: 1.65;
+  --home-button-height: 50px;
+  --home-button-padding: 22px;
+  --home-button-size: 14px;
+  --home-heading-copy-gap: 16px;
+  --home-header-content-gap: clamp(44px, 4vw, 64px);
+}
+
+@media (max-width: 1024px) {
+  :root {
+    --home-shell-width: min(1360px, calc(100% - 48px));
+    --home-section-space: 76px;
+    --home-heading-size: 46px;
+    --home-heading-line: 50px;
+  }
+}
+
+@media (max-width: 700px) {
+  :root {
+    --home-shell-width: min(1360px, calc(100% - 32px));
+    --home-section-space: 64px;
+    --home-heading-size: 42px;
+    --home-heading-line: 46px;
+    --home-body-size: 15px;
+    --home-button-height: 48px;
+    --home-button-padding: 20px;
+    --home-header-content-gap: 40px;
+  }
+}
+
+@media (max-width: 380px) {
+  :root {
+    --home-shell-width: min(1360px, calc(100% - 28px));
+    --home-heading-size: 38px;
+    --home-heading-line: 42px;
+  }
 }
 
 * {
@@ -1670,7 +1715,7 @@ main {
    ========================================================================== */
 .motion-ready [data-motion] {
   transition-property: opacity, transform, filter;
-  transition-duration: 0.85s;
+  transition-duration: 0.66s;
   transition-delay: var(--motion-delay, 0ms);
   transition-timing-function: var(--ease);
   will-change: opacity, transform;
@@ -1678,7 +1723,7 @@ main {
 
 .motion-ready [data-motion="rise"] {
   opacity: 0;
-  transform: translate3d(0, 36px, 0);
+  transform: translate3d(0, 28px, 0);
 }
 
 .motion-ready [data-motion="title-rise"] {
@@ -1703,13 +1748,180 @@ main {
 
 .motion-ready [data-motion="showcase-in"] {
   opacity: 0;
-  transform: perspective(1000px) rotateX(15deg) scale(0.95);
+  transform: perspective(1000px) rotateX(8deg) scale(0.975);
+}
+
+html.lenis {
+  scroll-behavior: auto !important;
 }
 
 .motion-ready [data-motion].is-inview {
   opacity: 1;
   transform: none;
   filter: none;
+  will-change: auto;
+}
+
+/* ==========================================================================
+   Homepage visual rhythm
+   These semantic tokens intentionally normalize only section-level framing
+   and typography. Internal cards, diagrams and editorial layouts stay unique.
+   ========================================================================== */
+:is(
+  .trust-showcase,
+  #why-jabit,
+  .service-directory,
+  .recent-works,
+  .client-results,
+  #how-we-work,
+  .company-stats-clean,
+  #problems,
+  .latest-blog,
+  .faq-ref
+) {
+  padding-block: var(--home-section-space) !important;
+}
+
+:is(
+  .trust-showcase__inner,
+  #why-jabit > div,
+  .service-directory__inner,
+  .recent-works__head,
+  .recent-works__stack,
+  .cr-shell,
+  #how-we-work > div,
+  .company-stats-clean__shell,
+  #problems > div,
+  .latest-blog__shell,
+  .faq-ref__shell,
+  .jabit-footer__cta,
+  .jabit-footer__card
+) {
+  width: var(--home-shell-width) !important;
+}
+
+:is(
+  .trust-showcase__title,
+  #intro-heading,
+  #service-directory-title,
+  #recent-works-title,
+  #client-results-title,
+  #company-stats-clean-title,
+  #problems-we-solve-title,
+  #latest-blog-title,
+  #faq-ref-title,
+  #footer-cta-title,
+  #how-we-work-title
+),
+#how-we-work-title [data-heading-line] {
+  font-family: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", Inter, sans-serif !important;
+  font-size: var(--home-heading-size) !important;
+  font-weight: 700 !important;
+  line-height: var(--home-heading-line) !important;
+  letter-spacing: normal !important;
+  text-transform: capitalize !important;
+}
+
+:is(
+  #why-jabit header > div:first-child,
+  .service-directory__eyebrow,
+  .recent-works__eyebrow,
+  .cr-eyebrow,
+  #how-we-work header > div:first-child > p,
+  .company-stats-clean__badge,
+  #problems header p:first-child,
+  .latest-blog__eyebrow,
+  .faq-ref__eyebrow,
+  .jabit-footer__eyebrow
+) {
+  min-height: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: rgb(92, 92, 92) !important;
+  font-family: var(--font-inter), Inter, sans-serif !important;
+  font-size: var(--home-eyebrow-size) !important;
+  font-weight: 500 !important;
+  line-height: var(--home-eyebrow-line) !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+}
+
+#why-jabit header > div:first-child,
+.recent-works__eyebrow,
+.cr-eyebrow,
+.company-stats-clean__badge,
+.latest-blog__eyebrow,
+.faq-ref__eyebrow,
+.jabit-footer__eyebrow {
+  margin: 0 0 14px !important;
+}
+
+#how-we-work header > div:first-child {
+  gap: 14px !important;
+}
+
+#problems-we-solve-title {
+  margin-top: 14px !important;
+}
+
+#why-jabit header > div:first-child > span,
+.company-stats-clean__badge > span {
+  display: none !important;
+}
+
+:is(
+  .trust-showcase__copy,
+  #why-jabit header > p,
+  .service-directory__intro,
+  .recent-works__subhead,
+  .cr-subhead,
+  .company-stats-clean__copy,
+  #problems header p:last-child,
+  .latest-blog__header-side > p,
+  .faq-ref__subhead,
+  .jabit-footer__cta-copy
+) {
+  font-family: var(--font-inter), Inter, sans-serif !important;
+  font-size: var(--home-body-size) !important;
+  font-weight: 400 !important;
+  line-height: var(--home-body-line) !important;
+  letter-spacing: normal !important;
+}
+
+:is(
+  .trust-showcase__copy,
+  #why-jabit header > p,
+  .recent-works__subhead,
+  .cr-subhead,
+  .faq-ref__subhead
+) {
+  margin-top: var(--home-heading-copy-gap) !important;
+}
+
+.service-directory__header,
+.cr-heading,
+.faq-ref__header {
+  margin-bottom: var(--home-header-content-gap) !important;
+}
+
+.latest-blog__grid {
+  margin-top: var(--home-header-content-gap) !important;
+}
+
+:is(
+  .trust-showcase__button,
+  .company-stats-clean__link,
+  .latest-blog__view-all,
+  .jabit-footer__cta-button
+) {
+  min-height: var(--home-button-height) !important;
+  padding-inline: var(--home-button-padding) !important;
+  border-radius: 999px !important;
+  font-family: var(--font-inter), Inter, sans-serif !important;
+  font-size: var(--home-button-size) !important;
+  font-weight: 600 !important;
 }
 
 /* ==========================================================================

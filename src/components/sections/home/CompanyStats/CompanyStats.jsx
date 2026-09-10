@@ -67,18 +67,18 @@ export default function CompanyStats() {
     const ctx = gsap.context(() => {
       gsap.fromTo(
         "[data-company-stats-reveal]",
-        { autoAlpha: 0, y: 130, scale: 0.94 },
+        { autoAlpha: 0, y: 44, scale: 0.985 },
         {
           autoAlpha: 1,
           y: 0,
           scale: 1,
-          ease: "none",
-          stagger: 0.6,
+          duration: 0.72,
+          ease: "power4.out",
+          stagger: 0.09,
           scrollTrigger: {
             trigger: section,
-            start: "top 84%",
-            end: "top 36%",
-            scrub: 1,
+            start: "top 82%",
+            once: true,
             invalidateOnRefresh: true,
           },
         },
@@ -93,15 +93,15 @@ export default function CompanyStats() {
 
         gsap.to(proxy, {
           val: end,
-          ease: "none",
+          duration: 0.9,
+          ease: "power2.out",
           onUpdate: () => {
             el.textContent = `${Math.round(proxy.val)}${suffix}`;
           },
           scrollTrigger: {
-            trigger: section,
+            trigger: el.closest(".company-stats-clean__card") || section,
             start: "top 84%",
-            end: "top 36%",
-            scrub: 1,
+            once: true,
             invalidateOnRefresh: true,
           },
         });
@@ -232,6 +232,10 @@ export default function CompanyStats() {
                 src={stats[0].image}
                 alt=""
                 aria-hidden="true"
+                width="1400"
+                height="933"
+                loading="lazy"
+                decoding="async"
               />
               <span className="company-stats-clean__card-shade" aria-hidden="true" />
 
@@ -264,6 +268,10 @@ export default function CompanyStats() {
                     src={stat.image}
                     alt=""
                     aria-hidden="true"
+                    width="1200"
+                    height="800"
+                    loading="lazy"
+                    decoding="async"
                   />
                   <span className="company-stats-clean__card-shade" aria-hidden="true" />
 

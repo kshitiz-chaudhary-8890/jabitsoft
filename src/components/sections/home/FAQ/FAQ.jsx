@@ -70,18 +70,18 @@ export default function FAQ() {
     const ctx = gsap.context(() => {
       gsap.set(headerRef.current, {
         autoAlpha: 0,
-        y: 60,
+        y: 34,
       });
 
       gsap.set(itemRefs.current, {
         autoAlpha: 0,
-        y: 56,
+        y: 30,
       });
 
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
-          start: "top 78%",
+          start: "top 82%",
           once: true,
         },
       });
@@ -89,18 +89,18 @@ export default function FAQ() {
       tl.to(headerRef.current, {
         autoAlpha: 1,
         y: 0,
-        duration: 0.9,
-        ease: "power3.out",
+        duration: 0.64,
+        ease: "power4.out",
       }).to(
         itemRefs.current,
         {
           autoAlpha: 1,
           y: 0,
-          duration: 0.8,
-          stagger: 0.1,
-          ease: "power3.out",
+          duration: 0.56,
+          stagger: 0.065,
+          ease: "power4.out",
         },
-        "-=0.38",
+        "-=0.28",
       );
 
       const headingFill = section.querySelector(".section-heading-fill");

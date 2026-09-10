@@ -2,7 +2,12 @@
 
 import { Fragment, useLayoutEffect, useRef } from "react";
 import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import HillsBackground from "../../../three/HillsBackground/HillsBackground.jsx";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 const media = {
   founders: [
@@ -58,8 +63,10 @@ export default function Hero() {
     const chars = hero.querySelectorAll(".hero-reveal-char");
     const inlineImages = hero.querySelectorAll(".inline-image");
     const founderProof = hero.querySelector(".founder-proof");
+    const headline = hero.querySelector("h1");
     const copy = hero.querySelector(".hero-reference-copy");
     const cta = hero.querySelector(".hero-reference-cta");
+    const hills = hero.querySelector(".hero-hills-layer");
 
     if (reducedMotion) {
       gsap.set([nav, chars, inlineImages, founderProof, copy, cta], {
@@ -82,16 +89,17 @@ export default function Hero() {
 
       gsap.set(chars, {
         opacity: 0,
-        x: 11,
-        y: 6,
-        filter: "blur(9px)",
+        yPercent: 118,
+        rotateX: -24,
+        transformOrigin: "50% 100%",
         force3D: true,
       });
 
       gsap.set(inlineImages, {
         opacity: 0,
-        y: 9,
-        scale: 0.84,
+        yPercent: 32,
+        scale: 0.72,
+        clipPath: "inset(48% 48% 48% 48% round 999px)",
         transformOrigin: "50% 50%",
         force3D: true,
       });
@@ -115,7 +123,7 @@ export default function Hero() {
 
       const tl = gsap.timeline({
         defaults: {
-          ease: "power3.out",
+          ease: "power4.out",
         },
       });
 
@@ -132,28 +140,29 @@ export default function Hero() {
           chars,
           {
             opacity: 1,
-            x: 0,
-            y: 0,
-            filter: "blur(0px)",
-            duration: 0.62,
+            yPercent: 0,
+            rotateX: 0,
+            duration: 0.78,
             stagger: {
-              each: 0.022,
+              each: 0.014,
               from: "start",
             },
-            clearProps: "filter",
+            clearProps: "transform",
           },
-          0.22,
+          0.18,
         )
         .to(
           inlineImages,
           {
             opacity: 1,
-            y: 0,
+            yPercent: 0,
             scale: 1,
-            duration: 0.54,
-            stagger: 0.22,
+            clipPath: "inset(0% 0% 0% 0% round 999px)",
+            duration: 0.72,
+            stagger: 0.16,
+            clearProps: "clipPath",
           },
-          0.72,
+          0.48,
         )
         .to(
           founderProof,
@@ -162,7 +171,7 @@ export default function Hero() {
             y: 0,
             duration: 0.5,
           },
-          1.48,
+          0.9,
         )
         .to(
           copy,
@@ -171,7 +180,7 @@ export default function Hero() {
             y: 0,
             duration: 0.55,
           },
-          1.82,
+          1.04,
         )
         .to(
           cta,
@@ -181,8 +190,25 @@ export default function Hero() {
             scale: 1,
             duration: 0.5,
           },
-          2.02,
+          1.16,
         );
+
+      gsap
+        .timeline({
+          scrollTrigger: {
+            trigger: hero,
+            start: "top top",
+            end: "bottom top",
+            scrub: 0.85,
+            invalidateOnRefresh: true,
+          },
+          defaults: { ease: "none" },
+        })
+        .to(hills, { yPercent: 5, scale: 1.065 }, 0)
+        .to(headline, { yPercent: -7, opacity: 0.28 }, 0)
+        .to(founderProof, { yPercent: -20, opacity: 0 }, 0)
+        .to(copy, { yPercent: -14, opacity: 0 }, 0)
+        .to(cta, { yPercent: -18, opacity: 0 }, 0);
     }, hero);
 
     return () => ctx.revert();
@@ -196,7 +222,7 @@ export default function Hero() {
         <div className="founder-proof">
           <span className="avatar-stack" aria-hidden="true">
             {media.founders.map((src) => (
-              <img src={src} alt="" key={src} />
+              <img src={src} alt="" width="512" height="512" decoding="async" key={src} />
             ))}
           </span>
           <span>Trusted by founders.</span>
@@ -211,7 +237,7 @@ export default function Hero() {
               <HeroAnimatedText text="Our Engineers" />
             </b>{" "}
             <span className="inline-image hero-image-round">
-              <img src={media.heroSoftware} alt="" />
+              <img src={media.heroSoftware} alt="" width="400" height="400" decoding="async" />
             </span>{" "}
             <HeroAnimatedText text="Build" />
           </span>
@@ -219,7 +245,7 @@ export default function Hero() {
           <span className="hero-line" aria-hidden="true">
             <HeroAnimatedText text="Reliable" />{" "}
             <span className="inline-image hero-image-wide">
-              <img src={media.heroBusiness} alt="" />
+              <img src={media.heroBusiness} alt="" width="500" height="320" decoding="async" />
             </span>{" "}
             <em>
               <HeroAnimatedText text="Software" />
@@ -232,7 +258,7 @@ export default function Hero() {
           <span className="hero-line" aria-hidden="true">
             <HeroAnimatedText text="Growing Businesses" />{" "}
             <span className="inline-image hero-image-wide">
-              <img src={media.heroGlobal} alt="" />
+              <img src={media.heroGlobal} alt="" width="500" height="320" decoding="async" />
             </span>{" "}
             <HeroAnimatedText text="Worldwide" />
           </span>
@@ -381,12 +407,15 @@ export default function Hero() {
 
           .hero-reveal-word {
             display: inline-block;
+            overflow: hidden;
+            vertical-align: bottom;
             white-space: nowrap;
           }
 
           .hero-reveal-char {
             display: inline-block;
-            will-change: transform, opacity, filter;
+            will-change: transform, opacity;
+            backface-visibility: hidden;
           }
 
           /* Large laptop / small desktop */
@@ -763,7 +792,14 @@ export default function Hero() {
         data-scroll-scale="gsap"
       >
         <div className="showcase-inner">
-          <img src={media.showcase} alt="A showcase of selected JabitSoft projects" />
+          <img
+            src={media.showcase}
+            alt="Selected web, mobile and software projects delivered by JabitSoft"
+            width="2848"
+            height="1604"
+            loading="lazy"
+            decoding="async"
+          />
         </div>
       </section>
     </>

@@ -1750,7 +1750,7 @@ export default function ProblemsWeSolve() {
 							className={styles.headerText}
 							initial={{ opacity: 0, y: 20 }}
 							animate={headerInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-							transition={{ duration: 0.7, ease: EASE_OUT }}
+							transition={{ duration: 0.66, ease: EASE_OUT }}
 						>
 							<p className={styles.eyebrow}>(Problems we solve)</p>
 							<h2

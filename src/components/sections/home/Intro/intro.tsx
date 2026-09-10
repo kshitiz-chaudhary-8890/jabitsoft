@@ -336,6 +336,39 @@ export function Intro() {
           },
         );
       }
+
+      gsap.fromTo(
+        `.${styles.filters} > *`,
+        { y: 18, autoAlpha: 0 },
+        {
+          y: 0,
+          autoAlpha: 1,
+          duration: 0.48,
+          stagger: 0.055,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: `.${styles.filters}`,
+            start: "top 88%",
+            once: true,
+          },
+        },
+      );
+
+      gsap.fromTo(
+        `.${styles.footerNote}`,
+        { y: 20, autoAlpha: 0 },
+        {
+          y: 0,
+          autoAlpha: 1,
+          duration: 0.58,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: `.${styles.footerNote}`,
+            start: "top 92%",
+            once: true,
+          },
+        },
+      );
     }, section);
 
     return () => context.revert();
@@ -352,10 +385,10 @@ export function Intro() {
         <div className={styles.shell}>
           <motion.header
             className={styles.header}
-            initial={{ opacity: reduced ? 1 : 0, y: reduced ? 0 : 56 }}
+            initial={{ opacity: reduced ? 1 : 0, y: reduced ? 0 : 34 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.25 }}
-            transition={{ duration: reduced ? 0 : 0.85, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: reduced ? 0 : 0.66, ease: [0.22, 1, 0.36, 1] }}
           >
             <div className={styles.badge}>
               <span>

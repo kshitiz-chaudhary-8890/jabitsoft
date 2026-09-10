@@ -83,10 +83,17 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
     }
 
     gsap.registerPlugin(ScrollTrigger);
+    const html = document.documentElement;
+    const previousScrollBehavior = html.style.scrollBehavior;
+    html.style.scrollBehavior = "auto";
     const lenis = new Lenis({
-      lerp: 0.085,
+      // A slightly quicker settle keeps the premium glide without making the
+      // page feel like it is lagging behind the wheel.
+      lerp: 0.11,
       smoothWheel: true,
-      wheelMultiplier: 0.9,
+      wheelMultiplier: 1,
+      touchMultiplier: 1,
+      syncTouch: false,
       anchors: true,
     });
     const updateScroll = () => ScrollTrigger.update();
@@ -125,11 +132,8 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
         target = Math.max(0, Math.min(target, max));
         if (Math.abs(target - window.scrollY) < 20) return;
 
-        const html = document.documentElement;
-        const prevBehavior = html.style.scrollBehavior;
         html.style.scrollBehavior = "auto";
         window.scrollTo(0, target);
-        html.style.scrollBehavior = prevBehavior;
         ScrollTrigger.refresh();
       } catch {
         /* noop */
@@ -168,6 +172,7 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
       lenis.off("scroll", updateScroll);
       gsap.ticker.remove(updateFrame);
       lenis.destroy();
+      html.style.scrollBehavior = previousScrollBehavior;
     };
   }, []);
 

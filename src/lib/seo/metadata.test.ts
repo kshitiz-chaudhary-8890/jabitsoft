@@ -26,4 +26,16 @@ describe("rootMetadata", () => {
       }),
     );
   });
+
+  it("publishes a focused title, description, canonical and social image", () => {
+    expect(rootMetadata.title).toEqual(
+      expect.objectContaining({ default: "Software Development Company | JabitSoft" }),
+    );
+    expect(String(rootMetadata.description).length).toBeGreaterThanOrEqual(120);
+    expect(String(rootMetadata.description).length).toBeLessThanOrEqual(160);
+    expect(rootMetadata.alternates).toEqual(expect.objectContaining({ canonical: "/" }));
+    expect(rootMetadata.openGraph).toEqual(
+      expect.objectContaining({ images: expect.arrayContaining([expect.any(Object)]) }),
+    );
+  });
 });

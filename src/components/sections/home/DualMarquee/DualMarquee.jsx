@@ -1,4 +1,11 @@
+"use client";
+
+import { useLayoutEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
 export default function DualMarquee() {
+  const sectionRef = useRef(null);
   const blackItems = ["Agentic AI Development", "Cloud Consulting", "Mobile Application Development"];
   const blueItems = ["ERP Services", "SEO / Digital Marketing", "Website Solutions"];
 
@@ -17,8 +24,69 @@ export default function DualMarquee() {
     );
   };
 
+  useLayoutEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return undefined;
+
+    const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+    if (reduced) return undefined;
+
+    gsap.registerPlugin(ScrollTrigger);
+    const context = gsap.context(() => {
+      const ribbons = section.querySelectorAll(".ribbon");
+
+      ScrollTrigger.create({
+        trigger: section,
+        start: "top bottom",
+        end: "bottom top",
+        onEnter: () => section.classList.add("is-marquee-active"),
+        onEnterBack: () => section.classList.add("is-marquee-active"),
+        onLeave: () => section.classList.remove("is-marquee-active"),
+        onLeaveBack: () => section.classList.remove("is-marquee-active"),
+      });
+
+      gsap.fromTo(
+        ribbons,
+        {
+          xPercent: (index) => (index === 0 ? -11 : 11),
+          autoAlpha: 0,
+          scale: 0.965,
+        },
+        {
+          xPercent: 0,
+          autoAlpha: 1,
+          scale: 1,
+          duration: 0.86,
+          stagger: 0.1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: section,
+            start: "top 88%",
+            once: true,
+          },
+        },
+      );
+
+      gsap.to(ribbons, {
+        yPercent: (index) => (index === 0 ? -10 : 10),
+        ease: "none",
+        scrollTrigger: {
+          trigger: section,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 0.85,
+        },
+      });
+    }, section);
+
+    return () => {
+      section.classList.remove("is-marquee-active");
+      context.revert();
+    };
+  }, []);
+
   return (
-    <div className="ribbon-layer themed-ribbon-layer" aria-hidden="true">
+    <div ref={sectionRef} className="ribbon-layer themed-ribbon-layer" aria-hidden="true">
       <div className="ribbon ribbon-black themed-ribbon-dark">
         <div className="ribbon-text-mask">
           <div className="marquee-track-rev">
@@ -95,7 +163,13 @@ export default function DualMarquee() {
           line-height: 1;
           letter-spacing: -0.038em;
           animation: marquee-anim 30s linear infinite;
+          animation-play-state: paused;
           will-change: transform;
+        }
+
+        .themed-ribbon-layer.is-marquee-active .marquee-track,
+        .themed-ribbon-layer.is-marquee-active .marquee-track-rev {
+          animation-play-state: running;
         }
 
         .themed-ribbon-layer .ribbon-copy,

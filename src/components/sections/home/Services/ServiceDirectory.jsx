@@ -87,8 +87,8 @@ export default function ServiceDirectory() {
           {
             autoAlpha: 1,
             y: 0,
-            duration: 0.8,
-            ease: "power3.out",
+            duration: 0.58,
+            ease: "power4.out",
             scrollTrigger: {
               trigger: section,
               start: "top 86%",
@@ -106,9 +106,9 @@ export default function ServiceDirectory() {
           {
             autoAlpha: 1,
             y: 0,
-            duration: 0.9,
-            delay: 0.14,
-            ease: "power3.out",
+            duration: 0.68,
+            delay: 0.08,
+            ease: "power4.out",
             scrollTrigger: {
               trigger: section,
               start: "top 82%",
@@ -126,13 +126,13 @@ export default function ServiceDirectory() {
       if (rows.length) {
         gsap.fromTo(
           rows,
-          { autoAlpha: 0, y: 45 },
+          { autoAlpha: 0, y: 34 },
           {
             autoAlpha: 1,
             y: 0,
-            duration: 0.9,
-            stagger: 0.1,
-            ease: "power3.out",
+            duration: 0.68,
+            stagger: 0.065,
+            ease: "power4.out",
             scrollTrigger: {
               trigger: list,
               start: "top 88%",
@@ -146,9 +146,9 @@ export default function ServiceDirectory() {
           { scaleX: 0 },
           {
             scaleX: 1,
-            duration: 0.7,
-            stagger: 0.1,
-            ease: "power2.out",
+            duration: 0.58,
+            stagger: 0.065,
+            ease: "power3.out",
             scrollTrigger: {
               trigger: list,
               start: "top 88%",
