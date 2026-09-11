@@ -4,13 +4,13 @@
    ========================================================================== */
 
 .aboutPage {
-  --about-bg: #ffffff;
-  --about-surface: #f6f7f9;
-  --about-surface-strong: #eef1f5;
+  --about-bg: #f1fbfd;
+  --about-surface: #e6f5f3;
+  --about-surface-strong: #d8ebe6;
 
-  --about-ink: #131313;
-  --about-text: #5c5c5c;
-  --about-muted: #8a8a8a;
+  --about-ink: #062f25;
+  --about-text: #526e67;
+  --about-muted: #78928b;
 
   --about-line: #e5e7eb;
   --about-line-strong: #d8dde5;
