@@ -4,19 +4,22 @@
   -webkit-background-clip: text;
   background-clip: text;
 
+  /* Extend the paint area so descenders (g, y, p) survive tight line-heights. */
+  padding-bottom: 0.14em;
+  margin-bottom: -0.14em;
+
   background-image:
-    linear-gradient(
-      rgba(19, 19, 19, 0.16),
-      rgba(19, 19, 19, 0.16)
-    ),
-    linear-gradient(
-      rgb(19, 19, 19),
-      rgb(19, 19, 19)
-    );
+    linear-gradient(rgb(19, 19, 19), rgb(19, 19, 19)),
+    linear-gradient(rgba(19, 19, 19, 0.16), rgba(19, 19, 19, 0.16));
 
   background-repeat: no-repeat;
-  background-position: left center, left center;
-  background-size: 100% 100%, 0% 100%;
+  background-position:
+    left center,
+    left center;
+  background-size:
+    0% 100%,
+    100% 100%;
+  will-change: background-size;
 }
 
 @media (prefers-reduced-motion: reduce) {

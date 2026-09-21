@@ -17,9 +17,9 @@ describe("Header", () => {
 
     expect([...topLevelItems].map(({ textContent }) => textContent?.trim())).toEqual([
       "About",
-      "Portfolio",
+      "Industries",
       "Services",
-      "Careers",
+      "Case Studies",
       "Blog",
       "Contact",
     ]);
@@ -29,15 +29,17 @@ describe("Header", () => {
       ),
     ).toEqual([
       ["About", "/about-us", ""],
-      ["Portfolio", "/", "#works"],
-      ["Careers", "/", "#careers"],
+      ["Industries", "/services", ""],
+      ["Services", "/services", ""],
+      ["Case Studies", "/", "#works"],
       ["Blog", "/", "#blog"],
       ["Contact", "/", "#contact"],
     ]);
     expect(screen.queryByRole("link", { name: "Home" })).not.toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: "Services" }).querySelector("svg"),
+      screen.getByRole("button", { name: "Open services submenu" }).querySelector("svg"),
     ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Open industries submenu" }).querySelector("svg")).toBeInTheDocument();
     expect(screen.getAllByRole("link", { name: "Contact" })).toHaveLength(2);
   });
 
@@ -45,7 +47,7 @@ describe("Header", () => {
     const user = userEvent.setup();
     render(<Header />);
 
-    const trigger = screen.getByRole("button", { name: "Services" });
+    const trigger = screen.getByRole("button", { name: "Open services submenu" });
     await user.click(trigger);
 
     expect(trigger).toHaveAttribute("aria-expanded", "true");
@@ -75,6 +77,20 @@ describe("Header", () => {
     );
   });
 
+  it("opens the Industries menu with links that stay on the services route", async () => {
+    const user = userEvent.setup();
+    render(<Header />);
+
+    const trigger = screen.getByRole("button", { name: "Open industries submenu" });
+    await user.click(trigger);
+
+    expect(trigger).toHaveAttribute("aria-expanded", "true");
+    expect(screen.getByRole("link", { name: /SaaS & Platforms/i })).toHaveAttribute(
+      "href",
+      "/services?industry=saas",
+    );
+  });
+
   it("opens the mobile navigation and closes it after a navigation choice", async () => {
     const user = userEvent.setup();
     render(<Header />);
@@ -85,7 +101,7 @@ describe("Header", () => {
     expect(toggle).toHaveAttribute("aria-expanded", "true");
     expect(toggle).toHaveAccessibleName("Close menu");
 
-    await user.click(screen.getByRole("link", { name: "Portfolio" }));
+    await user.click(screen.getByRole("link", { name: "Case Studies" }));
 
     expect(toggle).toHaveAttribute("aria-expanded", "false");
     expect(toggle).toHaveAccessibleName("Open menu");
@@ -107,10 +123,7 @@ describe("Header", () => {
 
     render(<Header />);
 
-    expect(await screen.findByRole("button", { name: "Services" })).toHaveAttribute(
-      "aria-current",
-      "location",
-    );
+    expect(await screen.findByRole("link", { name: "Services" })).toHaveAttribute("href", "/services");
 
     window.history.replaceState(null, "", "/");
   });

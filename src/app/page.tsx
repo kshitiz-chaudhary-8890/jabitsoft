@@ -1,4 +1,4 @@
-import { HomepageClient } from "@/components/sections/HomepageClient";
+import { HomepageClient } from "@/components/pages/home/HomepageClient";
 import jabitLogo from "@/assets/jabit-logo.png";
 import { company } from "@/data/company";
 import { buildHomepageSchema, serializeJsonLd } from "@/lib/seo/schema";

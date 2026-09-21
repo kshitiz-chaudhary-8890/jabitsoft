@@ -1,0 +1,419 @@
+.section,
+.section * {
+  box-sizing: border-box;
+}
+
+/* Shared About-page typography and section rhythm. */
+.section {
+  padding-block: var(--about-section-space);
+}
+
+.shell {
+  width: var(--about-shell-width);
+}
+
+.heading {
+  margin-bottom: var(--about-heading-gap);
+}
+
+.eyebrow {
+  margin-bottom: var(--about-eyebrow-gap);
+}
+
+.display {
+  font-size: var(--about-heading-size) !important;
+  line-height: var(--about-heading-leading);
+}
+
+.description {
+  margin-top: var(--about-copy-gap);
+  font-size: var(--about-copy-size);
+}
+
+.section {
+  --ink: #f4f1ea;
+  --ink-soft: #d8d3c8;
+  --muted: #98a39d;
+  --hairline: rgba(244, 241, 234, 0.1);
+  --hairline-bright: rgba(244, 241, 234, 0.18);
+  --canvas: #0a1410;
+  --canvas-deep: #060d0a;
+  --paper: #fcfbf7;
+  --accent-deep: #1f9d6b;
+  --accent: #2bbb87;
+  --accent-bright: #4fd0a3;
+  --glow: rgba(43, 187, 135, 0.08);
+  --grid-line: rgba(244, 241, 234, 0.022);
+
+  position: relative;
+  width: 100%;
+  overflow: clip;
+  padding: clamp(120px, 12vw, 200px) 0 clamp(72px, 7vw, 110px);
+  background: var(--canvas);
+  color: var(--ink);
+  isolation: isolate;
+}
+
+/* ---------- Ambient layered background ---------- */
+
+.glow {
+  position: absolute;
+  inset: -10% 0 0 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(60% 50% at 22% 8%, var(--glow), transparent 70%),
+    radial-gradient(48% 38% at 82% 92%, rgba(31, 157, 107, 0.06), transparent 72%);
+  will-change: transform;
+}
+
+.ambientGrid {
+  position: absolute;
+  inset: -5% 0;
+  z-index: 1;
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 84px 84px;
+  mask-image: radial-gradient(125% 95% at 50% 28%, #000 18%, transparent 82%);
+  -webkit-mask-image: radial-gradient(125% 95% at 50% 28%, #000 18%, transparent 82%);
+  pointer-events: none;
+  will-change: transform;
+}
+
+.wipe {
+  position: absolute;
+  inset: 0;
+  z-index: 9;
+  background: var(--paper);
+  clip-path: inset(0 0 0 0);
+  pointer-events: none;
+  will-change: clip-path;
+}
+
+.shell {
+  position: relative;
+  z-index: 3;
+  width: min(1360px, calc(100% - clamp(28px, 5vw, 80px)));
+  margin-inline: auto;
+}
+
+/* ---------- Heading ---------- */
+
+.heading {
+  max-width: 1180px;
+  margin: 0 0 clamp(48px, 5vw, 80px);
+}
+
+.eyebrow {
+  display: block;
+  margin: 0 0 clamp(22px, 2.4vw, 34px);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #ffffff;
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.eyebrow::before {
+  content: none;
+}
+
+.display {
+  margin: 0;
+  max-width: 16ch;
+  color: var(--ink);
+  font-family: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", Inter, sans-serif;
+  font-size: clamp(48px, 4.15vw, 68px);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.035;
+  text-wrap: balance;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2px, 0.4vw, 8px);
+}
+
+.titleLine {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+  text-wrap: balance;
+  background-image:
+    linear-gradient(90deg, #ffffff 0%, #ffffff 100%),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.16) 100%);
+  background-repeat: no-repeat;
+  background-size: 0% 100%, 100% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.description {
+  max-width: 58ch;
+  margin: clamp(28px, 3vw, 44px) 0 0;
+  color: var(--muted);
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: clamp(16px, 1.15vw, 19px);
+  line-height: 1.62;
+  text-wrap: pretty;
+}
+
+.signature {
+  display: block;
+  width: clamp(180px, 18vw, 280px);
+  height: auto;
+  margin-top: clamp(20px, 2.2vw, 32px);
+  overflow: visible;
+}
+
+.signature path {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---------- Actions ---------- */
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: clamp(14px, 1.6vw, 22px);
+  margin-bottom: clamp(48px, 5vw, 80px);
+}
+
+.button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 26px;
+  border-radius: 999px;
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  transition: border-color 350ms ease, background 350ms ease, color 350ms ease, transform 350ms ease;
+  will-change: transform;
+}
+
+.buttonPrimary {
+  background: linear-gradient(180deg, var(--accent-bright) 0%, var(--accent) 100%);
+  color: #052017;
+  border: 1px solid var(--accent-bright);
+  box-shadow:
+    0 0 0 1px rgba(79, 208, 163, 0.18),
+    0 18px 40px -16px rgba(43, 187, 135, 0.6);
+}
+
+.buttonPrimary:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 0 1px rgba(79, 208, 163, 0.28),
+    0 24px 48px -16px rgba(43, 187, 135, 0.7);
+}
+
+.buttonSecondary {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--hairline-bright);
+}
+
+.buttonSecondary:hover {
+  border-color: var(--accent-bright);
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.buttonArrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+}
+
+.buttonArrow svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ---------- Progress hairline ---------- */
+
+.progressLine {
+  position: relative;
+  height: 1px;
+  margin-bottom: clamp(40px, 4vw, 60px);
+  background: var(--hairline);
+}
+
+.progressFill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 100%;
+  background: linear-gradient(90deg, var(--accent-deep), var(--accent-bright));
+  transform: scaleX(0);
+  transform-origin: left center;
+  will-change: transform;
+}
+
+/* ---------- Bridge (memorable closing motion into the footer) ---------- */
+
+.bridge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(20px, 2.4vw, 32px);
+  padding-top: clamp(8px, 1vw, 16px);
+}
+
+.bridgeLine {
+  width: 100%;
+  max-width: 1200px;
+  height: 40px;
+  display: block;
+  overflow: visible;
+}
+
+.bridgeLine path {
+  fill: none;
+  stroke: var(--accent-bright);
+  stroke-width: 1.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.7;
+}
+
+.bridgeLabel {
+  color: var(--muted);
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 1280px) {
+  .display {
+    font-size: clamp(46px, 4.75vw, 60px);
+  }
+}
+
+@media (max-width: 1024px) {
+  .display {
+    font-size: clamp(42px, 5.35vw, 54px);
+    line-height: 1.05;
+    letter-spacing: -0.022em;
+  }
+}
+
+@media (max-width: 820px) {
+  .display {
+    font-size: clamp(40px, 5.8vw, 47px);
+  }
+}
+
+@media (max-width: 680px) {
+  .section {
+    padding: 88px 0 56px;
+  }
+
+  .shell {
+    width: calc(100% - 32px);
+  }
+
+  .heading {
+    margin-bottom: 44px;
+  }
+
+  .display {
+    font-size: clamp(34px, 9.2vw, 44px);
+    line-height: 1.065;
+    letter-spacing: -0.02em;
+  }
+
+  .actions {
+    gap: 12px;
+    margin-bottom: 44px;
+  }
+
+  .button {
+    flex: 1 1 100%;
+    justify-content: center;
+    padding: 16px 22px;
+  }
+
+  .bridgeLabel {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+  }
+}
+
+@media (max-width: 430px) {
+  .display {
+    font-size: clamp(31px, 8.6vw, 37px);
+    line-height: 1.075;
+  }
+}
+
+@media (max-width: 360px) {
+  .display {
+    font-size: 30px;
+    line-height: 1.08;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .titleLine {
+    background-size: 100% 100%, 100% 100%;
+  }
+
+  .wipe {
+    display: none;
+  }
+
+  .ambientGrid,
+  .glow {
+    transform: none !important;
+  }
+
+  .progressFill {
+    transform: scaleX(1) !important;
+  }
+
+  .button {
+    transform: none !important;
+  }
+
+  .bridgeLine path {
+    stroke-dashoffset: 0 !important;
+  }
+}
+
+/* Final shared rhythm override: mirrors the homepage section scale. */
+.section { padding-block: var(--about-section-space); }
+.shell { width: var(--about-shell-width); }
+.heading { margin-bottom: var(--about-heading-gap); }
+.eyebrow { margin-bottom: var(--about-eyebrow-gap); font-size: var(--about-eyebrow-size); }
+.display { font-size: var(--about-heading-size) !important; line-height: var(--about-heading-leading); }
+.description { margin-top: var(--about-copy-gap); font-size: var(--about-copy-size); }

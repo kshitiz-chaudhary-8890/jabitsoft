@@ -1,0 +1,301 @@
+.section,
+.section * {
+  box-sizing: border-box;
+}
+
+.section {
+  position: relative;
+  overflow: clip;
+  background: #ffffff;
+  border-top: 1px solid var(--about-line);
+  color: var(--about-heading-color);
+}
+
+.shell {
+  width: var(--about-shell-width);
+  margin-inline: auto;
+  padding: var(--about-section-space) 0;
+}
+
+/* ---------- Intro — asymmetric split ---------- */
+
+.eyebrow {
+  margin: 0 0 var(--about-eyebrow-gap);
+  color: var(--about-heading-color);
+  font: var(--about-eyebrow-font);
+  letter-spacing: var(--about-eyebrow-tracking);
+}
+
+/* Size/leading/tracking come from the page-level h2 rule in about-us.module.css. */
+.display {
+  margin: 0;
+  max-width: 22ch;
+  color: var(--about-heading-color);
+}
+
+.intro {
+  display: grid;
+  margin-top: clamp(36px, 4.5vw, 60px);
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  gap: clamp(28px, 4vw, 72px);
+  align-items: start;
+}
+
+/* The client's hook line — the section's typographic voice. */
+.deck {
+  margin: 0;
+  color: var(--about-heading-color);
+  font-family: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", sans-serif;
+  font-size: clamp(28px, 3.2vw, 44px);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+.deck::after {
+  content: "";
+  display: block;
+  width: 64px;
+  height: 3px;
+  margin-top: clamp(22px, 2.6vw, 34px);
+  background: var(--about-heading-color);
+}
+
+.introCopy {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 6px;
+}
+
+.lede {
+  margin: 0;
+  color: var(--about-copy-color);
+  font:
+    400 clamp(16px, 1.15vw, 17.5px) / 1.72 var(--font-inter),
+    Inter,
+    sans-serif;
+  text-wrap: pretty;
+}
+
+/* ---------- Sub-section label + hairline ---------- */
+
+.subLabel {
+  margin: 0;
+  color: var(--about-heading-color);
+  font:
+    700 12px/1.4 var(--font-inter),
+    Inter,
+    sans-serif;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.objectivesHead {
+  display: flex;
+  margin-top: clamp(64px, 7.5vw, 104px);
+  align-items: center;
+  gap: 24px;
+}
+
+.objectivesHead::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--about-line);
+}
+
+/* ---------- Objective — manifesto statement + support ---------- */
+
+.objectiveRow {
+  display: grid;
+  margin-top: clamp(24px, 3vw, 40px);
+  grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+  gap: 20px clamp(32px, 5vw, 88px);
+  align-items: start;
+}
+
+.objectiveStatement {
+  margin: 0;
+  color: var(--about-heading-color);
+  font-family: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", sans-serif;
+  font-size: clamp(28px, 3vw, 48px);
+  font-weight: 600;
+  letter-spacing: -0.028em;
+  line-height: 1.12;
+  text-wrap: balance;
+}
+
+.objectiveNote {
+  max-width: 30ch;
+  margin: 0;
+  padding-top: 10px;
+  color: var(--about-copy-color);
+  font:
+    400 15.5px/1.7 var(--font-inter),
+    Inter,
+    sans-serif;
+  text-wrap: pretty;
+}
+
+/* ---------- Mission & Vision — statement ledger ---------- */
+
+.statement {
+  margin-top: clamp(64px, 7.5vw, 104px);
+}
+
+.statementHead {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.statementHead::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--about-line);
+}
+
+.statementTitle {
+  margin: 0;
+  color: var(--about-heading-color);
+}
+
+.statementGrid {
+  display: grid;
+  margin-top: clamp(20px, 2.6vw, 32px);
+  grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+  gap: 20px clamp(32px, 5vw, 88px);
+  align-items: start;
+}
+
+.statementLead {
+  margin: 0;
+  color: var(--about-heading-color);
+  font-family: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", sans-serif;
+  font-size: clamp(23px, 2.4vw, 34px);
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 1.22;
+  text-wrap: balance;
+}
+
+.statementCopy {
+  max-width: 44ch;
+  margin: 0;
+  padding-top: 6px;
+  color: var(--about-copy-color);
+  font:
+    400 15.5px/1.7 var(--font-inter),
+    Inter,
+    sans-serif;
+  text-wrap: pretty;
+}
+
+/* ---------- Values — index ledger ---------- */
+
+.valuesIntro {
+  max-width: 62ch;
+  margin: 16px 0 0;
+  color: var(--about-copy-color);
+  font:
+    400 clamp(16px, 1.2vw, 18px) / 1.7 var(--font-inter),
+    Inter,
+    sans-serif;
+  text-wrap: pretty;
+}
+
+.valuesList {
+  margin-top: clamp(24px, 3vw, 40px);
+}
+
+.valueRow {
+  display: grid;
+  padding: clamp(24px, 3vw, 36px) 0;
+  border-top: 1px solid var(--about-line);
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  gap: 10px clamp(32px, 5vw, 88px);
+  align-items: baseline;
+  transition: background 0.25s ease;
+}
+
+.valueRow:last-child {
+  border-bottom: 1px solid var(--about-line);
+}
+
+.valueName {
+  margin: 0;
+  color: var(--about-heading-color);
+  font-family: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", sans-serif;
+  font-size: clamp(19px, 1.7vw, 24px);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+.valueDesc {
+  margin: 0;
+  color: var(--about-copy-color);
+  font:
+    400 clamp(15.5px, 1.15vw, 17px) / 1.68 var(--font-inter),
+    Inter,
+    sans-serif;
+  text-wrap: pretty;
+}
+
+.valuesClose {
+  max-width: 54ch;
+  margin: clamp(36px, 4vw, 52px) auto 0;
+  color: var(--about-heading-color);
+  font:
+    450 clamp(16px, 1.3vw, 18px) / 1.65 var(--font-inter),
+    Inter,
+    sans-serif;
+  text-align: center;
+  text-wrap: pretty;
+}
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 680px) {
+  .intro {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .deck {
+    font-size: 26px;
+  }
+
+  .objectiveRow {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .statement {
+    margin-top: 56px;
+  }
+
+  .statementGrid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .valueRow {
+    grid-template-columns: 1fr;
+    padding: 20px 0;
+  }
+}
+
+/* ---------- Reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .section [data-reveal],
+  .section [data-story-intro] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

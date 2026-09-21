@@ -1,0 +1,554 @@
+.section,
+.section * {
+  box-sizing: border-box;
+}
+
+.section {
+  --ink: #f4f1ea;
+  --ink-soft: #d8d3c8;
+  --muted: #98a39d;
+  --hairline: rgba(244, 241, 234, 0.1);
+  --hairline-bright: rgba(244, 241, 234, 0.18);
+  --canvas: #0a1410;
+  --canvas-deep: #060d0a;
+  --paper: #fcfbf7;
+  --accent-deep: #1f9d6b;
+  --accent: #2bbb87;
+  --accent-bright: #4fd0a3;
+  --glow: rgba(43, 187, 135, 0.08);
+  --grid-line: rgba(244, 241, 234, 0.022);
+  --watermark: rgba(255, 255, 255, 0.055);
+
+  position: relative;
+  width: 100%;
+  overflow: clip;
+  padding: clamp(120px, 12vw, 200px) 0 clamp(80px, 8vw, 130px);
+  background: var(--canvas);
+  color: var(--ink);
+}
+
+/* ---------- Ambient layered background ---------- */
+
+.ambient {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(55% 45% at 18% 8%, var(--glow), transparent 72%),
+    radial-gradient(48% 38% at 82% 92%, rgba(31, 157, 107, 0.05), transparent 72%),
+    linear-gradient(180deg, var(--canvas) 0%, var(--canvas-deep) 100%);
+}
+
+.ambientGrid {
+  position: absolute;
+  inset: -5% 0;
+  z-index: 1;
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 84px 84px;
+  mask-image: radial-gradient(125% 95% at 50% 28%, #000 18%, transparent 82%);
+  -webkit-mask-image: radial-gradient(125% 95% at 50% 28%, #000 18%, transparent 82%);
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* Light curtain that retreats upward to reveal the dark band. */
+.wipe {
+  position: absolute;
+  inset: 0;
+  z-index: 9;
+  background: var(--paper);
+  clip-path: inset(0 0 0 0);
+  pointer-events: none;
+  will-change: clip-path;
+}
+
+.shell {
+  position: relative;
+  z-index: 3;
+  width: min(1360px, calc(100% - clamp(28px, 5vw, 80px)));
+  margin-inline: auto;
+}
+
+/* ---------- Heading ---------- */
+
+.heading {
+  max-width: 1080px;
+  margin: 0 0 clamp(56px, 6vw, 92px);
+}
+
+.eyebrow {
+  margin: 0 0 clamp(22px, 2.4vw, 34px);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #ffffff;
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.display {  margin: 0;
+  max-width: 18ch;
+  color: var(--ink);
+  font-family: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", Inter, sans-serif;
+  font-size: clamp(48px, 4.15vw, 68px);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.035;
+  text-wrap: balance;
+}
+
+/* Dark-section version of the How We Build left-to-right heading fill. */
+.beliefsHeadingFill {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  background-image:
+    linear-gradient(90deg, #ffffff 0%, #ffffff 100%),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.16) 100%);
+  background-repeat: no-repeat;
+  background-size: 0% 100%, 100% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.display .word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+.display .wordInner {
+  display: inline-block;
+  will-change: transform;
+}
+
+.description {
+  max-width: 58ch;
+  margin: clamp(28px, 3vw, 44px) 0 0;
+  color: var(--muted);
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: clamp(16px, 1.15vw, 19px);
+  line-height: 1.62;
+  text-wrap: pretty;
+}
+
+/* ---------- Progress hairline ---------- */
+
+.progressLine {
+  position: relative;
+  height: 1px;
+  margin-bottom: clamp(20px, 2vw, 32px);
+  background: var(--hairline);
+}
+
+.progressFill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 100%;
+  background: linear-gradient(90deg, var(--accent-deep), var(--accent-bright));
+  transform: scaleX(0);
+  transform-origin: left center;
+  will-change: transform;
+}
+
+/* ---------- Principles ---------- */
+
+.principles {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.principle {
+  position: relative;
+  padding: clamp(48px, 5.5vw, 80px) 0;
+}
+
+/* Drawn divider at the top of each principle (replaces static border-top). */
+.principleRule {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, var(--accent) 0%, var(--hairline-bright) 40%, transparent 100%);
+  transform: scaleX(0);
+  transform-origin: left center;
+  will-change: transform;
+  z-index: 2;
+}
+
+/* Ghost watermark numeral behind each principle. */
+.principleWatermarkWrap {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.principleWatermark {
+  position: absolute;
+  right: clamp(-20px, -2vw, 0px);
+  top: 50%;
+  transform: translateY(-50%);
+  margin: 0;
+  color: var(--watermark);
+  font-family: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", sans-serif;
+  font-size: clamp(180px, 24vw, 380px);
+  font-weight: 800;
+  letter-spacing: -0.08em;
+  line-height: 0.78;
+  font-variant-numeric: tabular-nums;
+  user-select: none;
+  transition: color 600ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+.principle:hover .principleWatermark {
+  color: rgba(255, 255, 255, 0.09);
+}
+
+.principleInner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: clamp(110px, 13vw, 190px) minmax(0, 1fr);
+  gap: clamp(24px, 4vw, 72px);
+  will-change: transform;
+}
+
+.principleMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 8px;
+}
+
+.principleNumber {
+  color: var(--accent-bright);
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  font-variant-numeric: tabular-nums;
+  transition: text-shadow 500ms ease;
+}
+
+.principle:hover .principleNumber {
+  text-shadow: 0 0 24px rgba(79, 208, 163, 0.5);
+}
+
+.principleLabel {
+  color: var(--muted);
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.principleBody {
+  min-width: 0;
+}
+
+.principleThesis {
+  margin: 0;
+  max-width: 22ch;
+  color: var(--ink);
+  font-family: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", sans-serif;
+  font-size: clamp(28px, 3.4vw, 52px);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.04;
+  text-wrap: balance;
+  will-change: transform;
+}
+
+.principleThesis .word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: 0.09em;
+  margin-bottom: -0.09em;
+}
+
+.principleThesis .wordInner {
+  display: inline-block;
+  will-change: transform;
+}
+
+/* Underline that draws beneath the thesis on hover. */
+.principleThesis::after {
+  content: "";
+  display: block;
+  width: 0;
+  height: 2px;
+  margin-top: clamp(14px, 1.6vw, 22px);
+  background: linear-gradient(90deg, var(--accent-bright), var(--accent-deep));
+  transition: width 600ms cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 1px;
+}
+
+.principle:hover .principleThesis::after {
+  width: clamp(60px, 8vw, 120px);
+}
+
+.principleCopy {
+  max-width: 62ch;
+  margin: clamp(24px, 2.6vw, 36px) 0 0;
+  color: var(--ink-soft);
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 16px;
+  line-height: 1.68;
+  text-wrap: pretty;
+}
+
+.principlePractice {
+  max-width: 58ch;
+  margin: clamp(22px, 2.4vw, 32px) 0 0;
+  padding: 14px 0 0;
+  border-top: 1px solid var(--hairline);
+  color: var(--ink-soft);
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 14.5px;
+  line-height: 1.6;
+  text-wrap: pretty;
+  transition: border-color 500ms ease;
+}
+
+.principle:hover .principlePractice {
+  border-color: var(--hairline-bright);
+}
+
+.principlePractice span {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--accent-bright);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* ---------- Disqualifier (editorial split, no box) ---------- */
+
+.disqualifier {
+  margin: clamp(64px, 7vw, 100px) 0 0;
+  position: relative;
+  padding: clamp(56px, 6vw, 88px) 0 0;
+}
+
+.disqualifierRule {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, var(--accent) 0%, var(--hairline-bright) 50%, transparent 100%);
+  transform: scaleX(0);
+  transform-origin: left center;
+  will-change: transform;
+}
+
+.disqualifierSplit {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  gap: clamp(36px, 5vw, 80px);
+  align-items: start;
+}
+
+.disqualifierLeft {
+  min-width: 0;
+}
+
+.disqualifierMark {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: clamp(20px, 2.4vw, 30px);
+  color: var(--accent-bright);
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.disqualifierMark::before {
+  content: "✕";
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0;
+  opacity: 0.7;
+}
+
+.disqualifierStatement {
+  margin: 0;
+  max-width: 20ch;
+  color: var(--ink);
+  font-family: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", sans-serif;
+  font-size: clamp(26px, 2.8vw, 42px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+.disqualifierCopy {
+  margin: 0;
+  max-width: 56ch;
+  color: var(--muted);
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 15.5px;
+  line-height: 1.7;
+  text-wrap: pretty;
+  padding-top: clamp(28px, 3vw, 40px);
+}
+
+.disqualifierCopy strong {
+  color: var(--ink-soft);
+  font-weight: 600;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 1280px) {
+  .display {
+    font-size: clamp(46px, 4.75vw, 60px);
+  }
+}
+
+@media (max-width: 1024px) {
+  .display {
+    font-size: clamp(42px, 5.35vw, 54px);
+    line-height: 1.05;
+    letter-spacing: -0.022em;
+  }
+}
+
+@media (max-width: 820px) {
+  .display {
+    font-size: clamp(40px, 5.8vw, 47px);
+  }
+}
+
+
+@media (max-width: 880px) {
+  .principleInner {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .principleMeta {
+    flex-direction: row;
+    gap: 16px;
+    padding-top: 0;
+  }
+
+  .disqualifierSplit {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .disqualifierCopy {
+    padding-top: 0;
+  }
+}
+
+@media (max-width: 680px) {
+  .section {
+    padding: 88px 0 64px;
+  }
+
+  .shell {
+    width: calc(100% - 32px);
+  }
+
+  .heading {
+    margin-bottom: 48px;
+  }
+
+  .display {
+    font-size: clamp(34px, 9.2vw, 44px);
+    line-height: 1.065;
+    letter-spacing: -0.02em;
+  }
+
+  .principle {
+    padding: 40px 0;
+  }
+
+  .principleThesis {
+    font-size: 30px;
+  }
+
+  .principleWatermark {
+    font-size: clamp(140px, 30vw, 220px);
+    opacity: 0.7;
+  }
+
+  .disqualifierStatement {
+    font-size: 26px;
+  }
+
+}
+
+@media (max-width: 430px) {
+  .display {
+    font-size: clamp(31px, 8.6vw, 37px);
+    line-height: 1.075;
+  }
+}
+
+@media (max-width: 360px) {
+  .display {
+    font-size: 30px;
+    line-height: 1.08;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .beliefsHeadingFill {
+    background-size: 100% 100%, 100% 100%;
+  }
+
+  .wipe {
+    display: none;
+  }
+
+  .ambientGrid {
+    transform: none !important;
+  }
+
+  .display .wordInner,
+  .principleThesis .wordInner {
+    transform: none !important;
+  }
+
+  .progressFill,
+  .principleRule,
+  .disqualifierRule {
+    transform: scaleX(1) !important;
+  }
+
+  .principleWatermark {
+    transform: translateY(-50%) !important;
+  }
+
+  .principleThesis::after {
+    width: clamp(60px, 8vw, 120px) !important;
+  }
+}

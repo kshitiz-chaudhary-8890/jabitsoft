@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { SiX, SiInstagram, SiDribbble } from "react-icons/si";
+import { SiX, SiInstagram, SiFacebook, SiBehance } from "react-icons/si";
 import { FaLinkedin } from "react-icons/fa6";
 import jabitLogo from "../../../assets/jabit-logo.png";
 
@@ -9,23 +9,23 @@ const footerGroups = [
   {
     title: "Services",
     links: [
-      ["Agentic AI Development", "#services"],
-      ["Cloud Consulting", "#services"],
-      ["Mobile App Development", "#services"],
-      ["ERP Solutions", "#services"],
-      ["Web Development", "#services"],
-      ["SEO & Digital Marketing", "#services"],
+      ["Agentic AI Development", "/#services"],
+      ["Cloud Consulting", "/#services"],
+      ["Mobile App Development", "/#services"],
+      ["ERP Solutions", "/#services"],
+      ["Web Development", "/#services"],
+      ["SEO & Digital Marketing", "/#services"],
     ],
   },
   {
     title: "Company",
     links: [
-      ["About Us", "#about"],
-      ["Recent Works", "#works"],
-      ["Our Services", "#services"],
-      ["Careers", "#careers"],
-      ["Blog", "#blog"],
-      ["Contact", "mailto:hello@jabitsoft.com"],
+      ["About Us", "/about-us"],
+      ["Recent Works", "/#works"],
+      ["Our Services", "/#services"],
+      ["Careers", "/careers"],
+      ["Blog", "/blog"],
+      ["Contact", "/contact-us"],
     ],
   },
 ];
@@ -52,11 +52,15 @@ function SocialIcon({ type }) {
     return <SiX {...common} />;
   }
 
+  if (type === "behance") {
+    return <SiBehance {...common} />;
+  }
+
   if (type === "instagram") {
     return <SiInstagram {...common} />;
   }
 
-  return <SiDribbble {...common} />;
+  return <SiFacebook {...common} />;
 }
 
 export default function Footer() {
@@ -66,9 +70,7 @@ export default function Footer() {
     const footer = footerRef.current;
     if (!footer) return undefined;
 
-    const reduced = window.matchMedia?.(
-      "(prefers-reduced-motion: reduce)",
-    )?.matches;
+    const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
 
     if (reduced || !("IntersectionObserver" in window)) {
       footer.classList.add("jabit-footer--visible");
@@ -110,25 +112,23 @@ export default function Footer() {
 
             <div className="jabit-footer__cta-right">
               <p className="jabit-footer__cta-copy">
-                From strategy and design to engineering and launch, JabitSoft
-                helps teams build software products that are reliable,
-                maintainable, and ready to grow.
+                From strategy and design to engineering and launch, JabitSoft helps teams build
+                software products that are reliable, maintainable, and ready to grow.
               </p>
 
               <div className="jabit-footer__cta-actions">
                 <a
                   className="jabit-footer__cta-button"
-                  href="mailto:hello@jabitsoft.com"
+                  href="/contact-us"
+                  data-site-button
+                  data-button-variant="primary"
                 >
                   <span>Start a Project</span>
                   <ArrowUpRight />
                 </a>
 
-                <a
-                  className="jabit-footer__cta-email"
-                  href="mailto:hello@jabitsoft.com"
-                >
-                  hello@jabitsoft.com
+                <a className="jabit-footer__cta-email" href="mailto:info@jabitsoft.com">
+                  info@jabitsoft.com
                 </a>
               </div>
             </div>
@@ -139,7 +139,7 @@ export default function Footer() {
           <div className="jabit-footer__card">
             <div className="jabit-footer__top">
               <div className="jabit-footer__brand-block">
-                <a className="jabit-footer__brand" href="#top" aria-label="JabitSoft home">
+                <a className="jabit-footer__brand" href="/" aria-label="JabitSoft home">
                   <img
                     className="jabit-footer__brand-logo"
                     src={jabitLogo.src}
@@ -152,41 +152,87 @@ export default function Footer() {
                 </a>
 
                 <p>
-                  JabitSoft is a software services company building scalable
-                  web platforms, mobile applications, cloud systems, ERP
-                  solutions, AI products, and digital growth experiences for
-                  businesses worldwide.
+                  JabitSoft is a software services company building scalable web platforms, mobile
+                  applications, cloud systems, ERP solutions, AI products, and digital growth
+                  experiences for businesses worldwide.
                 </p>
 
                 <div className="jabit-footer__contact-list">
-                  <a href="mailto:hello@jabitsoft.com">
+                  <a href="mailto:info@jabitsoft.com">
                     <span className="jabit-footer__contact-label">Email</span>
-                    <strong>hello@jabitsoft.com</strong>
+                    <strong>info@jabitsoft.com</strong>
                   </a>
 
-                  <div>
+                  <a href="tel:+919091006600">
                     <span className="jabit-footer__contact-label">Phone</span>
-                    <strong>+91 XXXXX XXXXX</strong>
-                  </div>
+                    <strong>+91 9091006600</strong>
+                  </a>
 
-                  <div>
-                    <span className="jabit-footer__contact-label">Office</span>
-                    <strong>New Delhi, India</strong>
-                  </div>
+                  <a
+                    href="https://maps.app.goo.gl/HToXh1CiDk6EMyNe9"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <span className="jabit-footer__contact-label">Head office</span>
+                    <strong>
+                      Tower A, Stellar IT Park, Office 3, 6th Floor, Sector 62, Noida, Uttar Pradesh
+                      201309
+                    </strong>
+                  </a>
+
+                  <a
+                    href="https://maps.app.goo.gl/dEU7yQS3yqio5n8i6"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <span className="jabit-footer__contact-label">Branch</span>
+                    <strong>
+                      Office 514, 5th Floor, Jyoti Shikhar Building, District Centre, Janakpuri, New
+                      Delhi 110058
+                    </strong>
+                  </a>
                 </div>
 
                 <div className="jabit-footer__socials" aria-label="JabitSoft social links">
-                  <a href="https://linkedin.com" target="_blank" rel="noreferrer" aria-label="LinkedIn">
+                  <a
+                    href="https://in.linkedin.com/company/jabit-soft"
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label="LinkedIn"
+                  >
                     <SocialIcon type="linkedin" />
                   </a>
-                  <a href="https://x.com" target="_blank" rel="noreferrer" aria-label="X">
+                  <a
+                    href="https://twitter.com/jabitsoft"
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label="X"
+                  >
                     <SocialIcon type="x" />
                   </a>
-                  <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram">
+                  <a
+                    href="https://www.instagram.com/jabitsoftofficial/"
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label="Instagram"
+                  >
                     <SocialIcon type="instagram" />
                   </a>
-                  <a href="https://dribbble.com" target="_blank" rel="noreferrer" aria-label="Dribbble">
-                    <SocialIcon type="dribbble" />
+                  <a
+                    href="https://www.facebook.com/jabitsoft"
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label="Facebook"
+                  >
+                    <SocialIcon type="facebook" />
+                  </a>
+                  <a
+                    href="https://www.behance.net/jabitsoft"
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label="Behance"
+                  >
+                    <SocialIcon type="behance" />
                   </a>
                 </div>
               </div>
@@ -204,9 +250,7 @@ export default function Footer() {
                           <a
                             href={href}
                             key={label}
-                            {...(external
-                              ? { target: "_blank", rel: "noreferrer" }
-                              : {})}
+                            {...(external ? { target: "_blank", rel: "noreferrer" } : {})}
                           >
                             {label}
                           </a>
@@ -220,7 +264,7 @@ export default function Footer() {
                   <h3>Business</h3>
                   <div className="jabit-footer__business-copy">
                     <p>Have a project, partnership, or support request?</p>
-                    <a href="mailto:hello@jabitsoft.com">
+                    <a href="/contact-us">
                       Talk to our team <ArrowUpRight />
                     </a>
                   </div>
@@ -231,9 +275,7 @@ export default function Footer() {
             <div className="jabit-footer__divider" />
 
             <div className="jabit-footer__bottom footer-bottom">
-              <span>
-                © {new Date().getFullYear()} JabitSoft. All rights reserved.
-              </span>
+              <span>© {new Date().getFullYear()} JabitSoft. All rights reserved.</span>
 
               <div className="jabit-footer__legal">
                 <a href="#terms">Terms of Service</a>
@@ -243,7 +285,9 @@ export default function Footer() {
           </div>
 
           <div className="jabit-footer__wordmark-wrap" aria-hidden="true">
-            <div className="jabit-footer__wordmark">JabitSoft<span>.</span></div>
+            <div className="jabit-footer__wordmark">
+              JabitSoft<span>.</span>
+            </div>
           </div>
         </section>
       </footer>
@@ -583,7 +627,7 @@ export default function Footer() {
         .jabit-footer__contact-list > a,
         .jabit-footer__contact-list > div {
           display: grid;
-          grid-template-columns: 74px minmax(0, 1fr);
+          grid-template-columns: 88px minmax(0, 1fr);
           gap: 18px;
           padding: 12px 0;
           align-items: center;
@@ -603,6 +647,7 @@ export default function Footer() {
         .jabit-footer__contact-list strong {
           font-size: 13px;
           font-weight: 500;
+          line-height: 1.55;
         }
 
         .jabit-footer__contact-list a:hover strong {
@@ -843,7 +888,7 @@ export default function Footer() {
 
           .jabit-footer__contact-list > a,
           .jabit-footer__contact-list > div {
-            grid-template-columns: 66px minmax(0, 1fr);
+            grid-template-columns: 82px minmax(0, 1fr);
           }
 
           .jabit-footer__bottom {

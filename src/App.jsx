@@ -2,31 +2,31 @@ import { Fragment, useEffect, useLayoutEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Hero from "./components/sections/home/Hero/Hero.jsx";
-import ClientMarquee from "./components/sections/home/ClientMarquee/ClientMarquee.jsx";
-import DualMarquee from "./components/sections/home/DualMarquee/DualMarquee.jsx";
-import Intro from "./components/sections/home/Intro/intro";
-import RecentWorks from "./components/sections/home/RecentWorks/RecentWorks.jsx";
-import ServiceDirectory from "./components/sections/home/Services/ServiceDirectory.jsx";
+import Hero from "./components/pages/home/Hero/Hero.jsx";
+import ClientMarquee from "./components/pages/home/ClientMarquee/ClientMarquee.jsx";
+import DualMarquee from "./components/pages/home/DualMarquee/DualMarquee.jsx";
+import Intro from "./components/pages/home/Intro/intro";
+import RecentWorks from "./components/pages/home/RecentWorks/RecentWorks.jsx";
+import ServiceDirectory from "./components/pages/home/Services/ServiceDirectory.jsx";
 import Footer from "./components/layout/Footer/Footer.jsx";
 import jabitLogo from "./assets/jabit-logo.png";
 
 const ClientResults = dynamic(() =>
-  import("./components/sections/home/ClientResults/ClientResults.jsx"),
+  import("./components/pages/home/ClientResults/ClientResults.jsx"),
 );
 const HowWeBuild = dynamic(() =>
-  import("./components/sections/home/HowWeBuild/HowWeBuild"),
+  import("./components/pages/home/HowWeBuild/HowWeBuild"),
 );
 const CompanyStats = dynamic(() =>
-  import("./components/sections/home/CompanyStats/CompanyStats.jsx"),
+  import("./components/pages/home/CompanyStats/CompanyStats.jsx"),
 );
 const ProblemsWeSolve = dynamic(() =>
-  import("./components/sections/home/ProblemsWeSolve/ProblemsWeSolve"),
+  import("./components/pages/home/ProblemsWeSolve/ProblemsWeSolve"),
 );
 const LatestBlog = dynamic(() =>
-  import("./components/sections/home/LatestBlog/LatestBlog.jsx"),
+  import("./components/pages/home/LatestBlog/LatestBlog.jsx"),
 );
-const FAQ = dynamic(() => import("./components/sections/home/FAQ/FAQ.jsx"));
+const FAQ = dynamic(() => import("./components/pages/home/FAQ/FAQ.jsx"));
 
 const media = {
   founders: [

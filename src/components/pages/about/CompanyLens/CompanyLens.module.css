@@ -1,0 +1,428 @@
+.section,
+.section * {
+  box-sizing: border-box;
+}
+
+.section {
+  --lens-ink: #17201d;
+  --lens-muted: #67716d;
+  --lens-green: #0d5d45;
+  --lens-line: rgba(23, 32, 29, 0.14);
+  position: relative;
+  padding: var(--about-section-space) 0;
+  overflow: clip;
+  background: #ffffff;
+  color: var(--lens-ink);
+}
+
+.shell {
+  width: var(--about-shell-width);
+  margin-inline: auto;
+}
+
+.intro {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(280px, 0.52fr);
+  gap: 30px clamp(40px, 8vw, 140px);
+  align-items: end;
+  margin-bottom: var(--about-heading-gap);
+}
+
+.eyebrow {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: var(--about-eyebrow-color);
+  font: var(--about-eyebrow-font);
+  letter-spacing: var(--about-eyebrow-tracking);
+}
+
+.display {
+  max-width: 780px;
+  margin: 0;
+  color: var(--about-heading-color);
+  font-family: "Cal Sans", var(--font-plus-jakarta-sans), sans-serif;
+  font-weight: 400;
+  letter-spacing: var(--about-heading-tracking);
+  line-height: var(--about-heading-leading);
+  text-wrap: balance;
+}
+
+.lede {
+  max-width: 520px;
+  margin: 0;
+  color: var(--lens-muted);
+  font: 400 var(--about-copy-size) / var(--about-copy-leading) var(--font-inter), Inter, sans-serif;
+  text-wrap: pretty;
+}
+
+.field {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(340px, 0.62fr);
+  gap: clamp(44px, 7vw, 108px);
+  align-items: start;
+}
+
+.readings {
+  border-top: 1px solid var(--lens-ink);
+}
+
+.readingsHeader {
+  display: flex;
+  min-height: 52px;
+  padding-inline: 18px;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--lens-line);
+  color: var(--lens-muted);
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.reading {
+  position: relative;
+  display: grid;
+  width: 100%;
+  min-height: 118px;
+  padding: 24px 18px;
+  grid-template-columns: 12px minmax(150px, 0.58fr) minmax(220px, 1fr);
+  gap: clamp(18px, 3vw, 42px);
+  align-items: center;
+  border: 0;
+  border-bottom: 1px solid var(--lens-line);
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: padding 260ms ease, background-color 260ms ease, color 260ms ease;
+}
+
+.reading:hover,
+.reading:focus-visible,
+.reading[data-state="on"] {
+  padding-inline: 24px 12px;
+  background: #111513;
+  color: #fff;
+}
+
+.reading:focus-visible {
+  outline: 3px solid rgba(13, 93, 69, 0.3);
+  outline-offset: -3px;
+}
+
+.readingTick {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #9ab4a6;
+  box-shadow: 0 0 0 5px rgba(13, 93, 69, 0.08);
+  transition: background-color 220ms ease, box-shadow 220ms ease;
+}
+
+.reading:hover .readingTick,
+.reading:focus-visible .readingTick,
+.reading[data-state="on"] .readingTick {
+  background: #b8dbc7;
+  box-shadow: 0 0 0 5px rgba(184, 219, 199, 0.13);
+}
+
+.readingLabel {
+  font-family: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", sans-serif;
+  font-size: clamp(20px, 1.7vw, 26px);
+  font-weight: 500;
+  line-height: 1.18;
+  letter-spacing: -0.03em;
+}
+
+.readingPhrase {
+  max-width: 520px;
+  color: var(--lens-muted);
+  font-size: 14px;
+  line-height: 1.62;
+  transition: color 220ms ease;
+}
+
+.reading:hover .readingPhrase,
+.reading:focus-visible .readingPhrase,
+.reading[data-state="on"] .readingPhrase {
+  color: rgba(255, 255, 255, 0.66);
+}
+
+.signal {
+  position: sticky;
+  top: 120px;
+  min-height: 590px;
+  padding: clamp(32px, 4vw, 50px);
+  overflow: hidden;
+  border-radius: 28px;
+  background: #111513;
+  color: #f7faf8;
+  isolation: isolate;
+}
+
+.signal::before {
+  position: absolute;
+  right: -38%;
+  bottom: -24%;
+  z-index: -1;
+  width: 430px;
+  aspect-ratio: 1;
+  border: 1px solid rgba(184, 219, 199, 0.13);
+  border-radius: 50%;
+  box-shadow: 0 0 0 74px rgba(184, 219, 199, 0.035), 0 0 0 148px rgba(184, 219, 199, 0.02);
+  content: "";
+}
+
+.signalKicker {
+  display: block;
+  color: #a9d5bd;
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.outcome {
+  max-width: 430px;
+  margin: 28px 0 0;
+  font-family: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", sans-serif;
+  font-size: clamp(28px, 3vw, 42px);
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+.activeReadout {
+  min-height: 138px;
+  margin-top: 44px;
+  padding: 22px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.activeReadout > span {
+  color: #b8dbc7;
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: 0.06em;
+}
+
+.activeReadout p {
+  max-width: 440px;
+  margin: 12px 0 0;
+  color: rgba(247, 250, 248, 0.62);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.gauge {
+  margin-top: 30px;
+}
+
+.gaugeTitle {
+  margin: 0 0 20px;
+  color: rgba(247, 250, 248, 0.58);
+  font-family: var(--font-inter), Inter, sans-serif !important;
+  font-size: 10px !important;
+  font-weight: 650 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.13em !important;
+  text-transform: uppercase;
+}
+
+.gaugeList {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  gap: 12px;
+  list-style: none;
+}
+
+.gaugeItem {
+  display: grid;
+  grid-template-columns: minmax(150px, 0.72fr) minmax(80px, 1fr);
+  gap: 18px;
+  align-items: center;
+  color: rgba(247, 250, 248, 0.7);
+  transition: color 220ms ease, opacity 220ms ease;
+}
+
+.gaugeName {
+  font-size: 12px;
+  line-height: 1.25;
+}
+
+.gaugeBar {
+  height: 3px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.gaugeBar::after {
+  display: block;
+  width: 34%;
+  height: 100%;
+  border-radius: inherit;
+  background: #789b89;
+  content: "";
+  transform-origin: left;
+  transition: width 320ms cubic-bezier(0.22, 1, 0.36, 1), background-color 220ms ease;
+}
+
+.gaugeItem[data-state="off"] {
+  opacity: 0.3;
+}
+
+.gaugeItem[data-state="on"] {
+  color: #fff;
+}
+
+.gaugeItem[data-state="on"] .gaugeBar::after {
+  width: 100%;
+  background: #b8dbc7;
+}
+
+.close {
+  display: grid;
+  margin-top: clamp(44px, 6vw, 82px);
+  padding: 30px 0;
+  grid-template-columns: minmax(180px, 0.35fr) minmax(280px, 1fr);
+  gap: 30px clamp(40px, 8vw, 130px);
+  align-items: center;
+  border-top: 1px solid var(--lens-ink);
+  border-bottom: 1px solid var(--lens-line);
+}
+
+.close > span {
+  color: var(--lens-green);
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.close p {
+  max-width: 760px;
+  margin: 0;
+  font-family: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", sans-serif;
+  font-size: clamp(20px, 2vw, 28px);
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.03em;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 980px) {
+  .field {
+    grid-template-columns: 1fr;
+  }
+
+  .signal {
+    position: relative;
+    top: auto;
+    min-height: 0;
+  }
+
+  .gaugeList {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px 26px;
+  }
+
+  .gaugeItem {
+    grid-template-columns: minmax(130px, 0.75fr) 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .intro {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .eyebrow {
+    grid-column: auto;
+    margin-bottom: -4px;
+  }
+
+  .field {
+    gap: 34px;
+  }
+
+  .readingsHeader {
+    padding-inline: 0;
+  }
+
+  .reading {
+    min-height: 0;
+    padding: 24px 0;
+    grid-template-columns: 10px 1fr;
+    gap: 10px 16px;
+  }
+
+  .reading:hover,
+  .reading:focus-visible,
+  .reading[data-state="on"] {
+    padding-inline: 14px;
+  }
+
+  .readingPhrase {
+    grid-column: 2;
+  }
+
+  .signal {
+    padding: 30px 24px;
+    border-radius: 22px;
+  }
+
+  .outcome {
+    font-size: clamp(28px, 8vw, 36px);
+  }
+
+  .gaugeList {
+    grid-template-columns: 1fr;
+  }
+
+  .close {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+}
+
+@media (max-width: 420px) {
+  .readingsHeader span:last-child {
+    display: none;
+  }
+
+  .signal {
+    padding: 28px 20px;
+  }
+
+  .gaugeItem {
+    grid-template-columns: minmax(128px, 0.8fr) 1fr;
+    gap: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reading,
+  .readingTick,
+  .readingPhrase,
+  .gaugeItem,
+  .gaugeBar::after {
+    transition: none;
+  }
+}

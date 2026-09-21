@@ -1,0 +1,15 @@
+.servicesPage,
+.servicesPage * {
+  box-sizing: border-box;
+}
+
+.servicesPage {
+  width: 100%;
+  min-height: 100vh;
+  background: #ffffff;
+  color: var(--ink);
+}
+
+.servicesPage main {
+  width: 100%;
+}

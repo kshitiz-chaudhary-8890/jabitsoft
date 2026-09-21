@@ -4,6 +4,7 @@
 @import "../styles/animations.css";
 @import "../styles/utilities.css";
 @import "../styles/section-heading-fill.css";
+@import "../styles/button-system.css";
 
 @layer base {
   *,
@@ -14,19 +15,18 @@
 
   html {
     min-width: 320px;
-    overflow-x: hidden;
+    overflow-x: clip;
     background: var(--paper);
   }
 
   body {
     min-width: 320px;
     margin: 0;
-    overflow-x: hidden;
+    overflow-x: clip;
     background: var(--paper);
     color: var(--ink);
     font-family:
       var(--font-inter),
-      var(--font-dm-sans),
       -apple-system,
       BlinkMacSystemFont,
       sans-serif;

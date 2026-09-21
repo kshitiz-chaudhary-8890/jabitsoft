@@ -1,0 +1,470 @@
+/* ==========================================================================
+   JabitSoft Office Gallery — premium bento grid + fullscreen lightbox
+   ========================================================================== */
+
+.section,
+.section * {
+  box-sizing: border-box;
+}
+
+.section {
+  position: relative;
+  width: 100%;
+  padding: var(--about-section-space) 0;
+  overflow: clip;
+  background: #ffffff;
+  color: var(--about-ink);
+}
+
+.shell {
+  width: var(--about-shell-width);
+  margin-inline: auto;
+}
+
+/* ============================= Intro ===================================== */
+
+.intro {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(280px, 0.52fr);
+  align-items: end;
+  gap: 10px clamp(40px, 8vw, 140px);
+  margin-bottom: var(--about-heading-gap, clamp(46px, 5.5vw, 76px));
+}
+
+.eyebrow {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: var(--about-eyebrow-color);
+  font: var(--about-eyebrow-font);
+  letter-spacing: var(--about-eyebrow-tracking);
+}
+
+.intro h2 {
+  max-width: 780px;
+  margin: 0;
+  color: var(--about-heading-color);
+  font-family: "Cal Sans", var(--font-plus-jakarta-sans), sans-serif;
+  font-weight: 400;
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+  text-wrap: balance;
+}
+
+.description {
+  max-width: 520px;
+  margin: 0;
+  color: var(--service-muted, var(--about-copy-color));
+  font:
+    400 clamp(16px, 1.35vw, 20px) / 1.62 var(--font-inter),
+    Inter,
+    sans-serif;
+  text-wrap: pretty;
+}
+
+/* ====================== Editorial contact sheet ========================== */
+
+.galleryHeader {
+  display: flex;
+  min-height: 54px;
+  padding: 14px 0;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #17201d;
+  border-bottom: 1px solid var(--about-line);
+  color: #68746f;
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.bentoGrid {
+  display: grid;
+  margin-top: clamp(22px, 2.6vw, 38px);
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-auto-rows: clamp(82px, 6.1vw, 94px);
+  grid-auto-flow: dense;
+  gap: clamp(12px, 1.25vw, 18px);
+  width: 100%;
+}
+
+.tile {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid rgba(17, 27, 22, 0.07);
+  border-radius: clamp(16px, 1.45vw, 22px);
+  background: #eef2f0;
+  box-shadow: none;
+  cursor: zoom-in;
+  outline: none;
+  isolation: isolate;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tileOne {
+  grid-column: span 8;
+  grid-row: span 5;
+}
+
+.tileTwo {
+  grid-column: span 4;
+  grid-row: span 3;
+}
+
+.tileThree {
+  grid-column: span 4;
+  grid-row: span 2;
+}
+
+.tileFour,
+.tileFive,
+.tileSix {
+  grid-column: span 4;
+  grid-row: span 3;
+}
+
+.tileSeven {
+  grid-column: span 5;
+  grid-row: span 3;
+}
+
+.tileEight {
+  grid-column: span 7;
+  grid-row: span 3;
+}
+
+.tileNine {
+  grid-column: span 12;
+  grid-row: span 4;
+}
+
+.tileImage {
+  object-fit: cover;
+  object-position: center;
+  transform: scale(1.001);
+  transition:
+    transform 0.65s cubic-bezier(0.2, 0.75, 0.2, 1),
+    filter 0.35s ease;
+}
+
+.tile::before {
+  position: absolute;
+  inset: 42% 0 0;
+  z-index: 1;
+  background: linear-gradient(180deg, transparent, rgba(5, 10, 7, 0.78));
+  content: "";
+  pointer-events: none;
+}
+
+.tileMeta {
+  position: absolute;
+  right: clamp(14px, 1.6vw, 24px);
+  bottom: clamp(14px, 1.6vw, 24px);
+  left: clamp(14px, 1.6vw, 24px);
+  z-index: 3;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 16px;
+  align-items: end;
+  color: #fff;
+  text-align: left;
+}
+
+.tileMeta span:first-child {
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 0.11em;
+}
+
+.tileMeta span:last-child {
+  max-width: 52ch;
+  justify-self: end;
+  font-size: clamp(12px, 1vw, 14px);
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.tile::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  pointer-events: none;
+}
+
+.tile:hover .tileImage,
+.tile:focus-visible .tileImage {
+  transform: scale(1.025);
+}
+
+.tile:focus-visible {
+  outline: 3px solid var(--about-accent);
+  outline-offset: 3px;
+}
+
+/* ================================ Lightbox ================================ */
+
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: grid;
+  place-items: center;
+  padding: clamp(14px, 2.6vw, 40px);
+  overscroll-behavior: contain;
+  cursor: zoom-out;
+}
+
+.backdropBg {
+  position: absolute;
+  inset: 0;
+  background: rgba(5, 9, 7, 0.91);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  pointer-events: none;
+}
+
+.modalContent {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  width: min(92vw, 1500px);
+  max-width: 92vw;
+  max-height: calc(100svh - clamp(28px, 5.2vw, 80px));
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  background: #0b100d;
+  box-shadow: 0 34px 90px -18px rgba(0, 0, 0, 0.72);
+  cursor: default;
+}
+
+.imageFrame {
+  position: relative;
+  width: 100%;
+  height: min(76svh, 900px);
+  min-height: 300px;
+  overflow: hidden;
+  background: #070b09;
+}
+
+.imageStage {
+  position: absolute;
+  inset: 0;
+}
+
+.modalImage {
+  object-fit: contain;
+  object-position: center;
+}
+
+.closeBtn,
+.navControl {
+  position: absolute;
+  z-index: 20;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.26);
+  border-radius: 50%;
+  background: rgba(11, 16, 13, 0.74);
+  color: #fff;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  cursor: pointer;
+  outline: none;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.closeBtn {
+  top: 14px;
+  right: 14px;
+}
+
+.navControl {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.navPrev {
+  left: 16px;
+}
+
+.navNext {
+  right: 16px;
+}
+
+.closeBtn:hover,
+.navControl:hover {
+  border-color: #fff;
+  background: #fff;
+  color: #0b100d;
+}
+
+.closeBtn:hover {
+  transform: scale(1.06);
+}
+
+.navControl:hover {
+  transform: translateY(-50%) scale(1.08);
+}
+
+.closeBtn:focus-visible,
+.navControl:focus-visible {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.9);
+}
+
+/* ============================== Responsive ================================ */
+
+@media (max-width: 1100px) {
+  .bentoGrid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-auto-rows: clamp(78px, 10vw, 96px);
+  }
+
+  .tileOne {
+    grid-column: span 6;
+    grid-row: span 3;
+  }
+
+  .tileTwo,
+  .tileThree,
+  .tileFour,
+  .tileFive {
+    grid-column: span 3;
+    grid-row: span 2;
+  }
+
+  .tileSix {
+    grid-column: span 6;
+    grid-row: span 3;
+  }
+
+  .tileSeven,
+  .tileEight {
+    grid-column: span 3;
+    grid-row: span 2;
+  }
+
+  .tileNine {
+    grid-column: span 6;
+    grid-row: span 3;
+  }
+}
+
+@media (max-width: 991px) {
+  .section {
+    padding-top: clamp(84px, 10vw, 112px);
+    padding-bottom: clamp(88px, 10vw, 116px);
+  }
+
+  .intro {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: clamp(42px, 6vw, 58px);
+  }
+
+  .description {
+    margin-top: 8px;
+  }
+
+  .imageFrame {
+    height: min(70svh, 720px);
+  }
+}
+
+@media (max-width: 767px) {
+  .bentoGrid {
+    grid-template-columns: 1fr;
+    grid-auto-rows: auto;
+    gap: 12px;
+  }
+
+  .tileOne,
+  .tileTwo,
+  .tileThree,
+  .tileFour,
+  .tileFive,
+  .tileSix,
+  .tileSeven,
+  .tileEight,
+  .tileNine {
+    grid-column: auto;
+    grid-row: auto;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+  }
+}
+
+@media (max-width: 640px) {
+  .section {
+    padding-top: 72px;
+    padding-bottom: 80px;
+  }
+
+  .intro {
+    margin-bottom: 34px;
+  }
+
+  .tile {
+    border-radius: 15px;
+  }
+
+  .modalBackdrop {
+    padding: 10px;
+  }
+
+  .modalContent {
+    width: calc(100vw - 20px);
+    max-width: none;
+    max-height: calc(100svh - 20px);
+    border-radius: 14px;
+  }
+
+  .imageFrame {
+    height: min(70svh, 560px);
+    min-height: 240px;
+  }
+
+  .closeBtn {
+    top: 10px;
+    right: 10px;
+    width: 38px;
+    height: 38px;
+  }
+
+  .navControl {
+    width: 38px;
+    height: 38px;
+  }
+
+  .navPrev {
+    left: 8px;
+  }
+
+  .navNext {
+    right: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tileImage,
+  .closeBtn,
+  .navControl {
+    transition: none !important;
+  }
+}

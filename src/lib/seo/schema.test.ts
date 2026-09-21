@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { buildHomepageSchema, serializeJsonLd } from "./schema";
+import { buildAboutPageSchema, buildHomepageSchema, serializeJsonLd } from "./schema";
 
 describe("serializeJsonLd", () => {
   it("escapes opening angle brackets to keep JSON-LD out of HTML parsing", () => {
@@ -29,5 +29,29 @@ describe("buildHomepageSchema", () => {
     expect(serialized).toContain('"@type":"WebPage"');
     expect(serialized).toContain('"@type":"Service"');
     expect(serialized).toContain("https://jabitsoft.com/#organization");
+  });
+});
+
+describe("buildAboutPageSchema", () => {
+  it("connects the about page, organization, founder and breadcrumb trail", () => {
+    const schema = buildAboutPageSchema({
+      name: "JabitSoft",
+      legalName: "JabitSoft Pvt. Ltd.",
+      siteUrl: "https://jabitsoft.com",
+      email: "hello@jabitsoft.com",
+      description: "A software development company founded in 2007.",
+      language: "en",
+      founderName: "Baldeep Singh",
+      founderImageUrl: "/images/baldeep-singh-founder.webp",
+      foundingDate: "2007",
+      services: ["Custom Software Development", "ERP Development"],
+    });
+    const serialized = serializeJsonLd(schema);
+
+    expect(serialized).toContain('"@type":"AboutPage"');
+    expect(serialized).toContain('"@type":"Person"');
+    expect(serialized).toContain('"@type":"BreadcrumbList"');
+    expect(serialized).toContain("Baldeep Singh");
+    expect(serialized).toContain("https://jabitsoft.com/about-us#webpage");
   });
 });

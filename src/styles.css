@@ -1,4 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap");
 @import "tailwindcss";
 
 @font-face {
@@ -49,12 +48,12 @@
   /* Homepage system: one shared rhythm across every content section. */
   --home-shell-width: min(1360px, calc(100% - 64px));
   --home-section-space: clamp(72px, 5vw, 88px);
-  --home-heading-size: 50px;
-  --home-heading-line: 54px;
-  --home-eyebrow-size: 15px;
-  --home-eyebrow-line: 23px;
-  --home-body-size: 16px;
-  --home-body-line: 1.65;
+  --home-heading-size: var(--type-section-title-size);
+  --home-heading-line: var(--type-section-title-leading);
+  --home-eyebrow-size: var(--type-eyebrow-size);
+  --home-eyebrow-line: var(--type-eyebrow-leading);
+  --home-body-size: var(--type-lead-size);
+  --home-body-line: var(--type-lead-leading);
   --home-button-height: 50px;
   --home-button-padding: 22px;
   --home-button-size: 14px;
@@ -66,8 +65,8 @@
   :root {
     --home-shell-width: min(1360px, calc(100% - 48px));
     --home-section-space: 76px;
-    --home-heading-size: 46px;
-    --home-heading-line: 50px;
+    --home-heading-size: clamp(40px, 5.5vw, 54px);
+    --home-heading-line: 0.98;
   }
 }
 
@@ -75,9 +74,9 @@
   :root {
     --home-shell-width: min(1360px, calc(100% - 32px));
     --home-section-space: 64px;
-    --home-heading-size: 42px;
-    --home-heading-line: 46px;
-    --home-body-size: 15px;
+    --home-heading-size: var(--type-section-title-size);
+    --home-heading-line: var(--type-section-title-leading);
+    --home-body-size: var(--type-lead-size);
     --home-button-height: 48px;
     --home-button-padding: 20px;
     --home-header-content-gap: 40px;
@@ -87,8 +86,8 @@
 @media (max-width: 380px) {
   :root {
     --home-shell-width: min(1360px, calc(100% - 28px));
-    --home-heading-size: 38px;
-    --home-heading-line: 42px;
+    --home-heading-size: var(--type-section-title-size);
+    --home-heading-line: var(--type-section-title-leading);
   }
 }
 
@@ -100,16 +99,21 @@
 
 html {
   scroll-behavior: smooth;
-  overflow-x: hidden;
+  overflow-x: clip;
   background: var(--paper);
 }
 
 body {
   min-width: 320px;
-  overflow-x: hidden;
+  overflow-x: clip;
   background: var(--paper);
   color: var(--ink);
-  font-family: "Inter", "DM Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family:
+    "Inter",
+    "DM Sans",
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.5;
@@ -139,7 +143,8 @@ main {
     cursor: pointer;
   }
 
-  input, textarea {
+  input,
+  textarea {
     font-family: inherit;
   }
 }
@@ -201,7 +206,11 @@ main {
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.25s var(--ease), background 0.25s, box-shadow 0.25s, color 0.25s;
+  transition:
+    transform 0.25s var(--ease),
+    background 0.25s,
+    box-shadow 0.25s,
+    color 0.25s;
 }
 
 .button:hover {
@@ -250,7 +259,7 @@ main {
 }
 
 .script-eyebrow {
-  color: #00AAFF;
+  color: #00aaff;
   font-family: "Caveat", cursive;
   font-size: 28px;
   font-weight: 700;
@@ -316,8 +325,15 @@ main {
 }
 
 @keyframes pulse-dot {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.7; transform: scale(1.15); }
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.15);
+  }
 }
 
 .site-nav {
@@ -339,7 +355,7 @@ main {
   font-size: 28px;
   font-weight: 800;
   letter-spacing: -0.05em;
-  color: #0099FF;
+  color: #0099ff;
 }
 
 .logo img {
@@ -349,7 +365,7 @@ main {
 }
 
 .logo span {
-  color: #0099FF;
+  color: #0099ff;
 }
 
 .nav-links {
@@ -378,7 +394,7 @@ main {
   left: 0;
   right: 0;
   height: 1.5px;
-  background: #00AAFF;
+  background: #00aaff;
   transform: scaleX(0);
   transform-origin: right;
   transition: transform 0.25s ease;
@@ -460,7 +476,7 @@ main {
 
 .hero h1 em {
   font-style: normal;
-  color: #00AAFF;
+  color: #00aaff;
 }
 
 .inline-image {
@@ -583,8 +599,20 @@ main {
 }
 
 .client-logos {
-  mask-image: linear-gradient(to right, transparent 0, #000 clamp(80px, 10%, 120px), #000 calc(100% - clamp(80px, 10%, 120px)), transparent 100%);
-  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 clamp(80px, 10%, 120px), #000 calc(100% - clamp(80px, 10%, 120px)), transparent 100%);
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 clamp(80px, 10%, 120px),
+    #000 calc(100% - clamp(80px, 10%, 120px)),
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 clamp(80px, 10%, 120px),
+    #000 calc(100% - clamp(80px, 10%, 120px)),
+    transparent 100%
+  );
 }
 
 .client-logo-track {
@@ -666,10 +694,17 @@ main {
   height: 100%;
   overflow: hidden;
   mask-image: linear-gradient(to right, transparent 0%, #000 9%, #000 91%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 9%, #000 91%, transparent 100%);
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    #000 9%,
+    #000 91%,
+    transparent 100%
+  );
 }
 
-.marquee-track, .marquee-track-rev {
+.marquee-track,
+.marquee-track-rev {
   display: flex;
   align-items: center;
   width: max-content;
@@ -704,8 +739,12 @@ main {
 }
 
 @keyframes marquee-anim {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 @media (max-width: 700px) {
@@ -795,7 +834,9 @@ main {
   font-size: 13px;
   font-weight: 600;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s ease, background 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
 }
 
 .service-pill:hover {
@@ -895,7 +936,12 @@ main {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, rgba(10, 10, 10, 0.85) 0%, rgba(10, 10, 10, 0.4) 60%, rgba(10, 10, 10, 0.15) 100%);
+  background: linear-gradient(
+    90deg,
+    rgba(10, 10, 10, 0.85) 0%,
+    rgba(10, 10, 10, 0.4) 60%,
+    rgba(10, 10, 10, 0.15) 100%
+  );
 }
 
 .quote-copy {
@@ -958,11 +1004,13 @@ main {
   color: #ffffff;
   border: 1px solid rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(10px);
-  transition: background 0.2s, transform 0.2s;
+  transition:
+    background 0.2s,
+    transform 0.2s;
 }
 
 .quote-controls button:hover {
-  background: #00AAFF;
+  background: #00aaff;
   transform: scale(1.08);
 }
 
@@ -1183,7 +1231,9 @@ main {
 }
 
 @keyframes seal-spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .founder-copy {
@@ -1343,7 +1393,9 @@ main {
   display: block;
   border-radius: 999px;
   background: #ffffff;
-  transition: transform 0.28s ease, opacity 0.2s ease;
+  transition:
+    transform 0.28s ease,
+    opacity 0.2s ease;
 }
 
 .faq-icon-line-horizontal {
@@ -1365,7 +1417,9 @@ main {
   display: grid;
   grid-template-rows: 0fr;
   opacity: 0;
-  transition: grid-template-rows 0.35s var(--ease), opacity 0.25s ease;
+  transition:
+    grid-template-rows 0.35s var(--ease),
+    opacity 0.25s ease;
 }
 
 .faq-item.is-open .faq-answer {
@@ -1556,7 +1610,7 @@ main {
 
 .form-group input:focus,
 .form-group textarea:focus {
-  border-color: #00AAFF;
+  border-color: #00aaff;
 }
 
 .send-button {
@@ -1625,7 +1679,7 @@ main {
 }
 
 .footer-col a:hover {
-  color: #00AAFF;
+  color: #00aaff;
 }
 
 .footer-bottom {
@@ -1639,7 +1693,7 @@ main {
 }
 
 .back-to-top {
-  color: #00AAFF;
+  color: #00aaff;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
@@ -1816,13 +1870,24 @@ html.lenis {
   #footer-cta-title,
   #how-we-work-title
 ),
+#main-content > :not(:first-child) h2,
 #how-we-work-title [data-heading-line] {
-  font-family: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", Inter, sans-serif !important;
+  font-family:
+    "Cal Sans", "Cal Sans Placeholder", var(--font-plus-jakarta-sans), sans-serif !important;
   font-size: var(--home-heading-size) !important;
-  font-weight: 700 !important;
+  font-weight: 400 !important;
   line-height: var(--home-heading-line) !important;
-  letter-spacing: normal !important;
-  text-transform: capitalize !important;
+  letter-spacing: -0.045em !important;
+}
+
+/* Match the supporting-heading hierarchy used on Services and About. The
+   first main child is the Hero, so its typography remains completely local. */
+#main-content > :not(:first-child) h3 {
+  font-family: var(--type-font-supporting) !important;
+  font-size: var(--type-supporting-title-size) !important;
+  font-weight: var(--type-supporting-title-weight) !important;
+  line-height: var(--type-supporting-title-leading) !important;
+  letter-spacing: var(--type-supporting-title-tracking) !important;
 }
 
 :is(
@@ -1842,13 +1907,13 @@ html.lenis {
   border: 0 !important;
   border-radius: 0 !important;
   background: transparent !important;
-  color: rgb(92, 92, 92) !important;
-  font-family: var(--font-inter), Inter, sans-serif !important;
+  color: #0d5d45 !important;
+  font-family: var(--type-font-body) !important;
   font-size: var(--home-eyebrow-size) !important;
-  font-weight: 500 !important;
+  font-weight: var(--type-eyebrow-weight) !important;
   line-height: var(--home-eyebrow-line) !important;
-  letter-spacing: normal !important;
-  text-transform: none !important;
+  letter-spacing: var(--type-eyebrow-tracking) !important;
+  text-transform: uppercase !important;
 }
 
 #why-jabit header > div:first-child,
@@ -1869,6 +1934,12 @@ html.lenis {
   margin-top: 14px !important;
 }
 
+/* Problems We Solve — black eyebrow (section-local override) */
+#problems header p:first-child,
+#problems header p[class*="eyebrow"]:first-child {
+  color: #141414 !important;
+}
+
 #why-jabit header > div:first-child > span,
 .company-stats-clean__badge > span {
   display: none !important;
@@ -1885,8 +1956,11 @@ html.lenis {
   .latest-blog__header-side > p,
   .faq-ref__subhead,
   .jabit-footer__cta-copy
-) {
-  font-family: var(--font-inter), Inter, sans-serif !important;
+),
+#main-content > :not(:first-child) [class*="description"],
+#main-content > :not(:first-child) [class*="subtitle"],
+#main-content > :not(:first-child) [class*="lede"] {
+  font-family: var(--type-font-body) !important;
   font-size: var(--home-body-size) !important;
   font-weight: 400 !important;
   line-height: var(--home-body-line) !important;
@@ -2019,7 +2093,6 @@ html.lenis {
   .faq-grid {
     grid-template-columns: 1fr;
   }
-
 }
 
 @media (max-width: 640px) {
@@ -2146,8 +2219,8 @@ html.lenis {
 }
 
 .hero-reference .shader-frame iframe {
-  opacity: .22;
-  filter: invert(1) hue-rotate(180deg) saturate(.7) brightness(1.15);
+  opacity: 0.22;
+  filter: invert(1) hue-rotate(180deg) saturate(0.7) brightness(1.15);
   mix-blend-mode: multiply;
 }
 
@@ -2156,7 +2229,11 @@ html.lenis {
   inset: 0;
   content: "";
   pointer-events: none;
-  background: radial-gradient(circle at 50% 44%, rgba(255, 255, 255, .38), rgba(255, 255, 255, .82));
+  background: radial-gradient(
+    circle at 50% 44%,
+    rgba(255, 255, 255, 0.38),
+    rgba(255, 255, 255, 0.82)
+  );
 }
 
 .hero-reference > :not(.shader-frame) {
@@ -2191,9 +2268,10 @@ html.lenis {
   font-family: "Cal Sans", "Cal Sans Placeholder", sans-serif;
   font-size: 72px;
   font-style: normal;
-  font-weight: 400;
-  line-height: 80px;
-  letter-spacing: 0;
+  font-weight: var(--type-hero-title-weight);
+  line-height: var(--type-hero-title-leading);
+  letter-spacing: var(--type-hero-title-tracking);
+  word-spacing: var(--type-hero-title-word-spacing);
 }
 
 .hero-reference .hero-line {
@@ -2224,11 +2302,11 @@ html.lenis {
 }
 
 .hero-reference .hero-line:nth-child(2) .inline-image {
-  animation-delay: .45s;
+  animation-delay: 0.45s;
 }
 
 .hero-reference .hero-line:nth-child(3) .inline-image {
-  animation-delay: .9s;
+  animation-delay: 0.9s;
 }
 
 .hero-reference .inline-image:hover {
@@ -2236,8 +2314,13 @@ html.lenis {
 }
 
 @keyframes hero-image-float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-4px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2281,12 +2364,12 @@ html.lenis {
 
   .hero-reference .inline-image {
     width: 1.25em;
-    height: .92em;
-    vertical-align: -.18em;
+    height: 0.92em;
+    vertical-align: -0.18em;
   }
 
   .hero-reference .hero-image-round {
-    width: .92em;
+    width: 0.92em;
   }
 }
 

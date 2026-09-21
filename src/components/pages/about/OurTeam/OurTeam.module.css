@@ -1,0 +1,332 @@
+.section,
+.section * {
+  box-sizing: border-box;
+}
+
+.section {
+  position: relative;
+  overflow: clip;
+  background: #ffffff;
+  border-top: 1px solid var(--about-line);
+  color: var(--about-ink);
+}
+
+.shell {
+  width: var(--about-shell-width);
+  margin-inline: auto;
+  padding: var(--about-section-space) 0;
+}
+
+/* ---------- Intro ---------- */
+
+.eyebrow {
+  margin: 0 0 var(--about-eyebrow-gap);
+  color: var(--about-heading-color);
+  font: var(--about-eyebrow-font);
+  letter-spacing: var(--about-eyebrow-tracking);
+}
+
+.description {
+  max-width: var(--about-copy-measure);
+  margin: var(--about-copy-gap) 0 0;
+  color: var(--about-copy-color);
+  text-wrap: pretty;
+}
+
+/* ---------- Sub-section label + hairline ---------- */
+
+.subLabel {
+  margin: 0;
+  color: var(--about-heading-color);
+  font:
+    700 12px/1.4 var(--font-inter),
+    Inter,
+    sans-serif;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.stageHead,
+.principlesHead {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.stageHead {
+  margin-top: clamp(56px, 6.5vw, 92px);
+}
+
+.stageHead::after,
+.principlesHead::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--about-line);
+}
+
+/* ---------- Disciplines — selectable list + active narrative ---------- */
+
+.disciplines {
+  display: grid;
+  margin-top: 30px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: clamp(32px, 5vw, 80px);
+  align-items: start;
+}
+
+.discList {
+  display: flex;
+  flex-direction: column;
+}
+
+.discItem {
+  display: flex;
+  width: 100%;
+  padding: 15px 0;
+  border: 0;
+  border-top: 1px solid var(--about-line);
+  background: none;
+  cursor: pointer;
+  gap: 16px;
+  align-items: baseline;
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.discItem:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.discItem:last-child {
+  padding-bottom: 0;
+}
+
+.discIndex {
+  flex: 0 0 auto;
+  color: var(--about-muted);
+  font:
+    600 12px/1.8 var(--font-inter),
+    Inter,
+    sans-serif;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+  transition: color 0.25s ease;
+}
+
+.discName {
+  color: var(--about-muted);
+  font-family: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", sans-serif;
+  font-size: clamp(18px, 1.6vw, 23px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.4;
+  transition:
+    color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.discItem:hover .discName,
+.discItem:focus-visible .discName {
+  color: var(--about-ink);
+  transform: translateX(4px);
+}
+
+.discItemActive .discIndex {
+  color: var(--about-heading-color);
+}
+
+.discItemActive .discName {
+  color: var(--about-ink);
+  font-weight: 600;
+}
+
+.discItem:focus-visible {
+  outline: 2px solid var(--about-heading-color);
+  outline-offset: 3px;
+}
+
+/* Active narrative panel */
+.discPanel {
+  position: relative;
+  min-height: 200px;
+  padding: clamp(8px, 1.5vw, 20px) 0 0 clamp(20px, 2.5vw, 36px);
+  border-left: 2px solid var(--about-heading-color);
+}
+
+.discGhost {
+  position: absolute;
+  top: -14px;
+  right: 0;
+  color: rgb(23 26 31 / 7%);
+  font-family: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", sans-serif;
+  font-size: clamp(88px, 9vw, 150px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+  user-select: none;
+}
+
+.discPanelInner {
+  position: relative;
+  z-index: 1;
+  animation: disc-fade-in 0.4s ease both;
+}
+
+.discRole {
+  margin: 0 0 14px;
+  color: var(--about-muted);
+  font:
+    600 12px/1.4 var(--font-inter),
+    Inter,
+    sans-serif;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.discNarrative {
+  max-width: 34ch;
+  margin: 0;
+  color: var(--about-ink);
+  font-family: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", sans-serif;
+  font-size: clamp(19px, 1.8vw, 26px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.38;
+  text-wrap: balance;
+}
+
+@keyframes disc-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- Operating principles — indexed ledger ---------- */
+
+.principlesSection {
+  margin-top: clamp(64px, 7.5vw, 104px);
+}
+
+.principlesRow {
+  display: grid;
+  margin-top: 26px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(24px, 3vw, 48px);
+}
+
+.principleCol {
+  padding-top: 18px;
+  border-top: 1px solid var(--about-line);
+}
+
+.principleIndex {
+  display: block;
+  color: var(--about-heading-color);
+  font:
+    600 12px/1.4 var(--font-inter),
+    Inter,
+    sans-serif;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+}
+
+.principleTitle {
+  margin: 10px 0 8px;
+  color: var(--about-ink);
+}
+
+.principleCopy {
+  margin: 0;
+  color: var(--about-copy-color);
+  font:
+    400 15.5px/1.65 var(--font-inter),
+    Inter,
+    sans-serif;
+  text-wrap: pretty;
+}
+
+/* ---------- Closing ---------- */
+
+.closing {
+  margin-top: clamp(56px, 6.5vw, 92px);
+  border-top: 1px solid var(--about-line);
+  padding-top: clamp(36px, 4vw, 52px);
+}
+
+.closingStatement {
+  max-width: 26ch;
+  margin: 0 auto;
+  color: var(--about-ink);
+  font-family: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", sans-serif;
+  font-size: clamp(22px, 2.4vw, 34px);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.18;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.closingSoft {
+  color: var(--about-muted);
+  font-weight: 500;
+}
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 991px) {
+  .principlesRow {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .principleCol {
+    padding: 18px 0;
+  }
+
+  .principleCol + .principleCol {
+    border-top: 1px solid var(--about-line);
+  }
+}
+
+@media (max-width: 680px) {
+  .disciplines {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .discPanel {
+    min-height: 0;
+  }
+
+  .discGhost {
+    top: -10px;
+    font-size: 72px;
+  }
+
+  .closingStatement {
+    font-size: 22px;
+  }
+}
+
+/* ---------- Reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .discPanelInner {
+    animation: none;
+  }
+
+  .discName {
+    transition: color 0.25s ease;
+  }
+}

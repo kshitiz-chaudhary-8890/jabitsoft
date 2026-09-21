@@ -1,0 +1,562 @@
+.section,
+.section * {
+  box-sizing: border-box;
+}
+
+/* Shared About-page typography and section rhythm. */
+.section {
+  padding-block: var(--about-section-space);
+}
+
+.shell {
+  width: var(--about-shell-width);
+}
+
+.heading {
+  margin-bottom: var(--about-heading-gap);
+}
+
+.eyebrow {
+  margin-bottom: var(--about-eyebrow-gap);
+}
+
+.display {
+  font-size: var(--about-heading-size) !important;
+  line-height: var(--about-heading-leading);
+}
+
+.description {
+  margin-top: var(--about-copy-gap);
+  font-size: var(--about-copy-size);
+}
+
+.section {
+  --ink: #0e1410;
+  --ink-soft: #2a332e;
+  --muted: #5a6660;
+  --hairline: #e4e7e3;
+  --canvas: #ffffff;
+  --paper: #ffffff;
+  --accent-deep: #0f3c26;
+  --accent: #1f9d6b;
+  --accent-bright: #2bbb87;
+  --mint-veil: #e6f4ec;
+  --grid-line: rgba(15, 60, 38, 0.035);
+
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding: clamp(96px, 10vw, 168px) 0 clamp(80px, 8vw, 140px);
+  background: #ffffff;
+  color: var(--ink);
+}
+
+.ambientGrid {
+  position: absolute;
+  inset: -5% 0;
+  z-index: 0;
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 84px 84px;
+  mask-image: radial-gradient(125% 95% at 50% 28%, #000 18%, transparent 82%);
+  -webkit-mask-image: radial-gradient(125% 95% at 50% 28%, #000 18%, transparent 82%);
+  pointer-events: none;
+  will-change: transform;
+}
+
+.shell {
+  position: relative;
+  z-index: 3;
+  width: min(1360px, calc(100% - clamp(28px, 5vw, 80px)));
+  margin-inline: auto;
+}
+
+/* ---------- Heading ---------- */
+
+.heading {
+  max-width: 1080px;
+  margin: 0 0 clamp(48px, 5vw, 80px);
+}
+
+.eyebrow {
+  display: block;
+  margin: 0 0 clamp(22px, 2.4vw, 34px);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: rgb(92, 92, 92);
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.eyebrow::before {
+  content: none;
+}
+
+.display {
+  margin: 0;
+  max-width: 16ch;
+  color: var(--ink);
+  font-family: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", Inter, sans-serif;
+  font-size: clamp(48px, 4.15vw, 68px);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.035;
+  text-wrap: balance;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2px, 0.4vw, 8px);
+}
+
+.titleLine {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+  text-wrap: balance;
+  background-image:
+    linear-gradient(90deg, var(--ink) 0%, var(--ink) 100%),
+    linear-gradient(90deg, rgba(19, 19, 19, 0.14) 0%, rgba(19, 19, 19, 0.14) 100%);
+  background-repeat: no-repeat;
+  background-size: 0% 100%, 100% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.description {
+  max-width: 60ch;
+  margin: clamp(28px, 3vw, 44px) 0 0;
+  color: var(--muted);
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: clamp(16px, 1.15vw, 19px);
+  line-height: 1.62;
+  text-wrap: pretty;
+}
+
+.signature {
+  display: block;
+  width: clamp(180px, 18vw, 280px);
+  height: auto;
+  margin-top: clamp(20px, 2.2vw, 32px);
+  overflow: visible;
+}
+
+.signature path {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---------- Progress hairline ---------- */
+
+.progressLine {
+  position: relative;
+  height: 1px;
+  margin-bottom: clamp(40px, 4vw, 64px);
+  background: var(--hairline);
+}
+
+.progressFill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 100%;
+  background: linear-gradient(90deg, var(--accent-deep), var(--accent-bright));
+  transform: scaleX(0);
+  transform-origin: left center;
+  will-change: transform;
+}
+
+/* ---------- Expanding system diagram ---------- */
+
+.systemStage {
+  position: relative;
+  will-change: transform;
+  margin: 0 auto clamp(48px, 5vw, 80px);
+}
+
+.systemFrame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 5 / 3;
+  max-width: clamp(720px, 80vw, 1080px);
+  margin: 0 auto;
+}
+
+.systemSvg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.connector {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.2;
+  stroke-linecap: round;
+  opacity: 0.5;
+}
+
+.ringMark {
+  fill: none;
+  stroke: var(--hairline);
+  stroke-width: 0.8;
+  stroke-dasharray: 2 4;
+  opacity: 0.7;
+}
+
+.coreHalo {
+  fill: none;
+  stroke: var(--accent-bright);
+  stroke-width: 0.6;
+  opacity: 0.3;
+}
+
+.core {
+  fill: var(--accent-deep);
+  stroke: var(--accent-bright);
+  stroke-width: 1.4;
+  will-change: transform, opacity;
+}
+
+.corePulse {
+  fill: var(--accent-bright);
+  opacity: 0.35;
+  will-change: transform, opacity;
+  transform-origin: center center;
+}
+
+.nodeMark {
+  fill: var(--accent-deep);
+  stroke: var(--accent-bright);
+  stroke-width: 1.2;
+}
+
+/* Core label */
+.coreLabel {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, calc(-50% + 36px));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  pointer-events: none;
+}
+
+.coreLabelText {
+  color: var(--ink);
+  font-family: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", sans-serif;
+  font-size: clamp(11px, 1vw, 13px);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.coreLabelSub {
+  color: var(--muted);
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* ---------- Direction nodes (overlay) ---------- */
+
+.node {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  will-change: transform, opacity;
+}
+
+.nodeDot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--canvas);
+  border: 2px solid var(--accent-deep);
+  flex: 0 0 auto;
+  transition: border-color 350ms ease, box-shadow 350ms ease, background 350ms ease;
+  box-shadow: 0 0 0 4px rgba(43, 187, 135, 0.08);
+}
+
+.node:hover .nodeDot {
+  background: var(--accent-bright);
+  border-color: var(--accent-bright);
+  box-shadow: 0 0 0 6px rgba(43, 187, 135, 0.18);
+}
+
+.nodeLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  pointer-events: none;
+}
+
+.nodeLabelText {
+  color: var(--accent-deep);
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: clamp(11px, 1vw, 12.5px);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+.labelTop {
+  transform: translate(-50%, -100%);
+  flex-direction: column-reverse;
+  align-items: center;
+  padding-bottom: 16px;
+}
+
+.labelBottom {
+  transform: translate(-50%, 0);
+  flex-direction: column;
+  align-items: center;
+  padding-top: 16px;
+}
+
+.labelRight {
+  transform: translate(0, -50%);
+  flex-direction: row;
+  align-items: center;
+  padding-left: 16px;
+}
+
+.labelLeft {
+  transform: translate(-100%, -50%);
+  flex-direction: row-reverse;
+  align-items: center;
+  padding-right: 16px;
+}
+
+.labelLeft .nodeLabel {
+  align-items: flex-end;
+  text-align: right;
+}
+
+/* ---------- Direction cards (3 broad themes) ---------- */
+
+.directions {
+  list-style: none;
+  margin: 0;
+  padding: clamp(36px, 4vw, 56px) 0 0;
+  border-top: 1px solid var(--hairline);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(32px, 4vw, 64px);
+}
+
+.direction {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(14px, 1.6vw, 22px);
+  position: relative;
+}
+
+.directionNumber {
+  color: var(--accent-deep);
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  font-variant-numeric: tabular-nums;
+}
+
+.directionBody {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.directionLabel {
+  color: var(--accent-deep);
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.directionHeading {
+  margin: 0;
+  max-width: 22ch;
+  color: var(--ink);
+  font-family: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", sans-serif;
+  font-size: clamp(20px, 2vw, 28px);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+.directionCopy {
+  margin: 0;
+  max-width: 36ch;
+  color: var(--ink-soft);
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 14.5px;
+  line-height: 1.65;
+  text-wrap: pretty;
+}
+
+/* ---------- Closing ---------- */
+
+.closing {
+  margin-top: clamp(48px, 5vw, 80px);
+  padding-top: clamp(28px, 3vw, 40px);
+  border-top: 1px solid var(--hairline);
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(16px, 2vw, 28px);
+}
+
+.closingLine {
+  width: clamp(28px, 3vw, 44px);
+  height: 1px;
+  background: var(--accent);
+  margin-top: 12px;
+  flex: 0 0 auto;
+}
+
+.closingBody {
+  margin: 0;
+  max-width: 64ch;
+  color: var(--ink-soft);
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: clamp(15px, 1.2vw, 17px);
+  line-height: 1.7;
+  text-wrap: pretty;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 1280px) {
+  .display {
+    font-size: clamp(46px, 4.75vw, 60px);
+  }
+}
+
+@media (max-width: 1024px) {
+  .display {
+    font-size: clamp(42px, 5.35vw, 54px);
+    line-height: 1.05;
+    letter-spacing: -0.022em;
+  }
+
+  .directions {
+    grid-template-columns: 1fr;
+    gap: clamp(28px, 3vw, 40px);
+  }
+}
+
+@media (max-width: 820px) {
+  .display {
+    font-size: clamp(40px, 5.8vw, 47px);
+  }
+
+  .systemFrame {
+    aspect-ratio: 4 / 5;
+    max-width: 460px;
+  }
+}
+
+@media (max-width: 680px) {
+  .section {
+    padding: 72px 0 64px;
+  }
+
+  .shell {
+    width: calc(100% - 32px);
+  }
+
+  .heading {
+    margin-bottom: 40px;
+  }
+
+  .display {
+    font-size: clamp(34px, 9.2vw, 44px);
+    line-height: 1.065;
+    letter-spacing: -0.02em;
+  }
+
+  .systemFrame {
+    aspect-ratio: 3 / 4;
+    max-width: 400px;
+  }
+
+  .nodeLabelText {
+    font-size: 10.5px;
+  }
+
+  .coreLabel {
+    transform: translate(-50%, calc(-50% + 30px));
+  }
+
+  .directionHeading {
+    font-size: clamp(20px, 5.5vw, 24px);
+  }
+}
+
+@media (max-width: 430px) {
+  .display {
+    font-size: clamp(31px, 8.6vw, 37px);
+    line-height: 1.075;
+  }
+}
+
+@media (max-width: 360px) {
+  .display {
+    font-size: 30px;
+    line-height: 1.08;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .titleLine {
+    background-size: 100% 100%, 100% 100%;
+  }
+
+  .progressFill {
+    transform: scaleX(1) !important;
+  }
+
+  .connector {
+    stroke-dashoffset: 0 !important;
+  }
+
+  .node,
+  .core,
+  .corePulse,
+  .ambientGrid,
+  .systemStage {
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}
+
+/* Final shared rhythm override: mirrors the homepage section scale. */
+.section { padding-block: var(--about-section-space); }
+.shell { width: var(--about-shell-width); }
+.heading { margin-bottom: var(--about-heading-gap); }
+.eyebrow { margin-bottom: var(--about-eyebrow-gap); font-size: var(--about-eyebrow-size); }
+.display { font-size: var(--about-heading-size) !important; line-height: var(--about-heading-leading); }
+.description { margin-top: var(--about-copy-gap); font-size: var(--about-copy-size); }

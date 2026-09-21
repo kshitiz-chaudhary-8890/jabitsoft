@@ -7,7 +7,7 @@ export const company = {
     "JabitSoft builds AI solutions, cloud platforms, mobile apps, ERP systems, SEO programs, and high-performing websites for ambitious organizations worldwide.",
   locale: "en_US",
   language: "en",
-  email: "hello@jabitsoft.com",
+  email: "info@jabitsoft.com",
   services: [
     "Agentic AI Development",
     "Cloud Consulting",

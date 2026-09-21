@@ -4,13 +4,34 @@
    ========================================================================== */
 
 .aboutPage {
-  --about-bg: #f1fbfd;
+  /* Shared About-page rhythm. Individual sections keep their own layouts. */
+  --about-shell-width: min(1280px, calc(100% - clamp(32px, 6vw, 96px)));
+  --about-section-space: clamp(84px, 8vw, 124px);
+  --about-heading-gap: clamp(46px, 5.5vw, 76px);
+  --about-eyebrow-gap: 10px;
+  --about-copy-gap: clamp(20px, 2vw, 28px);
+  --about-eyebrow-size: 12px;
+  --about-eyebrow-font: 600 var(--about-eyebrow-size) / 1.4 var(--font-inter), Inter, sans-serif;
+  --about-eyebrow-tracking: 0.15em;
+  --about-heading-size: clamp(42px, 4.2vw, 60px);
+  --about-heading-leading: 0.98;
+  --about-heading-weight: 400;
+  --about-heading-tracking: -0.045em;
+  --about-copy-size: clamp(16px, 1.35vw, 20px);
+  --about-copy-leading: 1.62;
+  --about-copy-measure: 56ch;
+
+  --about-bg: #ffffff;
   --about-surface: #e6f5f3;
   --about-surface-strong: #d8ebe6;
 
   --about-ink: #062f25;
   --about-text: #526e67;
   --about-muted: #78928b;
+  --about-heading-color: #171a1f;
+  --about-copy-color: #67716d;
+  --about-eyebrow-color: #0d5d45;
+  --about-accent: #0d5d45;
 
   --about-line: #e5e7eb;
   --about-line-strong: #d8dde5;
@@ -24,4 +45,125 @@
 
   background: var(--about-bg);
   color: var(--about-ink);
+  font-family: var(--font-inter), Inter, sans-serif;
+}
+
+.aboutPage main {
+  overflow: clip;
+  background: #ffffff;
+}
+
+/* About is intentionally a continuous white editorial canvas. Components can
+   still use dark cards or media overlays, but every section surface stays white. */
+.aboutPage main > section {
+  background: #ffffff !important;
+}
+
+/*
+ * A single editorial type hierarchy for the About page. Component modules
+ * still control colour, width and layout; these rules only prevent headings
+ * inside richer sections from growing beyond the page's intended scale.
+ */
+.aboutPage main h2 {
+  font-family:
+    "Cal Sans", "Cal Sans Placeholder", var(--font-plus-jakarta-sans), sans-serif !important;
+  font-size: var(--about-heading-size) !important;
+  line-height: var(--about-heading-leading) !important;
+  font-weight: var(--about-heading-weight) !important;
+  letter-spacing: var(--about-heading-tracking) !important;
+}
+
+/* Keep every section eyebrow aligned with the Services page's compact kicker. */
+.aboutPage main > section:not(:first-child) [class*="eyebrow"] {
+  color: var(--about-eyebrow-color) !important;
+  font-family: var(--font-inter), Inter, sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.15em !important;
+  text-transform: uppercase !important;
+}
+
+.aboutPage main h3 {
+  font-family: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", sans-serif !important;
+  font-size: clamp(22px, 1.8vw, 28px) !important;
+  font-weight: 500 !important;
+  line-height: 1.2 !important;
+  letter-spacing: -0.035em !important;
+}
+
+/* Our Story is the page's editorial timeline, so its chapter headlines need
+   more presence than supporting card titles on wide screens. */
+.aboutPage main h3[data-story-head] {
+  font-size: clamp(32px, 3vw, 42px) !important;
+  line-height: 1.02 !important;
+  letter-spacing: -0.04em !important;
+}
+
+.aboutPage main h4 {
+  font-family: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", sans-serif !important;
+  font-size: clamp(18px, 1.45vw, 22px) !important;
+  font-weight: 500 !important;
+  line-height: 1.3 !important;
+  letter-spacing: -0.025em !important;
+}
+
+/* Services uses Inter with a relaxed 1.62 measure for section copy. Keep the
+   same reading rhythm across every named About intro/description treatment.
+   The hero is excluded so it inherits the shared ServiceHero description
+   styles verbatim. */
+.aboutPage main > section:not(:first-child) [class*="description"],
+.aboutPage main > section:not(:first-child) [class*="lede"] {
+  font-family: var(--font-inter), Inter, sans-serif !important;
+  font-size: var(--about-copy-size) !important;
+  font-weight: 400 !important;
+  line-height: var(--about-copy-leading) !important;
+}
+
+@media (max-width: 1024px) and (min-width: 681px) {
+  .aboutPage {
+    --about-shell-width: min(100% - 48px, 920px);
+    --about-section-space: 76px;
+    --about-heading-size: clamp(40px, 5.5vw, 54px);
+    --about-heading-leading: 0.98;
+  }
+
+  .aboutPage main h3[data-story-head] {
+    font-size: clamp(28px, 3.8vw, 34px) !important;
+  }
+}
+
+@media (max-width: 680px) {
+  .aboutPage {
+    --about-shell-width: calc(100% - 32px);
+    --about-section-space: 68px;
+    --about-heading-gap: 40px;
+    --about-eyebrow-gap: 8px;
+    --about-copy-gap: 20px;
+    --about-heading-size: clamp(34px, 9.5vw, 44px);
+    --about-heading-leading: 0.98;
+    --about-copy-size: 16px;
+  }
+
+  .aboutPage main h3 {
+    font-size: 22px !important;
+    line-height: 1.24 !important;
+  }
+
+  .aboutPage main h3[data-story-head] {
+    font-size: 22px !important;
+    line-height: 1.24 !important;
+    letter-spacing: -0.03em !important;
+  }
+
+  .aboutPage main h4 {
+    font-size: 18px !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .aboutPage {
+    --about-heading-size: clamp(32px, 9vw, 36px);
+    --about-heading-leading: 1;
+  }
 }

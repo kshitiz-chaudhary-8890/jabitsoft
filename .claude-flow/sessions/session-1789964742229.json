@@ -1,0 +1,15 @@
+{
+  "id": "session-1789964742229",
+  "startedAt": "2026-09-21T04:25:42.229Z",
+  "cwd": "C:\\Users\\jabit\\jabit-home-refactor",
+  "context": {},
+  "metrics": {
+    "edits": 11,
+    "commands": 0,
+    "tasks": 0,
+    "errors": 0
+  },
+  "restoredAt": "2026-09-21T04:42:34.503Z",
+  "endedAt": "2026-09-21T04:46:03.294Z",
+  "duration": 1221066
+}

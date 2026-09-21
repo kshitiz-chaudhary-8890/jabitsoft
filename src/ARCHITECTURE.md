@@ -4,7 +4,12 @@ The Next.js foundation uses responsibility-based directories and creates them on
 
 - `app/`: App Router layouts, route groups, metadata routes, and route-level boundaries.
 - `components/layout/`: shared Header, Footer, and navigation components when Phase 2 begins.
-- `components/sections/`: visually complete reusable page sections as they are migrated.
+- `components/pages/`: page-owned UI. Each route keeps its sections, local hooks, content, and CSS together.
+  - `pages/home/`: homepage composition and sections.
+  - `pages/about/`: About page composition and sections.
+  - `pages/services/landing/`: the services index page only.
+  - `pages/services/details/`: service-detail registry and shared detail types.
+  - `pages/services/details/<service-slug>/`: every single-service page owns its content and components.
 - `components/ui/`: reusable presentation primitives; currently owns `Container`.
 - `components/providers/`: the root provider composition boundary and future interactive providers.
 - `features/`: domain workflows such as forms, careers, products, and services when implemented.

@@ -1,0 +1,125 @@
+.form {
+  padding-top: clamp(30px, 4vw, 54px);
+}
+.fieldGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 30px 42px;
+  margin-bottom: 30px;
+}
+.field {
+  display: grid;
+  gap: 10px;
+}
+.field > span {
+  color: #39414d;
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: 0.025em;
+}
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid rgb(13 15 18 / 19%);
+  border-radius: 0;
+  background: transparent;
+  color: #0d0f12;
+  outline: 0;
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+.field input,
+.field select {
+  height: 50px;
+  padding: 0 2px;
+}
+.field textarea {
+  min-height: 140px;
+  padding: 12px 2px;
+  resize: vertical;
+  line-height: 1.65;
+}
+.field input::placeholder,
+.field textarea::placeholder {
+  color: #9097a1;
+}
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: #2563eb;
+  box-shadow: 0 1px 0 #2563eb;
+}
+.message {
+  margin-top: 30px;
+}
+.submitRow {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  margin-top: 30px;
+}
+.submitRow button {
+  display: inline-flex;
+  min-height: 52px;
+  padding: 0 23px;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 12px;
+  border: 0;
+  border-radius: 999px;
+  background: #0d0f12;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 650;
+  cursor: pointer;
+}
+.submitRow button:hover {
+  background: #2563eb;
+}
+.submitRow svg {
+  width: 18px;
+  height: 18px;
+}
+.submitRow p {
+  max-width: 410px;
+  margin: 0;
+  color: #737b86;
+  font-size: 11px;
+  line-height: 1.55;
+}
+.status {
+  min-height: 20px;
+  margin: 12px 0 0;
+  color: #2563eb;
+  font-size: 12px;
+  font-weight: 600;
+}
+.honeypot {
+  position: absolute;
+  left: -9999px;
+}
+
+@media (max-width: 700px) {
+  .fieldGrid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .message {
+    margin-top: 24px;
+  }
+  .submitRow {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .field input,
+  .field select,
+  .field textarea {
+    transition: none;
+  }
+}
