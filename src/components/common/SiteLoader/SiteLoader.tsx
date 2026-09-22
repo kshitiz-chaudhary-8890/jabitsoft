@@ -1,15 +1,44 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 
 import styles from "./SiteLoader.module.css";
 
 const WORDS = ["Welcome", "to", "JabitSoft"];
 
+const SEEN_KEY = "jabit-loader-seen";
+
 export function SiteLoader() {
   const [leaving, setLeaving] = useState(false);
   const [gone, setGone] = useState(false);
   const [reduced, setReduced] = useState(false);
+
+  // Runs before paint: repeat visitors never see a flash of the loader,
+  // and server HTML always matches the first client render.
+  useLayoutEffect(() => {
+    let seen = false;
+    try {
+      seen =
+        window.localStorage.getItem(SEEN_KEY) === "1" ||
+        document.cookie.split("; ").some((c) => c === `${SEEN_KEY}=1`);
+    } catch {
+      seen = false;
+    }
+    if (seen) {
+      setGone(true);
+    } else {
+      try {
+        window.localStorage.setItem(SEEN_KEY, "1");
+      } catch {
+        /* storage unavailable */
+      }
+      try {
+        document.cookie = `${SEEN_KEY}=1; max-age=31536000; path=/; SameSite=Lax`;
+      } catch {
+        /* cookies unavailable */
+      }
+    }
+  }, []);
 
   useEffect(() => {
     if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) {
@@ -19,11 +48,11 @@ export function SiteLoader() {
 
     document.documentElement.style.overflow = "hidden";
 
-    const minShow = window.setTimeout(() => setLeaving(true), 2300);
+    const minShow = window.setTimeout(() => setLeaving(true), 2900);
     const kill = window.setTimeout(() => {
       setGone(true);
       document.documentElement.style.overflow = "";
-    }, 3950);
+    }, 4650);
 
     return () => {
       window.clearTimeout(minShow);
@@ -37,7 +66,10 @@ export function SiteLoader() {
   let li = 0;
 
   return (
-    <div className={`${styles.veils} ${leaving ? styles.leaving : ""}`} aria-hidden="true">
+    <div
+      className={`site-loader-veil ${styles.veils} ${leaving ? styles.leaving : ""}`}
+      aria-hidden="true"
+    >
       <h1 className={styles.heading}>
         {WORDS.map((word) => (
           <span key={word} className={styles.word}>

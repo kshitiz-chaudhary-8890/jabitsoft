@@ -12,8 +12,8 @@
   align-items: center;
   justify-content: center;
   gap: 26px;
-  background: #000000;
-  color: #ffffff;
+  background: #ffffff;
+  color: #0c0f16;
   transition: transform 900ms cubic-bezier(0.76, 0, 0.24, 1) 600ms;
   will-change: transform;
 }
@@ -33,7 +33,7 @@
   font-weight: 600;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(12, 15, 22, 0.45);
   opacity: 0;
   animation: loaderFade 700ms ease 1200ms forwards;
 }
@@ -84,7 +84,7 @@
   content: "";
   position: absolute;
   inset: -10% -4%;
-  background: #000000;
+  background: #ffffff;
   transform: scaleX(0);
   transform-origin: left center;
   pointer-events: none;

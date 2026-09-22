@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 export function ScrollRestore() {
   const pathname = usePathname();
   const [veil, setVeil] = useState(false);
+  const [fading, setFading] = useState(false);
 
   useEffect(() => {
     try {
@@ -36,7 +37,14 @@ export function ScrollRestore() {
         // showing one there would flash white over the loader animation.
         if (pathname !== "/") {
           setVeil(true);
-          timer = window.setTimeout(() => setVeil(false), 1500);
+          setFading(false);
+          timer = window.setTimeout(() => {
+            setFading(true);
+            window.setTimeout(() => {
+              setVeil(false);
+              setFading(false);
+            }, 450);
+          }, 350);
         }
       }
 
@@ -57,6 +65,8 @@ export function ScrollRestore() {
         background: "#ffffff",
         zIndex: 9998,
         pointerEvents: "none",
+        opacity: fading ? 0 : 1,
+        transition: "opacity 400ms ease",
       }}
     />
   );

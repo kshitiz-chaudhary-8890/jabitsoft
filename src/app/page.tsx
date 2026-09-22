@@ -14,6 +14,7 @@ export default function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(schema) }}
       />
+      <link rel="preload" href="/videos/hero-tunnel.mp4" as="video" type="video/mp4" />
       <SiteLoader />
       <HomepageClient />
       <SharedCTA

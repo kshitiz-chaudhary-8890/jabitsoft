@@ -6,6 +6,12 @@
 @import "../styles/section-heading-fill.css";
 @import "../styles/button-system.css";
 
+/* Repeat visitors: hide the site loader before first paint (the early
+   head script adds .jl-seen). No flash, no hydration mismatch. */
+.jl-seen .site-loader-veil {
+  display: none !important;
+}
+
 @layer base {
   *,
   *::before,

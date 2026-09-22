@@ -171,10 +171,7 @@ export default function Hero() {
           position: absolute;
           inset: 0;
           z-index: 1;
-          background-image:
-            linear-gradient(90deg, rgba(5, 7, 12, 0.82) 0%, rgba(5, 7, 12, 0.5) 45%, rgba(5, 7, 12, 0.22) 75%),
-            linear-gradient(0deg, rgba(5, 7, 12, 0.9) 0%, rgba(5, 7, 12, 0) 36%),
-            linear-gradient(180deg, rgba(5, 7, 12, 0.55) 0%, rgba(5, 7, 12, 0) 26%);
+          background: transparent;
           pointer-events: none;
         }
 

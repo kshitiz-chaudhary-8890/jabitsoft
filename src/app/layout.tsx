@@ -22,8 +22,13 @@ export default function RootLayout({ children }: RootLayoutProps) {
   );
 
   return (
-    <html lang="en" className={fontVariables}>
+    <html lang="en" className={fontVariables} suppressHydrationWarning>
       <body>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{if(localStorage.getItem("jabit-loader-seen")==="1"){document.documentElement.classList.add("jl-seen")}}catch(e){}`,
+          }}
+        />
         <AppProviders>
           <ScrollRestore />
           <Header />
