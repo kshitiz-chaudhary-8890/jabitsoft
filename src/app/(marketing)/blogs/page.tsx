@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     "Practical JabitSoft insights on app development, cloud consulting, digital marketing, ERP, software, technology and web development.",
   alternates: { canonical: "/blogs" },
   openGraph: {
-    title: "JabitSoft Field Notes",
+    title: "JabitSoft Blogs",
     description: "Practical thinking for teams building dependable digital products and systems.",
     type: "website",
     url: "/blogs",

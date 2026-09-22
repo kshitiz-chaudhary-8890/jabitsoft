@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRef } from "react";
 
 import { caseStudies } from "../data";
+import { SharedCTA } from "@/components/common/SharedCTA/SharedCTA";
 import type { CaseStudyDetail } from "../detailData";
 import styles from "./CaseStudyDetailPage.module.css";
 import { useCaseStudyDetailMotion } from "./useCaseStudyDetailMotion";
@@ -182,7 +183,7 @@ export function CaseStudyDetailPage({ study }: { study: CaseStudyDetail }) {
         </div>
       </section>
 
-      <section className={styles.cta} aria-labelledby="case-study-cta-title">
+      <section className={styles.cta} aria-label="Related work">
         <div className={styles.shell}>
           <p className={styles.ctaIndex} data-detail-reveal>
             04 / Related work
@@ -214,23 +215,17 @@ export function CaseStudyDetailPage({ study }: { study: CaseStudyDetail }) {
               </Link>
             ))}
           </div>
-          <div className={styles.ctaLayout}>
-            <h2 id="case-study-cta-title">
-              <span className="section-heading-fill">Building something similar? Let&apos;s scope it.</span>
-            </h2>
-            <div data-detail-reveal>
-              <p>
-                Start with a focused conversation about the workflow, product or platform you need
-                to move forward.
-              </p>
-              <Link className={styles.ctaButton} href="/#contact" data-case-study-cta data-site-button data-button-variant="primary">
-                Start a conversation <ArrowIcon />
-              </Link>
-              <small>NDA available on request.</small>
-            </div>
-          </div>
         </div>
       </section>
+      <SharedCTA
+        headline={`Building something like ${study.name}?`}
+        lede="Start with a focused conversation about the workflow, product or platform you need to move forward."
+        primaryLabel="Start a conversation"
+        primaryHref="/contact-us"
+        secondaryLabel="Explore our services"
+        secondaryHref="/services"
+        image="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1600&auto=format&fit=crop"
+      />
     </div>
   );
 }

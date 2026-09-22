@@ -24,6 +24,7 @@ import { SiAnthropic, SiCrewai, SiGooglegemini, SiLangchain } from "react-icons/
 
 import { useServiceReveal } from "../landing/useServiceReveal";
 import { ServiceArrow } from "../landing/ServiceArrow";
+import { SharedCTA } from "@/components/common/SharedCTA/SharedCTA";
 import { ServiceHeroVisual } from "./ServiceHeroVisual";
 import type { ServiceDetailData } from "./types";
 import styles from "./ServiceDetailPage.module.css";
@@ -459,33 +460,15 @@ export function ServiceDetailPage({ data }: { data: ServiceDetailData }) {
         </div>
       </section>
 
-      <section className={styles.cta}>
-        <div className={styles.ctaGrid} aria-hidden="true" />
-        <div className={styles.shell}>
-          <header className={styles.ctaHeader} data-reveal>
-            <p>(Let&apos;s Build)</p>
-            <h2>
-              <span className="section-heading-fill">{data.cta.title}</span>
-            </h2>
-            <p className={styles.ctaText}>{data.cta.text}</p>
-          </header>
-          <div className={styles.ctaActions} data-reveal>
-            <Link className={styles.ctaPrimary} href="/#contact" data-site-button data-button-variant="primary">
-              <AnimatedButtonText>{data.cta.button}</AnimatedButtonText>
-              <ServiceArrow />
-            </Link>
-            <Link className={styles.ctaSecondary} href="/services/" data-site-button data-button-variant="secondary">
-              <AnimatedButtonText>Explore our services</AnimatedButtonText>
-            </Link>
-          </div>
-          <div className={styles.ctaBridge} data-reveal aria-hidden="true">
-            <svg viewBox="0 0 1200 40" preserveAspectRatio="none">
-              <path d="M0 20 C 300 4, 600 36, 900 20 C 1050 12, 1150 24, 1200 20" />
-            </svg>
-            <span>JabitSoft · Software that moves the business forward</span>
-          </div>
-        </div>
-      </section>
+      <SharedCTA
+        headline={data.cta.title}
+        lede={data.cta.text}
+        primaryLabel={data.cta.button}
+        primaryHref="/contact-us"
+        secondaryLabel="Explore our services"
+        secondaryHref="/services"
+        image="https://images.unsplash.com/photo-1551434678-e076c223a692?q=80&w=1600&auto=format&fit=crop"
+      />
     </main>
   );
 }

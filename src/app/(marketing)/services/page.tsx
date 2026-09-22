@@ -7,6 +7,7 @@ import { DeliveryProcess } from "@/components/pages/services/landing/DeliveryPro
 import { WhyJabit } from "@/components/pages/services/landing/WhyJabit/WhyJabit";
 import { CapabilityStack } from "@/components/pages/services/landing/CapabilityStack/CapabilityStack";
 import { ServicesFAQ } from "@/components/pages/services/landing/ServicesFAQ/ServicesFAQ";
+import { SharedCTA } from "@/components/common/SharedCTA/SharedCTA";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
@@ -36,6 +37,15 @@ export default function ServicesPage() {
         <CapabilityStack />
         <ServicesFAQ />
       </main>
+      <SharedCTA
+        headline="Need software that holds up?"
+        lede="From first scope to after-launch support — one senior team across web, mobile, cloud, AI and ERP."
+        primaryLabel="Start a conversation"
+        primaryHref="/contact-us"
+        secondaryLabel="See our work"
+        secondaryHref="/case-studies"
+        image="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1600&auto=format&fit=crop"
+      />
     </div>
   );
 }

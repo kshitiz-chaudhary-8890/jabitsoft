@@ -96,45 +96,28 @@ export default function Footer() {
   return (
     <>
       <footer ref={footerRef} className="jabit-footer" id="contact">
-        <section className="jabit-footer__cta" aria-labelledby="footer-cta-title">
-          <div className="jabit-footer__cta-orb jabit-footer__cta-orb--one" aria-hidden="true" />
-          <div className="jabit-footer__cta-orb jabit-footer__cta-orb--two" aria-hidden="true" />
-
-          <div className="jabit-footer__cta-inner">
-            <div className="jabit-footer__cta-left">
-              <p className="jabit-footer__eyebrow">(Let’s build what’s next)</p>
-
-              <h2 id="footer-cta-title">
-                Have a project in mind?
-                <span>Let’s make it scalable.</span>
-              </h2>
-            </div>
-
-            <div className="jabit-footer__cta-right">
-              <p className="jabit-footer__cta-copy">
-                From strategy and design to engineering and launch, JabitSoft helps teams build
-                software products that are reliable, maintainable, and ready to grow.
-              </p>
-
-              <div className="jabit-footer__cta-actions">
-                <a
-                  className="jabit-footer__cta-button"
-                  href="/contact-us"
-                  data-site-button
-                  data-button-variant="primary"
-                >
-                  <span>Start a Project</span>
-                  <ArrowUpRight />
-                </a>
-
-                <a className="jabit-footer__cta-email" href="mailto:info@jabitsoft.com">
-                  info@jabitsoft.com
-                </a>
-              </div>
-            </div>
+        <div className="jabit-footer__giant-wrap" aria-hidden="true">
+          <div className="jabit-footer__giant">
+            {(() => {
+              let li = 0;
+              return ["Build", "Design", "Deliver"].map((word) => (
+                <span key={word} className="jabit-footer__giant-word">
+                  {word.split("").map((ch) => {
+                    const i = li++;
+                    return (
+                      <span key={i} className="jabit-footer__giant-letter" style={{ "--i": i }}>
+                        <span className="jabit-footer__giant-stack">
+                          <span>{ch}</span>
+                          <span aria-hidden="true">{ch}</span>
+                        </span>
+                      </span>
+                    );
+                  })}
+                </span>
+              ));
+            })()}
           </div>
-        </section>
-
+        </div>
         <section className="jabit-footer__body">
           <div className="jabit-footer__card">
             <div className="jabit-footer__top">
@@ -513,9 +496,65 @@ export default function Footer() {
           color: #00aaff;
         }
 
+        .jabit-footer__giant-wrap {
+          width: 100%;
+          overflow: hidden;
+          padding: clamp(40px, 5vw, 72px) 0 clamp(28px, 3.5vw, 48px);
+          background: #ffffff;
+        }
+
+        .jabit-footer__giant-word {
+          display: inline-flex;
+        }
+
+        .jabit-footer__giant-letter {
+          display: inline-block;
+          height: 1em;
+          overflow: hidden;
+          line-height: 1;
+        }
+
+        .jabit-footer__giant-stack {
+          display: flex;
+          flex-direction: column;
+          transition: translate 500ms cubic-bezier(0.76, 0, 0.24, 1);
+          transition-delay: calc(var(--i, 0) * 22ms);
+          will-change: translate;
+        }
+
+        .jabit-footer__giant-wrap:hover .jabit-footer__giant-stack {
+          translate: 0 -50%;
+        }
+
+        .jabit-footer__giant {
+          display: flex;
+          justify-content: center;
+          gap: 0.28em;
+          color: #0c0f16;
+          font-family: "Inter", sans-serif;
+          font-style: normal;
+          font-weight: 800;
+          font-size: min(8vw, 140px);
+          line-height: 1;
+          letter-spacing: -0.02em;
+          text-transform: uppercase;
+          white-space: nowrap;
+          user-select: none;
+          opacity: 0;
+          transform: translate3d(0, 110%, 0);
+          transition:
+            opacity 600ms ease,
+            transform 950ms cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .jabit-footer--visible .jabit-footer__giant {
+          opacity: 1;
+          transform: translate3d(0, 0, 0);
+        }
+
         .jabit-footer__body {
           position: relative;
-          padding: 78px 0 0;
+          padding: 0;
           background: #ffffff;
         }
 
@@ -754,7 +793,7 @@ export default function Footer() {
           width: 100%;
           height: 1px;
           margin: 42px 0 24px;
-          background: rgba(19,19,19,0.08);
+          background: rgba(30, 30, 30, 0.1);
         }
 
         .jabit-footer__bottom {
@@ -929,10 +968,25 @@ export default function Footer() {
           }
 
           .jabit-footer__cta-inner,
-          .jabit-footer__card {
+          .jabit-footer__card,
+          .jabit-footer__giant {
             opacity: 1;
             transform: none;
             transition: none;
+          }
+
+          .jabit-footer__giant-flip {
+            opacity: 1;
+            transform: none;
+            background-size: 35% 100%, 100% 100%;
+            animation: none;
+            animation-timeline: auto;
+            transition: none;
+          }
+
+          .jabit-footer__giant:hover .jabit-footer__giant-flip {
+            transform: none;
+            animation: none;
           }
         }
       `}</style>

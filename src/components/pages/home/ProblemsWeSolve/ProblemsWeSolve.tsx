@@ -24,7 +24,7 @@ import {
   useState,
 } from "react";
 import { createPortal } from "react-dom";
-import { MotionConfig, animate, motion, useInView, useReducedMotion } from "motion/react";
+import { animate, useReducedMotion } from "motion/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -422,13 +422,6 @@ const PROBLEMS: Problem[] = [
       "A site that carries its weight: fast on real devices, clear about value, editable by the team and measured by conversations started.",
   },
 ];
-
-const DIALOG_STEPS = [
-  { id: "snapshot", label: "Overview" },
-  { id: "diagnosis", label: "Diagnosis" },
-  { id: "journey", label: "Journey" },
-  { id: "impact", label: "Outcome" },
-] as const;
 
 const PIPE_STATES = ["Today", "What we build", "What you get"] as const;
 
@@ -872,23 +865,11 @@ function ProblemDialog({ problem, index, total, onClose, onNavigate }: ProblemDi
   const scrollRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef<HTMLSpanElement>(null);
   const closingRef = useRef(false);
-  const stepRefs = useRef<Record<string, HTMLElement | null>>({});
 
-  const [activeStep, setActiveStep] = useState<string>(DIALOG_STEPS[0].id);
   const [countersOn, setCountersOn] = useState(false);
 
   const rawId = useId().replace(/[^a-zA-Z0-9-_]/g, "");
   const dialogId = `pws-dialog-${rawId}`;
-
-  const stepRefSetters = useMemo(() => {
-    const setters: Record<string, (el: HTMLElement | null) => void> = {};
-    DIALOG_STEPS.forEach((step) => {
-      setters[step.id] = (el) => {
-        stepRefs.current[step.id] = el;
-      };
-    });
-    return setters;
-  }, []);
 
   /* ---- close (animated) ---- */
   const requestClose = useCallback(() => {
@@ -1019,7 +1000,6 @@ function ProblemDialog({ problem, index, total, onClose, onNavigate }: ProblemDi
     if (!root) return;
     const scroller = scrollRef.current;
     if (scroller) scroller.scrollTop = 0;
-    setActiveStep(DIALOG_STEPS[0].id);
     setCountersOn(false);
     const start = window.setTimeout(() => setCountersOn(true), 220);
     if (reduced) {
@@ -1252,7 +1232,7 @@ function ProblemDialog({ problem, index, total, onClose, onNavigate }: ProblemDi
     };
   }, [problem.id, reduced]);
 
-  /* ---- read progress + section spy ---- */
+  /* ---- read progress ---- */
   useEffect(() => {
     const scroller = scrollRef.current;
     if (!scroller) return;
@@ -1262,13 +1242,6 @@ function ProblemDialog({ problem, index, total, onClose, onNavigate }: ProblemDi
       if (progressRef.current) {
         progressRef.current.style.transform = `scaleX(${ratio})`;
       }
-      const probe = scroller.scrollTop + scroller.clientHeight * 0.3;
-      let current: (typeof DIALOG_STEPS)[number]["id"] = DIALOG_STEPS[0].id;
-      DIALOG_STEPS.forEach((step) => {
-        const el = stepRefs.current[step.id];
-        if (el && el.offsetTop <= probe) current = step.id;
-      });
-      setActiveStep((prev) => (prev === current ? prev : current));
     };
     handleScroll();
     scroller.addEventListener("scroll", handleScroll, { passive: true });
@@ -1278,20 +1251,6 @@ function ProblemDialog({ problem, index, total, onClose, onNavigate }: ProblemDi
       window.removeEventListener("resize", handleScroll);
     };
   }, [problem.id]);
-
-  const goToStep = useCallback(
-    (stepId: string) => {
-      const scroller = scrollRef.current;
-      const target = stepRefs.current[stepId];
-      if (!scroller || !target) return;
-      scroller.scrollTo({
-        top: Math.max(0, target.offsetTop - 10),
-        behavior: reduced ? "auto" : "smooth",
-      });
-      setActiveStep(stepId);
-    },
-    [reduced],
-  );
 
   if (typeof document === "undefined") return null;
 
@@ -1388,32 +1347,13 @@ function ProblemDialog({ problem, index, total, onClose, onNavigate }: ProblemDi
                     {problem.metric.label}
                   </p>
                 </div>
-                <nav className={styles.jump} aria-label="Jump to a section">
-                  {DIALOG_STEPS.map((step) => (
-                    <button
-                      key={step.id}
-                      type="button"
-                      data-jump=""
-                      className={`${styles.jumpBtn} ${
-                        activeStep === step.id ? styles.jumpBtnActive : ""
-                      }`}
-                      onClick={() => goToStep(step.id)}
-                      aria-current={activeStep === step.id ? "true" : undefined}
-                    >
-                      <span className={styles.jumpRule} aria-hidden="true" />
-                      {step.label}
-                    </button>
-                  ))}
-                </nav>
               </div>
             </div>
 
             {/* ---------------- body ---------------- */}
             <div className={styles.body}>
-              {/* 01 overview + target metrics */}
-              <section
+                            <section
                 id={`${dialogId}-snapshot`}
-                ref={stepRefSetters.snapshot}
                 className={styles.block}
                 data-reveal=""
                 aria-label="Overview"
@@ -1422,7 +1362,7 @@ function ProblemDialog({ problem, index, total, onClose, onNavigate }: ProblemDi
                   {problem.summary}
                 </p>
                 <div className={styles.blockHead}>
-                  <h4 className={styles.blockTitle}>Target metrics</h4>
+                  <span className={styles.blockIndex}>01</span><h4 className={styles.blockTitle}>Target metrics</h4>
                   <p className={styles.blockNote}>Illustrative · not a client result</p>
                 </div>
                 <div className={styles.metrics}>
@@ -1446,16 +1386,14 @@ function ProblemDialog({ problem, index, total, onClose, onNavigate }: ProblemDi
                 <p className={styles.metricsNote}>{problem.metricsNote}</p>
               </section>
 
-              {/* 02 signals + response */}
-              <section
+                            <section
                 id={`${dialogId}-diagnosis`}
-                ref={stepRefSetters.diagnosis}
                 className={styles.block}
                 data-reveal=""
                 aria-label="Diagnosis"
               >
                 <div className={styles.blockHead}>
-                  <h4 className={styles.blockTitle}>Diagnosis</h4>
+                  <span className={styles.blockIndex}>02</span><h4 className={styles.blockTitle}>Diagnosis</h4>
                   <p className={styles.blockNote}>{problem.code}</p>
                 </div>
                 <div className={styles.columns}>
@@ -1484,31 +1422,27 @@ function ProblemDialog({ problem, index, total, onClose, onNavigate }: ProblemDi
                 </div>
               </section>
 
-              {/* 03 journey */}
-              <section
+                            <section
                 id={`${dialogId}-journey`}
-                ref={stepRefSetters.journey}
                 className={styles.block}
                 data-reveal=""
                 aria-label="Implementation journey"
               >
                 <div className={styles.blockHead}>
-                  <h4 className={styles.blockTitle}>Implementation journey</h4>
+                  <span className={styles.blockIndex}>03</span><h4 className={styles.blockTitle}>Implementation journey</h4>
                   <p className={styles.blockNote}>Today → what we build → what you get</p>
                 </div>
                 <JourneyDiagram flow={problem.flow} />
               </section>
 
-              {/* 04 outcome + service */}
-              <section
+                            <section
                 id={`${dialogId}-impact`}
-                ref={stepRefSetters.impact}
                 className={styles.block}
                 data-reveal=""
                 aria-label="Outcome"
               >
                 <div className={styles.blockHead}>
-                  <h4 className={styles.blockTitle}>Illustrative trajectory</h4>
+                  <span className={styles.blockIndex}>04</span><h4 className={styles.blockTitle}>Illustrative trajectory</h4>
                   <p className={styles.blockNote}>Shape of progress, not a promised result</p>
                 </div>
                 <ImpactChart trend={problem.trend} />
@@ -1544,93 +1478,39 @@ function ProblemDialog({ problem, index, total, onClose, onNavigate }: ProblemDi
 /* ---------------------------------------------------------------- section -- */
 
 export default function ProblemsWeSolve() {
-  const reduced = useReducedMotion();
-  const sectionRef = useRef<HTMLElement>(null);
-  const headerRef = useRef<HTMLDivElement>(null);
-  const statsRef = useRef<HTMLUListElement>(null);
-  const headerInView = useInView(headerRef, { once: true, amount: 0.4 });
-  const statsInView = useInView(statsRef, { once: true, amount: 0.25 });
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const reduced = useReducedMotion();
 
-  /* grey → dark, left to right, scrubbed by scroll (site-wide heading behaviour) */
+  /* site-wide heading behaviour: grey → dark, scrubbed by scroll */
   useLayoutEffect(() => {
     const root = sectionRef.current;
     if (!root) return;
-    const headings = Array.from(root.querySelectorAll<HTMLElement>("[data-heading-fill]"));
-    if (!headings.length) return;
+    const heading = root.querySelector<HTMLElement>("[data-heading-fill]");
+    if (!heading) return;
     if (reduced) {
-      headings.forEach((h) => gsap.set(h, { backgroundSize: "100% 100%, 100% 100%" }));
+      gsap.set(heading, { backgroundSize: "100% 100%, 100% 100%" });
       return;
     }
-    const tweens = headings.map((heading) =>
-      gsap.fromTo(
-        heading,
-        { backgroundSize: "100% 100%, 0% 100%" },
-        {
-          backgroundSize: "100% 100%, 100% 100%",
-          ease: "none",
-          scrollTrigger: {
-            trigger: heading,
-            start: "top 92%",
-            end: "top 38%",
-            scrub: 0.7,
-            invalidateOnRefresh: true,
-          },
+    const tween = gsap.fromTo(
+      heading,
+      { backgroundSize: "100% 100%, 0% 100%" },
+      {
+        backgroundSize: "100% 100%, 100% 100%",
+        ease: "none",
+        scrollTrigger: {
+          trigger: heading,
+          start: "top 92%",
+          end: "top 38%",
+          scrub: 0.7,
+          invalidateOnRefresh: true,
         },
-      ),
+      },
     );
     return () => {
-      tweens.forEach((tween) => {
-        tween.scrollTrigger?.kill();
-        tween.kill();
-      });
+      tween.scrollTrigger?.kill();
+      tween.kill();
     };
-  }, [reduced]);
-
-  /* stat reveals, meter fills and ledger entrance */
-  useLayoutEffect(() => {
-    const root = sectionRef.current;
-    if (!root || reduced) return;
-    const ctx = gsap.context(() => {
-      const stats = gsap.utils.toArray<HTMLElement>("[data-stat]");
-      if (stats.length) {
-        gsap.from(stats, {
-          opacity: 0,
-          y: 24,
-          duration: 0.75,
-          ease: "power3.out",
-          stagger: 0.12,
-          scrollTrigger: { trigger: stats[0], start: "top 88%", once: true },
-        });
-      }
-
-      gsap.utils.toArray<HTMLElement>("[data-meter]").forEach((meter) => {
-        const target = Number(meter.dataset.meter ?? "100") / 100;
-        gsap.fromTo(
-          meter,
-          { scaleX: 0 },
-          {
-            scaleX: target,
-            duration: 1.1,
-            ease: "power3.out",
-            scrollTrigger: { trigger: meter, start: "top 96%", once: true },
-          },
-        );
-      });
-
-      const entries = gsap.utils.toArray<HTMLElement>("[data-entry]");
-      if (entries.length) {
-        gsap.from(entries, {
-          opacity: 0,
-          y: 26,
-          duration: 0.7,
-          ease: "power3.out",
-          stagger: 0.07,
-          scrollTrigger: { trigger: entries[0], start: "top 86%", once: true },
-        });
-      }
-    }, root);
-    return () => ctx.revert();
   }, [reduced]);
 
   const closeProblem = useCallback(() => setOpenIndex(null), []);
@@ -1643,161 +1523,131 @@ export default function ProblemsWeSolve() {
   const activeProblem = openIndex === null ? null : PROBLEMS[openIndex];
 
   return (
-    <MotionConfig reducedMotion="user">
-      <section
-        ref={sectionRef}
-        id="problems"
-        className={styles.section}
-        aria-labelledby="problems-we-solve-title"
-      >
-        <div className={styles.inner}>
-          {/* ---------------- header ---------------- */}
-          <header className={styles.header}>
-            <motion.div
-              ref={headerRef}
-              className={styles.headerText}
-              initial={{ opacity: 0, y: 20 }}
-              animate={headerInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-              transition={{ duration: 0.66, ease: EASE_OUT }}
-            >
-              <p className={styles.eyebrow}>(Problems we solve)</p>
-              <h2 id="problems-we-solve-title" className={styles.title} data-heading-fill="">
-                Friction slows growth.
-              </h2>
-              <p className={styles.subtitle}>
-                We remove the bottlenecks that slow teams down — across systems, operations and
-                digital journeys.
-              </p>
-            </motion.div>
-          </header>
+    <section
+      ref={sectionRef}
+      id="problems"
+      className={styles.section}
+      aria-labelledby="problems-we-solve-title"
+    >
+      <div className={styles.inner}>
+        {/* ---------------- header ---------------- */}
+        <header className={styles.header}>
+          <p className={styles.eyebrow}>(Problems we solve)</p>
+          <h2 id="problems-we-solve-title" className={styles.title} data-heading-fill="">
+            Friction slows growth.
+          </h2>
+          <p className={styles.subtitle}>
+            We remove the bottlenecks that slow teams down — across systems, operations and
+            digital journeys.
+          </p>
+        </header>
 
-          {/* ---------------- 01 · evidence ---------------- */}
-          <div className={styles.evidence}>
-            <div className={styles.evidenceHead}>
-              <p className={styles.partLabel}>
-                <b>01</b>
-                <span>Evidence</span>
-                <span className={styles.partRule} aria-hidden="true" />
-                <span>Directional</span>
-              </p>
-              <p className={styles.evidenceStatement}>
-                Three patterns we keep seeing.
-              </p>
-              <p className={styles.evidenceNote}>Illustrative signals, not client benchmarks.</p>
-            </div>
-
-            <div className={styles.evidenceData}>
-              <ul ref={statsRef} className={styles.stats}>
-                {EVIDENCE.map((item, i) => (
-                  <li key={item.id} data-stat="" className={styles.stat}>
-                    <div className={styles.statTopicWrap}>
-                      <span className={styles.statIndex} aria-hidden="true">
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
-                      <span className={styles.statTopic}>{item.topic}</span>
-                    </div>
-                    <span className={styles.statValue}>
-                      <Counter value={item.value} play={statsInView && !reduced} duration={1.3} />
-                    </span>
-                    <span className={styles.statMeter} aria-hidden="true">
-                      <span
-                        className={styles.statMeterFill}
-                        data-meter={item.fill}
-                        style={{ transform: `scaleX(${item.fill / 100})` }}
-                      />
-                    </span>
-                    <p className={styles.statCopy}>{item.copy}</p>
-                    <span className={styles.srOnly}>{item.basis}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+        {/* ---------------- 01 · evidence ---------------- */}
+        <div id="problems-evidence" className={styles.part}>
+          <p className={styles.partLabel}>01 · Evidence · Directional</p>
+          <div className={styles.partHeadGrid}>
+            <h3 className={styles.partTitle}>Three patterns we keep seeing.</h3>
+            <p className={styles.partNote}>Illustrative signals, not client benchmarks.</p>
           </div>
 
-          {/* ---------------- 02 · problem ledger ---------------- */}
-          <div className={styles.ledger}>
-            <div className={styles.ledgerHead}>
-              <div className={styles.ledgerHeadMain}>
-                <p className={styles.partLabel}>
-                  <b>02</b> Problems we solve
-                  <span className={styles.partRule} aria-hidden="true" />
-                  {pad(PROBLEMS.length)} entries
-                </p>
-                <h3 className={styles.ledgerTitle}>Six bottlenecks we are built to remove.</h3>
-              </div>
-              <p className={styles.ledgerLead}>
+          <ul className={styles.stats}>
+            {EVIDENCE.map((item, i) => (
+              <li key={item.id} className={styles.stat}>
+                <span className={styles.statTop}>
+                  <span className={styles.statIndex}>{pad(i + 1)}</span>
+                  <span className={styles.statTopic}>{item.topic}</span>
+                </span>
+                <span className={styles.statValue}>{item.value}</span>
+                <span className={styles.statMeter} aria-hidden="true">
+                  <span className={styles.statMeterFill} style={{ width: `${item.fill}%` }} />
+                </span>
+                <p className={styles.statCopy}>{item.copy}</p>
+                <span className={styles.srOnly}>{item.basis}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* ---------------- 02 · problem ledger ---------------- */}
+        <div id="problems-ledger" className={styles.ledger}>
+          <aside className={styles.ledgerSide}>
+            <div className={styles.ledgerSticky}>
+              <p className={styles.partLabel}>02 · Problems we solve</p>
+              <h3 className={styles.partTitle}>Six bottlenecks we are built to remove.</h3>
+              <p className={styles.partNote}>
                 Each entry is a real business problem mapped to a JabitSoft capability.{" "}
-                <b>Open an entry</b> for the full diagnosis, the work involved, the implementation
-                journey and the metrics we design toward.
+                <b>Open an entry</b> for the full diagnosis.
               </p>
+              <p className={styles.ledgerCount}>
+                <b>{pad(PROBLEMS.length)}</b>
+                <span>
+                  problems mapped
+                  <i>to JabitSoft capabilities</i>
+                </span>
+              </p>
+              <a className={styles.ledgerCta} href="/contact-us">
+                <span className={styles.ledgerCtaLabel}>Not sure where to start?</span>
+                <span className={styles.ledgerCtaTitle}>Get a free problem diagnosis</span>
+                <span className={styles.ledgerCtaText}>
+                  A 30-minute call to map your bottleneck to the right capability.
+                </span>
+                <span className={styles.ledgerCtaLink}>
+                  Talk to us <ArrowIcon size={15} />
+                </span>
+              </a>
             </div>
+          </aside>
 
-            <ul className={styles.entries}>
-              {PROBLEMS.map((problem, i) => (
-                <li key={problem.id} className={styles.entry}>
-                  <button
-                    type="button"
-                    data-entry=""
-                    className={styles.entryBtn}
-                    onClick={() => setOpenIndex(i)}
-                    aria-haspopup="dialog"
-                    aria-label={`Open the detailed breakdown: ${problem.title} — ${problem.serviceFull}`}
-                  >
-                    <span className={styles.entryIndex}>
-                      <span className={styles.entryNum}>{pad(i + 1)}</span>
-                      <span className={styles.entryTick} aria-hidden="true" />
-                      <span className={styles.entryCode}>{problem.code}</span>
-                    </span>
-
-                    <span className={styles.entryLead}>
-                      <span className={styles.entryService}>
-                        <span className={styles.entryServiceIcon}>
-                          <ServiceIcon name={problem.icon} />
-                        </span>
-                        <span className={styles.entryServiceText}>{problem.service}</span>
-                      </span>
+          <ul className={styles.entries}>
+            {PROBLEMS.map((problem, i) => (
+              <li key={problem.id} className={styles.entry}>
+                <button
+                  type="button"
+                  className={styles.entryBtn}
+                  onClick={() => setOpenIndex(i)}
+                  aria-haspopup="dialog"
+                  aria-label={`Open the detailed breakdown: ${problem.title} — ${problem.serviceFull}`}
+                >
+                  <span className={styles.entryMain}>
+                    <span className={styles.entryNum}>{pad(i + 1)}</span>
+                    <span className={styles.entryText}>
                       <span className={styles.entryTitle}>{problem.title}</span>
-                      <span className={styles.entrySummary}>{problem.summary}</span>
+                      <span className={styles.entryService}>{problem.service}</span>
                     </span>
-
-                    <span className={styles.entryMetric}>
-                      <span className={styles.entryLabel}>Target</span>
-                      <span className={styles.entryMetricValue}>{problem.metric.value}</span>
-                      <span className={styles.entryMetricLabel}>{problem.metric.label}</span>
-                    </span>
-
-                    <span className={styles.entryCta}>
-                      <span className={styles.entryCtaText}>Open breakdown</span>
+                    <span className={styles.entryMetaRight}>
+                      <span className={styles.entryMetricInline}>
+                        <b>{problem.metric.value}</b> {problem.metric.label}
+                      </span>
                       <span className={styles.entryCtaIcon} aria-hidden="true">
                         <ArrowIcon size={16} />
                       </span>
                     </span>
-                  </button>
-                </li>
-              ))}
-            </ul>
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
 
-            <p className={styles.ledgerFoot}>
-              <span className={styles.ledgerFootMark} aria-hidden="true">
-                †
-              </span>
-              Target figures in the entries and modals are illustrative planning numbers used to
-              scope work — not client-verified outcomes. We baseline your own numbers during
-              discovery, then agree targets in writing before delivery starts.
-            </p>
-          </div>
+          <p className={styles.ledgerFoot}>
+            <span className={styles.ledgerFootMark} aria-hidden="true">
+              †
+            </span>
+            Target figures in the entries and modals are illustrative planning numbers used to
+            scope work — not client-verified outcomes. We baseline your own numbers during
+            discovery, then agree targets in writing before delivery starts.
+          </p>
         </div>
+      </div>
 
-        {activeProblem ? (
-          <ProblemDialog
-            problem={activeProblem}
-            index={openIndex ?? 0}
-            total={PROBLEMS.length}
-            onClose={closeProblem}
-            onNavigate={navigate}
-          />
-        ) : null}
-      </section>
-    </MotionConfig>
+      {activeProblem ? (
+        <ProblemDialog
+          problem={activeProblem}
+          index={openIndex ?? 0}
+          total={PROBLEMS.length}
+          onClose={closeProblem}
+          onNavigate={navigate}
+        />
+      ) : null}
+    </section>
   );
 }

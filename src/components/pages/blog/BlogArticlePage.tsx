@@ -1,19 +1,11 @@
 import Link from "next/link";
+import Image from "next/image";
 
 import type { BlogArticle } from "@/data/blog";
-import { blogArticles } from "@/data/blog";
+import { blogArticles, getBlogImage } from "@/data/blog";
+import { SharedCTA } from "@/components/common/SharedCTA/SharedCTA";
 
-import { CopyLinkButton } from "./CopyLinkButton";
 import styles from "./BlogArticlePage.module.css";
-
-const sections = [
-  ["decision", "Start with the decision"],
-  ["criteria", "What to measure first"],
-  ["matrix", "A practical decision matrix"],
-  ["cost", "The cost teams miss"],
-  ["recommendation", "Our recommendation"],
-  ["faq", "Frequently asked questions"],
-] as const;
 
 export function BlogArticlePage({ article }: { article: BlogArticle }) {
   const relatedArticles = blogArticles
@@ -28,7 +20,7 @@ export function BlogArticlePage({ article }: { article: BlogArticle }) {
             <nav className={styles.breadcrumbs} aria-label="Breadcrumb">
               <Link href="/">Home</Link>
               <span>/</span>
-              <Link href="/blogs">Field notes</Link>
+              <Link href="/blogs">Blogs</Link>
               <span>/</span>
               <span>{article.category}</span>
             </nav>
@@ -40,9 +32,12 @@ export function BlogArticlePage({ article }: { article: BlogArticle }) {
                 <p className={styles.dek}>{article.excerpt}</p>
 
                 <div className={styles.byline}>
+                  <span className={styles.authorMark} aria-hidden="true">
+                    JS
+                  </span>
                   <div>
                     <strong>JabitSoft Editorial</strong>
-                    <span>Product and engineering field notes</span>
+                    <span>Product and engineering insights</span>
                   </div>
                   <div className={styles.meta}>
                     <time>{article.date}</time>
@@ -51,34 +46,23 @@ export function BlogArticlePage({ article }: { article: BlogArticle }) {
                 </div>
               </div>
 
-              <div className={styles.heroArtwork} data-tone={article.tone} aria-hidden="true">
-                <span>{article.code}</span>
-                <strong>{article.category.split(" ")[0]}</strong>
-                <i />
-              </div>
+              <figure className={styles.heroMedia}>
+                <div className={styles.heroMediaFrame}>
+                  <Image
+                    src={getBlogImage(article)}
+                    alt={`${article.title} cover`}
+                    fill
+                    priority
+                    sizes="(max-width: 1000px) 100vw, 50vw"
+                  />
+                </div>
+              </figure>
             </div>
           </div>
         </header>
 
         <div className={`${styles.shell} ${styles.articleLayout}`}>
-          <aside className={styles.articleRail}>
-            <div className={styles.railInner}>
-              <div className={styles.railHeader}>
-                <span>In this field note</span>
-                <CopyLinkButton />
-              </div>
-              <nav aria-label="Article sections">
-                {sections.map(([id, label], index) => (
-                  <a href={`#${id}`} key={id}>
-                    <span>{String(index + 1).padStart(2, "0")}</span>
-                    {label}
-                  </a>
-                ))}
-              </nav>
-            </div>
-          </aside>
-
-          <div className={styles.prose}>
+          <aside className={styles.articleAside}>
             <section className={styles.tldr} aria-label="Article summary">
               <span>TL;DR</span>
               <p>
@@ -88,8 +72,25 @@ export function BlogArticlePage({ article }: { article: BlogArticle }) {
               </p>
             </section>
 
+            <div className={styles.asideFooter}>
+              <span>{article.readTime}</span>
+              <Link href="/blogs">
+                Back to all blogs <Arrow />
+              </Link>
+            </div>
+          </aside>
+
+          <div className={styles.prose}>
+            <div className={styles.articleIntro}>
+              <p>
+                Choosing the right direction for <em>{article.title.split(":")[0]}</em> is less
+                about finding a universally “best” option and more about matching the decision to
+                the product you are building. This blog breaks the evaluation into practical
+                questions your team can answer before committing time and budget.
+              </p>
+            </div>
+
             <section id="decision">
-              <p className={styles.sectionNumber}>01 / The real question</p>
               <h2>Start with the decision your business actually needs to make</h2>
               <p>
                 Technology choices become difficult when teams begin with tools instead of
@@ -109,7 +110,6 @@ export function BlogArticlePage({ article }: { article: BlogArticle }) {
             </section>
 
             <section id="criteria">
-              <p className={styles.sectionNumber}>02 / Evaluation criteria</p>
               <h2>Measure the factors that affect delivery after launch</h2>
               <p>
                 Teams naturally focus on build speed. The harder costs usually appear later, when
@@ -137,7 +137,6 @@ export function BlogArticlePage({ article }: { article: BlogArticle }) {
             </section>
 
             <section id="matrix">
-              <p className={styles.sectionNumber}>03 / Decision matrix</p>
               <h2>Score the options against the same operating reality</h2>
               <p>
                 A lightweight matrix prevents one impressive demo from outweighing the factors that
@@ -180,7 +179,6 @@ export function BlogArticlePage({ article }: { article: BlogArticle }) {
             </section>
 
             <section id="cost">
-              <p className={styles.sectionNumber}>04 / Total cost</p>
               <h2>The cost teams miss is coordination</h2>
               <p>
                 Licences and implementation estimates are visible. Coordination overhead is not.
@@ -206,7 +204,6 @@ export function BlogArticlePage({ article }: { article: BlogArticle }) {
             </section>
 
             <section id="recommendation">
-              <p className={styles.sectionNumber}>05 / Recommendation</p>
               <h2>Run a short discovery before locking the implementation path</h2>
               <p>
                 The safest next step is a focused discovery sprint. Define the critical journeys,
@@ -222,33 +219,6 @@ export function BlogArticlePage({ article }: { article: BlogArticle }) {
                 Discuss your project <Arrow />
               </Link>
             </section>
-
-            <section id="faq" className={styles.faq}>
-              <p className={styles.sectionNumber}>06 / FAQ</p>
-              <h2>Frequently asked questions</h2>
-              <details>
-                <summary>How early should a technical direction be decided?</summary>
-                <p>
-                  Decide after the critical user journeys and integration risks are understood, but
-                  before detailed interface production begins. This keeps the decision evidence-led
-                  without delaying delivery.
-                </p>
-              </details>
-              <details>
-                <summary>Should cost be the main deciding factor?</summary>
-                <p>
-                  Use total cost rather than initial build cost. Include maintenance, release
-                  coordination, quality assurance and the effort required to make routine changes.
-                </p>
-              </details>
-              <details>
-                <summary>What should a discovery sprint produce?</summary>
-                <p>
-                  A clear scope, prioritised risks, architecture direction, delivery phases and the
-                  evidence behind the major product and technology decisions.
-                </p>
-              </details>
-            </section>
           </div>
         </div>
 
@@ -257,7 +227,7 @@ export function BlogArticlePage({ article }: { article: BlogArticle }) {
             <header>
               <div>
                 <p className={styles.eyebrow}>Continue reading</p>
-                <h2 id="related-title">Related field notes</h2>
+                <h2 id="related-title">Related blogs</h2>
               </div>
               <Link href="/blogs">View all articles</Link>
             </header>
@@ -265,18 +235,38 @@ export function BlogArticlePage({ article }: { article: BlogArticle }) {
               {relatedArticles.map((related) => (
                 <Link href={`/blogs/${related.slug}`} key={related.slug}>
                   <div className={styles.relatedCover} data-tone={related.tone}>
-                    <span>{related.code}</span>
-                    <strong>{related.category.split(" ")[0]}</strong>
+                    <Image
+                      src={getBlogImage(related)}
+                      alt=""
+                      fill
+                      sizes="(max-width: 720px) 100vw, (max-width: 1000px) 50vw, 35vw"
+                    />
+                    <span>{related.category}</span>
+                    <i aria-hidden="true" />
+                    <b aria-hidden="true">
+                      <Arrow />
+                    </b>
                   </div>
-                  <span>{related.category}</span>
                   <h3>{related.title}</h3>
-                  <small>{related.readTime}</small>
+                  <small>
+                    {related.date} · {related.readTime}
+                  </small>
                 </Link>
               ))}
             </div>
           </div>
         </section>
       </article>
+
+      <SharedCTA
+        headline="Turning this idea into a project?"
+        lede="Discuss it with the team behind these notes — clear scope before any commitment."
+        primaryLabel="Discuss your project"
+        primaryHref="/contact-us"
+        secondaryLabel="Back to all blogs"
+        secondaryHref="/blogs"
+        image="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?q=80&w=1600&auto=format&fit=crop"
+      />
     </main>
   );
 }

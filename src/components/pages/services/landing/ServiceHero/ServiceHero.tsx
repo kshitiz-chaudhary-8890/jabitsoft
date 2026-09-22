@@ -84,7 +84,8 @@ export function ServiceHero() {
       gsap.set(facts, { opacity: 0, y: 14 });
 
       const intro = gsap.timeline({ defaults: { ease: "power4.out" } });
-      if (nav) intro.to(nav, { opacity: 1, y: 0, duration: 0.42 }, 0);
+      if (nav)
+        intro.to(nav, { opacity: 1, y: 0, duration: 0.42, clearProps: "opacity,transform" }, 0);
       if (kicker) intro.to(kicker, { opacity: 1, y: 0, duration: 0.35 }, 0);
       intro
         .to(

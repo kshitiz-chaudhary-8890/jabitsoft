@@ -8,7 +8,17 @@
   box-sizing: border-box;
 }
 
-.header {
+header.header {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  z-index: 100;
+  background: #fff;
+  transition: transform 320ms cubic-bezier(0.16, 1, 0.3, 1);
   --hd-ink: #0d0f12;
   --hd-ink-soft: #171a21;
   --hd-text: #101418;
@@ -18,11 +28,82 @@
   --hd-tint: rgb(13 15 18 / 5%);
   --hd-on-ink: #ffffff;
   --hd-on-ink-muted: rgb(255 255 255 / 72%);
+}
 
-  position: sticky;
+.headerSpacer {
+  height: 96px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 1024px) {
+  .headerSpacer {
+    height: 80px;
+  }
+}
+
+.header.headerHidden {
+  transform: translateY(-100%);
+}
+
+/* Home-only: transparent header merged over the video hero (Minati-style).
+   NOTE: do not add element/global selectors here — CSS Modules hashes them
+   and the rule silently stops matching. */
+.header.homeOverlay {
+  position: fixed;
   top: 0;
-  z-index: 100;
-  background: #fff;
+  right: 0;
+  left: 0;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding-top: 0;
+  background: transparent;
+
+  --hd-text: #ffffff;
+  --hd-muted: rgb(255 255 255 / 70%);
+  --hd-line: rgb(255 255 255 / 16%);
+  --hd-line-strong: rgb(255 255 255 / 32%);
+}
+
+.header.homeOverlay .logo img {
+  filter: brightness(0) invert(1);
+}
+
+.header.homeOverlay .navLinks > a::after,
+.header.homeOverlay .menuLink::after {
+  background: #ffffff;
+}
+
+.header.homeOverlay .navContact {
+  border-color: #ffffff !important;
+  background: #ffffff !important;
+  color: #0d0f12 !important;
+}
+
+.header.homeOverlay .navContact:hover,
+.header.homeOverlay .navContact:focus-visible {
+  border-color: #f1f5f9 !important;
+  background: #f1f5f9 !important;
+}
+
+.header.homeOverlay .bar {
+  width: var(--home-shell-width, min(1360px, calc(100% - 64px)));
+}
+
+.header.homeOverlay.homeSolid {
+  background: rgb(5 7 12 / 82%);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.header.homeOverlay .megaMenu {
+  width: min(var(--home-shell-width, min(1360px, calc(100% - 64px))), calc(100vw - 32px));
+
+  /* Panel itself stays a white card — reset ink vars inside it. */
+  --hd-text: #101418;
+  --hd-muted: #5b636f;
+  --hd-line: rgb(16 20 24 / 10%);
+  --hd-line-strong: rgb(16 20 24 / 18%);
 }
 
 /* Interactive targets: no double-tap zoom delay, no stray mobile highlight */
@@ -35,13 +116,13 @@
 .bar {
   /* Static on purpose: the full-width mega panel anchors to .header
      (the positioned ancestor), so it spans the viewport, not the
-     centered 1200px bar. */
+     centered bar. */
   position: static;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-  width: var(--shell);
+  width: var(--home-shell-width, min(1360px, calc(100% - 64px)));
   min-height: 88px;
   margin: 0 auto;
   padding: 19px 0 14px;
@@ -471,6 +552,10 @@
 }
 .navContact {
   flex-shrink: 0;
+  min-height: 46px;
+  padding: 0 24px;
+  border-radius: 999px;
+  font-size: 14px;
 }
 .mobileContact {
   display: none !important;
@@ -746,6 +831,17 @@
   .menuButtonOpen span:last-child {
     transform: translateY(-3.25px) rotate(-45deg);
   }
+
+  /* Home overlay: the mobile drawer is a white panel — dark ink inside it. */
+  .header.homeOverlay .navLinks {
+    --hd-text: #101418;
+    --hd-muted: #5b636f;
+    --hd-line: rgb(16 20 24 / 10%);
+    --hd-line-strong: rgb(16 20 24 / 18%);
+  }
+  .header.homeOverlay .menuButton {
+    color: #101418;
+  }
 }
 
 /* Small phones */
@@ -778,6 +874,9 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .header.homeOverlay {
+    transition: none;
+  }
   .megaMenu,
   .dropdownArrow,
   .megaItemArrow,

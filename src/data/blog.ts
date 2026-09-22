@@ -22,6 +22,19 @@ export type BlogArticle = {
   tone: "blue" | "ink" | "sky" | "violet" | "mint" | "orange" | "slate";
 };
 
+const blogImages: Record<BlogArticle["tone"], string> = {
+  blue: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=1400&q=88",
+  ink: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1400&q=88",
+  sky: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1400&q=88",
+  violet:
+    "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1400&q=88",
+  mint: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1400&q=88",
+  orange:
+    "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1400&q=88",
+  slate:
+    "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1400&q=88",
+};
+
 export const blogArticles: BlogArticle[] = [
   {
     slug: "native-or-cross-platform-app",
@@ -126,4 +139,8 @@ export const blogArticles: BlogArticle[] = [
 
 export function getBlogArticle(slug: string) {
   return blogArticles.find((article) => article.slug === slug);
+}
+
+export function getBlogImage(article: BlogArticle) {
+  return blogImages[article.tone];
 }

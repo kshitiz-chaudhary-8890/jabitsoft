@@ -11,21 +11,15 @@ import ServiceDirectory from "./components/pages/home/Services/ServiceDirectory.
 import Footer from "./components/layout/Footer/Footer.jsx";
 import jabitLogo from "./assets/jabit-logo.png";
 
-const ClientResults = dynamic(() =>
-  import("./components/pages/home/ClientResults/ClientResults.jsx"),
+const ClientResults = dynamic(
+  () => import("./components/pages/home/ClientResults/ClientResults.jsx"),
 );
-const HowWeBuild = dynamic(() =>
-  import("./components/pages/home/HowWeBuild/HowWeBuild"),
+const HowWeBuild = dynamic(() => import("./components/pages/home/HowWeBuild/HowWeBuild"));
+const CompanyStats = dynamic(() => import("./components/pages/home/CompanyStats/CompanyStats.jsx"));
+const ProblemsWeSolve = dynamic(
+  () => import("./components/pages/home/ProblemsWeSolve/ProblemsWeSolve"),
 );
-const CompanyStats = dynamic(() =>
-  import("./components/pages/home/CompanyStats/CompanyStats.jsx"),
-);
-const ProblemsWeSolve = dynamic(() =>
-  import("./components/pages/home/ProblemsWeSolve/ProblemsWeSolve"),
-);
-const LatestBlog = dynamic(() =>
-  import("./components/pages/home/LatestBlog/LatestBlog.jsx"),
-);
+const LatestBlog = dynamic(() => import("./components/pages/home/LatestBlog/LatestBlog.jsx"));
 const FAQ = dynamic(() => import("./components/pages/home/FAQ/FAQ.jsx"));
 
 const media = {

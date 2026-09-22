@@ -4,7 +4,7 @@ export const headerNavigation = [
   { label: "Services", href: "/services", menu: "services" },
   { label: "Case Studies", href: "/case-studies" },
   { label: "Blog", href: "/blogs" },
-  { label: "Contact", href: "/contact-us", isAction: true },
+  { label: "Contact Us", href: "/contact-us", isAction: true },
 ] as const;
 
 export const industryNavigation = [

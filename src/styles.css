@@ -1877,7 +1877,8 @@ html.lenis {
   font-size: var(--home-heading-size) !important;
   font-weight: 400 !important;
   line-height: var(--home-heading-line) !important;
-  letter-spacing: -0.045em !important;
+  letter-spacing: 0.04em !important;
+  word-spacing: 0.04em !important;
 }
 
 /* Match the supporting-heading hierarchy used on Services and About. The
@@ -1934,10 +1935,10 @@ html.lenis {
   margin-top: 14px !important;
 }
 
-/* Problems We Solve — black eyebrow (section-local override) */
+/* Problems We Solve — white eyebrow on the dark section (local override) */
 #problems header p:first-child,
 #problems header p[class*="eyebrow"]:first-child {
-  color: #141414 !important;
+  color: #ffffff !important;
 }
 
 #why-jabit header > div:first-child > span,

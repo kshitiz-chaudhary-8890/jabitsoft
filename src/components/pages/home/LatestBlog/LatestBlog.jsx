@@ -4,70 +4,13 @@ import { useLayoutEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-const posts = [
-  {
-    title: "Building Scalable Web Platforms with Next.js",
-    excerpt:
-      "A practical look at architecture, performance, rendering, and design systems for modern production-ready web products.",
-    category: "Web Development",
-    date: "28 Aug 2026",
-    readTime: "6 min read",
-    image:
-      "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=1400&q=88",
-  },
-  {
-    title: "Where Agentic AI Actually Creates Business Value",
-    excerpt:
-      "How AI agents can connect reasoning, tools, memory, and workflows without turning automation into unnecessary complexity.",
-    category: "AI & Automation",
-    date: "22 Aug 2026",
-    readTime: "7 min read",
-    image:
-      "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1200&q=88",
-  },
-  {
-    title: "Designing Mobile Apps People Keep Using",
-    excerpt:
-      "The product, UX, performance, and engineering decisions that help mobile experiences feel fast, useful, and dependable.",
-    category: "Mobile Apps",
-    date: "16 Aug 2026",
-    readTime: "5 min read",
-    image:
-      "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1200&q=88",
-  },
-  {
-    title: "A Better Cloud Migration Plan for Growing Teams",
-    excerpt:
-      "What to review before migration, where teams lose time, and how to build a secure cloud foundation that scales with the business.",
-    category: "Cloud",
-    date: "10 Aug 2026",
-    readTime: "6 min read",
-    image:
-      "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=88",
-  },
-  {
-    title: "Technical SEO Changes That Improve Real Performance",
-    excerpt:
-      "A focused guide to site architecture, Core Web Vitals, crawlability, content structure, and measurable organic growth.",
-    category: "SEO",
-    date: "03 Aug 2026",
-    readTime: "4 min read",
-    image:
-      "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=88",
-  },
-  {
-    title: "When Your Business Is Ready for a Custom ERP",
-    excerpt:
-      "How to identify fragmented workflows, reporting bottlenecks, and operational problems that justify a connected ERP system.",
-    category: "ERP",
-    date: "27 Jul 2026",
-    readTime: "6 min read",
-    image:
-      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=88",
-  },
-];
+import { blogArticles, getBlogImage } from "@/data/blog";
 
-
+const posts = blogArticles.map((article) => ({
+  ...article,
+  image: getBlogImage(article),
+  href: `/blogs/${article.slug}`,
+}));
 
 function ArrowUpRight() {
   return (
@@ -105,11 +48,7 @@ export default function LatestBlog() {
       });
 
       if (header) {
-        entrance.fromTo(
-          header,
-          { autoAlpha: 0, y: 34 },
-          { autoAlpha: 1, y: 0, duration: 0.66 },
-        );
+        entrance.fromTo(header, { autoAlpha: 0, y: 34 }, { autoAlpha: 1, y: 0, duration: 0.66 });
       }
 
       if (cards.length) {
@@ -142,53 +81,9 @@ export default function LatestBlog() {
               scrub: 0.7,
               invalidateOnRefresh: true,
             },
-          }
+          },
         );
       }
-
-      const mediaWraps = gsap.utils.toArray(
-        ".latest-blog__image-media",
-        section,
-      );
-
-      const parallaxMedia = (strength) => {
-        mediaWraps.forEach((media) => {
-          gsap.fromTo(
-            media,
-            {
-              scale: 1 + 0.15 * strength,
-              yPercent: 12 * strength,
-              clipPath: "inset(12% 0 12% 0)",
-            },
-            {
-              scale: 1,
-              yPercent: 0,
-              clipPath: "inset(0% 0 0% 0)",
-              ease: "none",
-              scrollTrigger: {
-                trigger: media,
-                start: "top 96%",
-                end: "top 52%",
-                scrub: 1,
-                invalidateOnRefresh: true,
-              },
-            }
-          );
-        });
-      };
-
-      const mm = gsap.matchMedia();
-      mm.add("(min-width: 1024px) and (prefers-reduced-motion: no-preference)", () =>
-        parallaxMedia(1),
-      );
-      mm.add(
-        "(min-width: 640px) and (max-width: 1023.98px) and (prefers-reduced-motion: no-preference)",
-        () => parallaxMedia(0.75),
-      );
-      mm.add(
-        "(max-width: 639.98px) and (prefers-reduced-motion: no-preference)",
-        () => parallaxMedia(0.5),
-      );
     }, section);
 
     return () => ctx.revert();
@@ -205,7 +100,7 @@ export default function LatestBlog() {
         <div className="latest-blog__shell">
           <header className="latest-blog__header">
             <div className="latest-blog__heading">
-              <p className="latest-blog__eyebrow">(Latest Blog)</p>
+              <p className="latest-blog__eyebrow">Latest Blog</p>
               <h2 id="latest-blog-title" data-reveal-heading>
                 <span className="section-heading-fill">
                   Ideas for building better digital products.
@@ -215,12 +110,17 @@ export default function LatestBlog() {
 
             <div className="latest-blog__header-side">
               <p>
-                Practical notes on software, product engineering, AI, cloud,
-                growth, and the technology behind modern businesses.
+                Practical notes on software, product engineering, AI, cloud, growth, and the
+                technology behind modern businesses.
               </p>
 
-              <a className="latest-blog__view-all" href="#blog" data-site-button data-button-variant="secondary">
-                View all articles
+              <a
+                className="latest-blog__view-all"
+                href="/blogs"
+                data-site-button
+                data-button-variant="secondary"
+              >
+                View all blogs
                 <ArrowUpRight />
               </a>
             </div>
@@ -237,7 +137,7 @@ export default function LatestBlog() {
                 key={post.title}
                 style={{ "--blog-delay": `${index * 120}ms` }}
               >
-                <a className="latest-blog__image-wrap" href="#blog">
+                <a className="latest-blog__image-wrap" href={post.href}>
                   <div className="latest-blog__image-media">
                     <img
                       src={post.image}
@@ -262,7 +162,7 @@ export default function LatestBlog() {
                 </div>
 
                 <h3>
-                  <a href="#blog">{post.title}</a>
+                  <a href={post.href}>{post.title}</a>
                 </h3>
 
                 <p className="latest-blog__excerpt">{post.excerpt}</p>
@@ -406,7 +306,6 @@ export default function LatestBlog() {
           inset: 0;
           overflow: hidden;
           border-radius: inherit;
-          will-change: transform;
         }
 
         .latest-blog__image-wrap img {
@@ -504,7 +403,8 @@ export default function LatestBlog() {
           font-size: clamp(21px, 1.55vw, 27px);
           font-weight: 700;
           line-height: 1.18;
-          letter-spacing: -0.035em;
+          letter-spacing: 0.02em;
+          word-spacing: 0.02em;
         }
 
         .latest-blog__card h3 a {

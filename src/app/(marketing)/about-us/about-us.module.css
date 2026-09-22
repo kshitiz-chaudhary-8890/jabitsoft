@@ -55,7 +55,7 @@
 
 /* About is intentionally a continuous white editorial canvas. Components can
    still use dark cards or media overlays, but every section surface stays white. */
-.aboutPage main > section {
+.aboutPage main > section:not([data-about-cta]) {
   background: #ffffff !important;
 }
 
@@ -64,7 +64,7 @@
  * still control colour, width and layout; these rules only prevent headings
  * inside richer sections from growing beyond the page's intended scale.
  */
-.aboutPage main h2 {
+.aboutPage main > section:not([data-about-cta]) h2 {
   font-family:
     "Cal Sans", "Cal Sans Placeholder", var(--font-plus-jakarta-sans), sans-serif !important;
   font-size: var(--about-heading-size) !important;
@@ -74,7 +74,7 @@
 }
 
 /* Keep every section eyebrow aligned with the Services page's compact kicker. */
-.aboutPage main > section:not(:first-child) [class*="eyebrow"] {
+.aboutPage main > section:not(:first-child):not([data-about-cta]) [class*="eyebrow"] {
   color: var(--about-eyebrow-color) !important;
   font-family: var(--font-inter), Inter, sans-serif !important;
   font-size: 12px !important;
@@ -84,7 +84,7 @@
   text-transform: uppercase !important;
 }
 
-.aboutPage main h3 {
+.aboutPage main > section:not([data-about-cta]) h3 {
   font-family: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", sans-serif !important;
   font-size: clamp(22px, 1.8vw, 28px) !important;
   font-weight: 500 !important;
@@ -94,13 +94,13 @@
 
 /* Our Story is the page's editorial timeline, so its chapter headlines need
    more presence than supporting card titles on wide screens. */
-.aboutPage main h3[data-story-head] {
+.aboutPage main > section:not([data-about-cta]) h3[data-story-head] {
   font-size: clamp(32px, 3vw, 42px) !important;
   line-height: 1.02 !important;
   letter-spacing: -0.04em !important;
 }
 
-.aboutPage main h4 {
+.aboutPage main > section:not([data-about-cta]) h4 {
   font-family: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", sans-serif !important;
   font-size: clamp(18px, 1.45vw, 22px) !important;
   font-weight: 500 !important;
@@ -112,8 +112,8 @@
    same reading rhythm across every named About intro/description treatment.
    The hero is excluded so it inherits the shared ServiceHero description
    styles verbatim. */
-.aboutPage main > section:not(:first-child) [class*="description"],
-.aboutPage main > section:not(:first-child) [class*="lede"] {
+.aboutPage main > section:not(:first-child):not([data-about-cta]) [class*="description"],
+.aboutPage main > section:not(:first-child):not([data-about-cta]) [class*="lede"] {
   font-family: var(--font-inter), Inter, sans-serif !important;
   font-size: var(--about-copy-size) !important;
   font-weight: 400 !important;
@@ -128,7 +128,7 @@
     --about-heading-leading: 0.98;
   }
 
-  .aboutPage main h3[data-story-head] {
+  .aboutPage main > section:not([data-about-cta]) h3[data-story-head] {
     font-size: clamp(28px, 3.8vw, 34px) !important;
   }
 }
@@ -145,18 +145,18 @@
     --about-copy-size: 16px;
   }
 
-  .aboutPage main h3 {
+  .aboutPage main > section:not([data-about-cta]) h3 {
     font-size: 22px !important;
     line-height: 1.24 !important;
   }
 
-  .aboutPage main h3[data-story-head] {
+  .aboutPage main > section:not([data-about-cta]) h3[data-story-head] {
     font-size: 22px !important;
     line-height: 1.24 !important;
     letter-spacing: -0.03em !important;
   }
 
-  .aboutPage main h4 {
+  .aboutPage main > section:not([data-about-cta]) h4 {
     font-size: 18px !important;
   }
 }

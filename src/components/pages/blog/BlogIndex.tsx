@@ -1,14 +1,17 @@
 "use client";
 
 import { FormEvent, useMemo, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 
 import {
   blogArticles as articles,
   blogCategories as categories,
+  getBlogImage,
   type BlogArticle as Article,
   type BlogCategory as Category,
 } from "@/data/blog";
+import { SharedCTA } from "@/components/common/SharedCTA/SharedCTA";
 
 import styles from "./BlogIndex.module.css";
 
@@ -34,7 +37,7 @@ export function BlogIndex() {
   function subscribe(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!email.trim()) return;
-    setSubscriptionStatus("You are on the list. Watch your inbox for the next field note.");
+    setSubscriptionStatus("You are on the list. Watch your inbox for the next blog update.");
     setEmail("");
   }
 
@@ -44,7 +47,7 @@ export function BlogIndex() {
         <div className={styles.shell}>
           <div className={styles.heroGrid}>
             <div>
-              <p className={styles.eyebrow}>JabitSoft field notes</p>
+              <p className={styles.eyebrow}>JabitSoft Blogs</p>
               <h1 id="blog-title">
                 Ideas for building
                 <span>software that holds up.</span>
@@ -80,7 +83,7 @@ export function BlogIndex() {
                 type="search"
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
-                placeholder="Search field notes"
+                placeholder="Search blogs"
               />
             </label>
           </div>
@@ -92,7 +95,7 @@ export function BlogIndex() {
           <header className={styles.sectionHeader}>
             <div>
               <p className={styles.eyebrow}>Filtered library</p>
-              <h2>{filteredArticles.length} field notes found</h2>
+              <h2>{filteredArticles.length} blogs found</h2>
             </div>
             <button
               type="button"
@@ -113,7 +116,7 @@ export function BlogIndex() {
           ) : (
             <div className={styles.emptyState}>
               <span>00</span>
-              <h3>No field notes match that search.</h3>
+              <h3>No blogs match that search.</h3>
               <p>Try a broader topic or clear the current category.</p>
             </div>
           )}
@@ -146,12 +149,12 @@ export function BlogIndex() {
                 <header className={styles.sectionHeader}>
                   <div>
                     <p className={styles.eyebrow}>The library</p>
-                    <h2 id="latest-title">Latest field notes</h2>
+                    <h2 id="latest-title">Latest blogs</h2>
                   </div>
                 </header>
-                <div className={styles.articleGrid}>
+                <div className={styles.latestList}>
                   {articles.slice(3).map((article) => (
-                    <ArticleCard article={article} key={article.slug} />
+                    <ArticleRow article={article} key={article.slug} />
                   ))}
                 </div>
               </div>
@@ -162,22 +165,27 @@ export function BlogIndex() {
                   <span>05 reads</span>
                 </div>
                 <h2 id="trending-title">
-                  Most useful
+                  Most useful{" "}
                   <span>this week.</span>
                 </h2>
                 <ol>
                   {articles.slice(0, 5).map((article, index) => (
                     <li key={article.slug}>
-                      <span className={styles.trendingRank}>
-                        {String(index + 1).padStart(2, "0")}
-                      </span>
-                      <div>
-                        <span className={styles.trendingCategory}>{article.category}</span>
-                        <strong>{article.title}</strong>
-                        <small>
-                          {article.date} · {article.readTime}
-                        </small>
-                      </div>
+                      <Link href={`/blogs/${article.slug}`}>
+                        <span className={styles.trendingRank}>
+                          {String(index + 1).padStart(2, "0")}
+                        </span>
+                        <div>
+                          <span className={styles.trendingCategory}>{article.category}</span>
+                          <strong>{article.title}</strong>
+                          <small>
+                            {article.date} · {article.readTime}
+                          </small>
+                        </div>
+                        <span className={styles.trendingArrow} aria-hidden="true">
+                          <ArrowIcon />
+                        </span>
+                      </Link>
                     </li>
                   ))}
                 </ol>
@@ -193,7 +201,7 @@ export function BlogIndex() {
         </div>
         <div className={styles.newsletterCopy}>
           <p className={styles.eyebrow}>One useful email</p>
-          <h2 id="newsletter-title">Get the next field note.</h2>
+          <h2 id="newsletter-title">Get the next blog update.</h2>
           <p>Practical software and growth insights. No noise, and no daily inbox clutter.</p>
         </div>
         <form className={styles.newsletterForm} onSubmit={subscribe}>
@@ -215,7 +223,46 @@ export function BlogIndex() {
           </p>
         </form>
       </section>
+
+      <SharedCTA
+        headline="Want this thinking on your project?"
+        lede="Bring us the problem behind the reading — we'll reply in one business day with clear next steps."
+        primaryLabel="Start a conversation"
+        primaryHref="/contact-us"
+        secondaryLabel="See our work"
+        secondaryHref="/case-studies"
+        image="https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=1600&auto=format&fit=crop"
+      />
     </main>
+  );
+}
+
+function ArticleRow({ article }: { article: Article }) {
+  return (
+    <article className={styles.storyRow}>
+      <Link href={`/blogs/${article.slug}`}>
+        <div className={styles.storyImage}>
+          <Image
+            src={getBlogImage(article)}
+            alt=""
+            fill
+            sizes="(max-width: 640px) 108px, (max-width: 1080px) 210px, 15vw"
+          />
+        </div>
+        <div className={styles.storyCopy}>
+          <div className={styles.storyMeta}>
+            <span>{article.category}</span>
+            <time>{article.date}</time>
+            <span>{article.readTime}</span>
+          </div>
+          <h3>{article.title}</h3>
+          <p>{article.excerpt}</p>
+        </div>
+        <span className={styles.storyArrow} aria-hidden="true">
+          <ArrowIcon />
+        </span>
+      </Link>
+    </article>
   );
 }
 
@@ -234,23 +281,26 @@ function ArticleCard({
     >
       <Link className={styles.cardLink} href={`/blogs/${article.slug}`}>
         <div className={styles.cover} data-tone={article.tone}>
-          <span>{article.code}</span>
-          <strong>{article.category.split(" ")[0]}</strong>
+          <Image
+            src={getBlogImage(article)}
+            alt=""
+            fill
+            sizes={featured ? "(max-width: 820px) 100vw, 64vw" : "(max-width: 820px) 50vw, 32vw"}
+          />
+          <div className={styles.coverShade} aria-hidden="true" />
+          <span>{article.category}</span>
           <i aria-hidden="true" />
+          <b aria-hidden="true">
+            <ArrowIcon />
+          </b>
         </div>
         <div className={styles.cardBody}>
           <div className={styles.cardMeta}>
-            <span>{article.category}</span>
+            <time>{article.date}</time>
             <span>{article.readTime}</span>
           </div>
-          <h3>{article.title}</h3>
+          <h3 className={compact ? styles.compactTitle : undefined}>{article.title}</h3>
           <p>{article.excerpt}</p>
-          <div className={styles.cardFooter}>
-            <time>{article.date}</time>
-            <span aria-hidden="true">
-              Read note <ArrowIcon />
-            </span>
-          </div>
         </div>
       </Link>
     </article>

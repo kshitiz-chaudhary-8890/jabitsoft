@@ -10,6 +10,7 @@ import { OurTeam } from "@/components/pages/about/OurTeam/OurTeam";
 import { TeamShowcase } from "@/components/pages/about/TeamShowcase/TeamShowcase";
 import { OfficeGallery } from "@/components/pages/about/OfficeGallery/OfficeGallery";
 import { Culture } from "@/components/pages/about/Culture/Culture";
+import { AboutCTA } from "@/components/pages/about/AboutCTA/AboutCTA";
 import page from "./about-us.module.css";
 
 const title = "About JabitSoft | Software Development Company Since 2007";
@@ -81,6 +82,7 @@ export default function AboutUsPage() {
           <CompanyLens />
           <OfficeGallery />
           <Culture />
+          <AboutCTA />
         </main>
       </div>
     </>
