@@ -3,7 +3,6 @@ import type { ReactNode } from "react";
 
 import { Header } from "@/components/layout/Header/Header";
 import { SiteFooter } from "@/components/layout/SiteFooter";
-import { SiteLoader } from "@/components/common/SiteLoader/SiteLoader";
 import { ScrollRestore } from "@/components/common/ScrollRestore";
 import { AppProviders } from "@/components/providers/AppProviders";
 import { rootMetadata } from "@/lib/seo/metadata";
@@ -27,7 +26,6 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <body>
         <AppProviders>
           <ScrollRestore />
-          <SiteLoader />
           <Header />
           {children}
           <SiteFooter />

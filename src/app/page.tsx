@@ -1,5 +1,6 @@
 import { HomepageClient } from "@/components/pages/home/HomepageClient";
 import { SharedCTA } from "@/components/common/SharedCTA/SharedCTA";
+import { SiteLoader } from "@/components/common/SiteLoader/SiteLoader";
 import jabitLogo from "@/assets/jabit-logo.png";
 import { company } from "@/data/company";
 import { buildHomepageSchema, serializeJsonLd } from "@/lib/seo/schema";
@@ -13,6 +14,7 @@ export default function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(schema) }}
       />
+      <SiteLoader />
       <HomepageClient />
       <SharedCTA
         headline="Have something worth building well?"
