@@ -16,7 +16,10 @@ export function Header() {
   const [hidden, setHidden] = useState(false);
   const [solid, setSolid] = useState(false);
   const track = useRef({ lastY: 0, acc: 0, hidden: false, init: false });
-  track.current.hidden = hidden;
+
+  useEffect(() => {
+    track.current.hidden = hidden;
+  }, [hidden]);
 
   useEffect(() => {
     if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return undefined;

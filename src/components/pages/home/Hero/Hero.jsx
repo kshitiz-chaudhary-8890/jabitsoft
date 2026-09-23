@@ -2,6 +2,8 @@
 
 import { useEffect, useRef } from "react";
 
+import { useHomeHeroReveal } from "./useHomeHeroReveal";
+
 const LINES = ["Software that", "moves business", "forward."];
 
 const LINKS = [
@@ -11,6 +13,12 @@ const LINKS = [
   ["AI Solutions", "/services"],
   ["ERP", "/services"],
 ];
+
+// Single swap point: point these at a video CDN (Cloudinary/Bunny/Mux) later
+// without touching markup. Local same-origin file starts fastest today and
+// matches the <link rel="preload"> in src/app/page.tsx.
+const VIDEO_SRC = "/videos/hero-tunnel.mp4";
+const VIDEO_POSTER = "/videos/hero-tunnel.jpg";
 
 function Arrow() {
   return (
@@ -24,6 +32,7 @@ export default function Hero() {
   const sectionRef = useRef(null);
   const bgRef = useRef(null);
   const shellRef = useRef(null);
+  useHomeHeroReveal(sectionRef, shellRef);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -70,69 +79,93 @@ export default function Hero() {
           muted
           loop
           playsInline
-          preload="metadata"
-          poster="https://cdn.pixabay.com/video/2019/10/01/27438-363642440_tiny.jpg"
+          preload="auto"
+          poster={VIDEO_POSTER}
           aria-hidden="true"
         >
           <source
-            src="https://cdn.pixabay.com/video/2019/10/01/27438-363642440_large.mp4"
+            src={VIDEO_SRC}
             type="video/mp4"
           />
         </video>
         <div className="jabit-hero__bg" aria-hidden="true" />
         <div ref={shellRef} className="jabit-hero__shell">
           <div className="jabit-hero__eyebrows">
-            <p className="jabit-hero__eyebrow-left">Custom software, delivered end to end</p>
-            <p className="jabit-hero__eyebrow-right">
-              JabitSoft designs, builds and supports web, mobile, cloud, AI and ERP systems
-              for businesses worldwide.
-            </p>
+            <span className="jabit-hero__rise">
+              <span className="jabit-hero__rise-inner">
+                <p className="jabit-hero__eyebrow-left">Custom software, delivered end to end</p>
+              </span>
+            </span>
+            <span className="jabit-hero__rise">
+              <span className="jabit-hero__rise-inner">
+                <p className="jabit-hero__eyebrow-right">
+                  JabitSoft designs, builds and supports web, mobile, cloud, AI and ERP systems
+                  for businesses worldwide.
+                </p>
+              </span>
+            </span>
           </div>
 
           <div className="jabit-hero__main">
             <h1 id="home-hero-title" className="jabit-hero__display">
-              {LINES.map((line, i) => (
+              {LINES.map((line) => (
                 <span key={line} className="jabit-hero__line">
-                  <span style={{ "--d": `${i * 110}ms` }}>{line}</span>
+                  <span className="jabit-hero__rise-inner">{line}</span>
                 </span>
               ))}
             </h1>
             <div className="jabit-hero__side">
-              <p className="jabit-hero__sub">
-                Design, build, launch and support — everything your product needs, all
-                under one roof.
-              </p>
+              <span className="jabit-hero__rise">
+                <span className="jabit-hero__rise-inner">
+                  <p className="jabit-hero__sub">
+                    Design, build, launch and support — everything your product needs, all
+                    under one roof.
+                  </p>
+                </span>
+              </span>
               <div className="jabit-hero__actions">
-                <a
-                  href="/case-studies"
-                  className="jabit-hero__ghost"
-                  data-site-button
-                  data-button-variant="secondary"
-                  data-button-theme="dark"
-                >
-                  See our work
-                  <Arrow />
-                </a>
-                <a
-                  href="/contact-us"
-                  className="jabit-hero__white"
-                  data-site-button
-                  data-button-variant="primary"
-                  data-button-theme="dark"
-                >
-                  Start a conversation
-                  <Arrow />
-                </a>
+                <span className="jabit-hero__rise">
+                  <span className="jabit-hero__rise-inner">
+                    <a
+                      href="/case-studies"
+                      className="jabit-hero__ghost"
+                      data-site-button
+                      data-button-variant="secondary"
+                      data-button-theme="dark"
+                    >
+                      See our work
+                      <Arrow />
+                    </a>
+                  </span>
+                </span>
+                <span className="jabit-hero__rise">
+                  <span className="jabit-hero__rise-inner">
+                    <a
+                      href="/contact-us"
+                      className="jabit-hero__white"
+                      data-site-button
+                      data-button-variant="primary"
+                      data-button-theme="dark"
+                    >
+                      Start a conversation
+                      <Arrow />
+                    </a>
+                  </span>
+                </span>
               </div>
             </div>
           </div>
 
           <nav className="jabit-hero__strip" aria-label="Services">
             {LINKS.map(([label, href]) => (
-              <a key={label} href={href}>
-                {label}
-                <Arrow />
-              </a>
+              <span key={label} className="jabit-hero__rise">
+                <span className="jabit-hero__rise-inner">
+                  <a href={href}>
+                    {label}
+                    <Arrow />
+                  </a>
+                </span>
+              </span>
             ))}
           </nav>
         </div>
@@ -188,7 +221,6 @@ export default function Hero() {
           grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
           gap: 32px;
           align-items: start;
-          animation: jabitHeroFade 900ms ease 100ms both;
         }
 
         .jabit-hero__eyebrow-left,
@@ -236,15 +268,22 @@ export default function Hero() {
 
         .jabit-hero__line > span {
           display: block;
-          transform: translateY(110%);
-          animation: jabitHeroRise 1000ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
-          animation-delay: calc(200ms + var(--d, 0ms));
+          will-change: transform;
+        }
+
+        /* Masked rise pieces — same cascade as the About hero. */
+        .jabit-hero__rise {
+          display: block;
+          overflow: hidden;
+        }
+
+        .jabit-hero__rise-inner {
+          display: block;
           will-change: transform;
         }
 
         .jabit-hero__side {
           padding-bottom: 12px;
-          animation: jabitHeroFade 900ms ease 550ms both;
         }
 
         .jabit-hero__sub {
@@ -287,7 +326,6 @@ export default function Hero() {
           margin-top: clamp(48px, 7vh, 90px);
           padding: 26px 0 30px;
           border-top: 1px solid rgba(255, 255, 255, 0.16);
-          animation: jabitHeroFade 900ms ease 750ms both;
         }
 
         .jabit-hero__strip a {
@@ -318,21 +356,10 @@ export default function Hero() {
           stroke-linejoin: round;
         }
 
-        @keyframes jabitHeroRise {
-          to {
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes jabitHeroFade {
-          from {
-            opacity: 0;
-            transform: translateY(18px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+        /* Button masks get breathing room so hover lift never clips. */
+        .jabit-hero__actions > .jabit-hero__rise {
+          padding: 4px 2px;
+          margin: -4px -2px;
         }
 
         @media (max-width: 980px) {
@@ -431,8 +458,11 @@ export default function Hero() {
             display: none;
           }
 
-          .jabit-hero__strip a {
+          .jabit-hero__strip > .jabit-hero__rise {
             flex-shrink: 0;
+          }
+
+          .jabit-hero__strip a {
             font-size: 13px;
           }
         }
@@ -440,17 +470,6 @@ export default function Hero() {
         @media (prefers-reduced-motion: reduce) {
           .jabit-hero__video {
             display: none;
-          }
-
-          .jabit-hero__line > span,
-          .jabit-hero__eyebrows,
-          .jabit-hero__side,
-          .jabit-hero__strip {
-            animation: none;
-          }
-
-          .jabit-hero__line > span {
-            transform: none;
           }
 
           .jabit-hero__ghost:hover,

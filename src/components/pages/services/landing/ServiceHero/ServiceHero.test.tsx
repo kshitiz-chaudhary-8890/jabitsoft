@@ -28,7 +28,7 @@ afterEach(() => cleanup());
 describe("ServiceHero", () => {
   it("renders the eyebrow, headline, description and CTAs", () => {
     render(<ServiceHero />);
-    expect(screen.getByText("Software development services")).toBeInTheDocument();
+    expect(screen.getByText("Our Services")).toBeInTheDocument();
     const heading = screen.getByRole("heading", { level: 1 });
     expect(heading).toHaveTextContent(/Built for/i);
     expect(heading).toHaveTextContent(/Engineered around your business/i);

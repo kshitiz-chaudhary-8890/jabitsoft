@@ -46,7 +46,6 @@ function SectionHeading({
       <h2>
         <span className="section-heading-fill">{title}</span>
       </h2>
-      <div className={styles.headingRule} data-motion-heading-rule />
       <div className={styles.headingIntro} data-motion-heading-intro>
         {intro}
       </div>

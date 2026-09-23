@@ -313,6 +313,7 @@
   border-top: 1px solid var(--c-line);
 }
 .detailsList a {
+  position: relative;
   display: grid;
   grid-template-columns: 110px minmax(0, 1fr) auto;
   gap: 20px;
@@ -321,6 +322,43 @@
   padding: 18px 0;
   border-bottom: 1px solid var(--c-line);
   text-decoration: none;
+  transition: color 260ms ease, padding 260ms ease;
+}
+.detailsList a::before {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: #111513;
+  content: "";
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 360ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.detailsList a > * {
+  position: relative;
+  z-index: 1;
+}
+.detailsList a:hover,
+.detailsList a:focus-visible {
+  padding-inline: 24px;
+  color: #fff;
+}
+.detailsList a:hover::before,
+.detailsList a:focus-visible::before {
+  transform: scaleY(1);
+  transform-origin: top;
+}
+.detailsList a:hover span,
+.detailsList a:focus-visible span {
+  color: rgba(255, 255, 255, 0.72);
+}
+.detailsList a:hover strong,
+.detailsList a:focus-visible strong {
+  color: #fff;
+}
+.detailsList a:hover svg,
+.detailsList a:focus-visible svg {
+  color: #fff;
 }
 .detailsList span {
   color: var(--c-muted);
@@ -328,19 +366,18 @@
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+  transition: color 250ms ease;
 }
 .detailsList strong {
   font-size: 14px;
   font-weight: 550;
   line-height: 1.55;
+  transition: color 250ms ease;
 }
 .detailsList svg {
   width: 19px;
   height: 19px;
-  transition: transform 180ms ease;
-}
-.detailsList a:hover strong {
-  color: var(--c-blue);
+  transition: transform 180ms ease, color 250ms ease;
 }
 .detailsList a:hover svg {
   transform: translate(2px, -2px);

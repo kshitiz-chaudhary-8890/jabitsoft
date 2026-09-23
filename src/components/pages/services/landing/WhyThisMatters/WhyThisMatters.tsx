@@ -98,7 +98,7 @@ export function WhyThisMatters() {
           </h2>
           <p className={styles.description}>
             Most companies treat AI as a feature. The ones pulling ahead treat it as workforce.
-            Agentic systems don't just answer prompts—they own outcomes.
+            Agentic systems don&apos;t just answer prompts&mdash;they own outcomes.
           </p>
         </header>
 

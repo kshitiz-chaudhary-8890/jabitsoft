@@ -3,6 +3,7 @@ import { FaFacebookF, FaLinkedinIn } from "react-icons/fa6";
 import { SiBehance, SiInstagram, SiX } from "react-icons/si";
 
 import { ContactForm } from "@/components/pages/contact/ContactForm";
+import { ContactHero } from "@/components/pages/contact/ContactHero/ContactHero";
 
 import styles from "./page.module.css";
 
@@ -19,58 +20,10 @@ export const metadata: Metadata = {
   },
 };
 
-const responseSteps = [
-  ["Reply", "Within one business day"],
-  ["First call", "A focused 30-minute conversation"],
-  ["Before work", "Scope and next steps in writing"],
-] as const;
-
 export default function ContactUsPage() {
   return (
     <main id="main-content" className={styles.page}>
-      <section className={styles.hero} aria-labelledby="contact-title">
-        <div className={styles.heroGrid}>
-          <div className={styles.heroIntro}>
-            <div className={styles.heroEyebrow}>
-              <p className={styles.kicker}>Contact JabitSoft</p>
-              <span>India · Worldwide</span>
-            </div>
-            <h1 id="contact-title">
-              Tell us what needs
-              <span>to work better.</span>
-            </h1>
-            <p className={styles.lede}>
-              Bring us the rough idea, the stubborn system, or the next product you need to ship. We
-              will help turn it into a clear, buildable plan.
-            </p>
-            <a className={styles.heroLink} href="#brief-title">
-              Start your project brief
-              <Arrow />
-            </a>
-          </div>
-
-          <aside className={styles.heroAside} aria-label="What happens next">
-            <div className={styles.asideHeader}>
-              <p className={styles.asideLabel}>What happens next</p>
-              <span className={styles.responseBadge}>
-                <i aria-hidden="true" /> We are listening
-              </span>
-            </div>
-            <p className={styles.asideTitle}>A clear start, before a line of code.</p>
-            <ol className={styles.steps}>
-              {responseSteps.map(([label, value], index) => (
-                <li key={label}>
-                  <span className={styles.stepNumber}>{String(index + 1).padStart(2, "0")}</span>
-                  <span>
-                    <strong>{label}</strong>
-                    <small>{value}</small>
-                  </span>
-                </li>
-              ))}
-            </ol>
-          </aside>
-        </div>
-      </section>
+      <ContactHero />
 
       <section className={styles.briefSection} aria-labelledby="brief-title">
         <div className={styles.briefShell}>

@@ -10,7 +10,7 @@
 }
 
 .shell {
-  width: min(1280px, calc(100% - clamp(32px, 6vw, 96px)));
+  width: var(--home-shell-width, min(1360px, calc(100% - 64px)));
   margin-inline: auto;
 }
 

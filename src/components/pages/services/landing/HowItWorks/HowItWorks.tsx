@@ -195,7 +195,7 @@ export function HowItWorks() {
       // Active indicator follows scroll
       if (activeIndicator) {
         gsap.to(activeIndicator, {
-          y: (i, target) => {
+          y: () => {
             const card = stageCards[activeStage] as HTMLElement;
             if (!card) return 0;
             const timelineRect = timeline?.getBoundingClientRect();

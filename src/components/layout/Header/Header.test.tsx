@@ -21,7 +21,7 @@ describe("Header", () => {
       "Services",
       "Case Studies",
       "Blog",
-      "Contact",
+      "Contact Us",
     ]);
     expect(
       [...navigation.querySelectorAll<HTMLAnchorElement>("a[data-nav-item]")].map(
@@ -31,16 +31,16 @@ describe("Header", () => {
       ["About", "/about-us", ""],
       ["Industries", "/services", ""],
       ["Services", "/services", ""],
-      ["Case Studies", "/", "#works"],
-      ["Blog", "/", "#blog"],
-      ["Contact", "/", "#contact"],
+      ["Case Studies", "/case-studies", ""],
+      ["Blog", "/blogs", ""],
+      ["Contact Us", "/contact-us", ""],
     ]);
     expect(screen.queryByRole("link", { name: "Home" })).not.toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: "Open services submenu" }).querySelector("svg"),
     ).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Open industries submenu" }).querySelector("svg")).toBeInTheDocument();
-    expect(screen.getAllByRole("link", { name: "Contact" })).toHaveLength(2);
+    expect(screen.getAllByRole("link", { name: "Contact Us" })).toHaveLength(2);
   });
 
   it("opens the Services menu and exposes all approved service routes", async () => {

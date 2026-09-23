@@ -25,6 +25,9 @@ export function SiteLoader() {
       seen = false;
     }
     if (seen) {
+      // Intentionally synchronous pre-paint: hiding the loader before first
+      // paint is the whole point — deferring would flash it on screen.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setGone(true);
     } else {
       try {
@@ -42,6 +45,9 @@ export function SiteLoader() {
 
   useEffect(() => {
     if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) {
+      // Media-query state can only be read on the client; skipping the
+      // loader for reduced-motion users must happen before its timers.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setReduced(true);
       return undefined;
     }

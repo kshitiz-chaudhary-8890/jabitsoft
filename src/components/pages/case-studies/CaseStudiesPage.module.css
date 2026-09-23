@@ -10,7 +10,7 @@
 }
 
 .shell {
-  width: min(90%, 1320px);
+  width: var(--home-shell-width, min(1360px, calc(100% - 64px)));
   margin-inline: auto;
 }
 
@@ -351,8 +351,58 @@
 }
 
 .work {
-  padding: clamp(90px, 11vw, 152px) 0 clamp(96px, 10vw, 142px);
+  padding: clamp(56px, 6vw, 88px) 0 clamp(96px, 10vw, 142px);
   background: #fff;
+}
+
+/* Pull the CTA up over half the work section's bottom padding —
+   halves the dead space between the two sections on every device. */
+.ctaBand {
+  margin-top: calc(clamp(48px, 5vw, 71px) * -1);
+}
+
+.workHead {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.58fr);
+  align-items: end;
+  gap: 20px clamp(48px, 8vw, 120px);
+  margin-bottom: clamp(36px, 4.5vw, 64px);
+}
+
+.workHead .eyebrow {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
+.workTitle {
+  max-width: 720px;
+  margin: 0;
+  font-family:
+    "Cal Sans", "Cal Sans Placeholder", var(--font-plus-jakarta-sans), sans-serif;
+  font-size: clamp(36px, 4.2vw, 58px);
+  font-weight: 400;
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+  color: var(--ink);
+}
+
+.workDesc {
+  max-width: 56ch;
+  margin: 0;
+  color: var(--muted);
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: clamp(16px, 1.35vw, 20px);
+  font-weight: 400;
+  line-height: 1.62;
+  text-wrap: pretty;
+}
+
+@media (max-width: 900px) {
+  .workHead {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
 }
 
 .studyGrid {

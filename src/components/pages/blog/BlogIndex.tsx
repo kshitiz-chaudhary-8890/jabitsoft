@@ -1,6 +1,7 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -11,15 +12,50 @@ import {
   type BlogArticle as Article,
   type BlogCategory as Category,
 } from "@/data/blog";
-import { SharedCTA } from "@/components/common/SharedCTA/SharedCTA";
 
 import styles from "./BlogIndex.module.css";
+import { BlogFilter } from "./BlogFilter/BlogFilter";
+import { useBlogHeroReveal } from "./useBlogHeroReveal";
+
+const HillsBackground = dynamic(() => import("@/components/three/HillsBackground/HillsBackground"), {
+  ssr: false,
+});
 
 export function BlogIndex() {
   const [activeCategory, setActiveCategory] = useState<Category>("All");
   const [query, setQuery] = useState("");
   const [email, setEmail] = useState("");
   const [subscriptionStatus, setSubscriptionStatus] = useState("");
+
+  const heroRef = useRef<HTMLElement>(null);
+  const heroShellRef = useRef<HTMLDivElement>(null);
+  useBlogHeroReveal(heroRef, heroShellRef);
+
+  // Scroll shrink — scales the hero down while scrolling, restores on return.
+  useEffect(() => {
+    const hero = heroRef.current;
+    if (!hero) return undefined;
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return undefined;
+
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const y = window.scrollY;
+      const h = hero.offsetHeight;
+      const p = Math.min(1, y / h);
+      hero.style.transform = `scale(${1 - 0.06 * p})`;
+      hero.style.borderRadius = `${p * 28}px`;
+    };
+    const onScroll = () => {
+      if (!frame) frame = window.requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
+  }, []);
 
   const filteredArticles = useMemo(() => {
     const search = query.trim().toLowerCase();
@@ -43,52 +79,81 @@ export function BlogIndex() {
 
   return (
     <main id="main-content" className={styles.page}>
-      <section className={styles.hero} aria-labelledby="blog-title">
-        <div className={styles.shell}>
+      <section ref={heroRef} className={styles.hero} aria-labelledby="blog-title">
+        <div className={styles.heroHills} aria-hidden="true">
+          <HillsBackground />
+        </div>
+        <div ref={heroShellRef} className={styles.shell}>
+          <div className={styles.heroEyebrows}>
+            <span className={styles.rise}>
+              <span className={styles.riseInner}>
+                <p className={styles.eyebrow}>JabitSoft Blogs</p>
+              </span>
+            </span>
+            <span className={styles.rise}>
+              <span className={styles.riseInner}>
+                <p className={styles.eyebrowNote}>Insights · Guides · Decisions</p>
+              </span>
+            </span>
+          </div>
           <div className={styles.heroGrid}>
             <div>
-              <p className={styles.eyebrow}>JabitSoft Blogs</p>
               <h1 id="blog-title">
-                Ideas for building
-                <span>software that holds up.</span>
+                <span className={styles.heroLine}>
+                  <span className={styles.riseInner}>Ideas for building</span>
+                </span>
+                <span className={styles.heroLine}>
+                  <span className={styles.riseInner}>software that holds up.</span>
+                </span>
               </h1>
             </div>
             <div className={styles.heroCopy}>
-              <span className={styles.issue}>Insights · Guides · Decisions</span>
-              <p>
-                Practical thinking on product delivery, cloud systems, ERP, growth and the
-                technology choices behind dependable digital products.
-              </p>
+              <span className={styles.rise}>
+                <span className={styles.riseInner}>
+                  <p>
+                    Practical thinking on delivery, cloud, ERP and growth — notes for
+                    teams building software that holds up.
+                  </p>
+                </span>
+              </span>
+              <div className={styles.heroActions}>
+                <span className={styles.rise}>
+                  <span className={styles.riseInner}>
+                    <a
+                      href="#latest"
+                      data-site-button
+                      data-button-variant="primary"
+                    >
+                      Browse latest
+                      <ArrowIcon />
+                    </a>
+                  </span>
+                </span>
+                <span className={styles.rise}>
+                  <span className={styles.riseInner}>
+                    <a
+                      href="#newsletter"
+                      data-site-button
+                      data-button-variant="secondary"
+                    >
+                      Get updates
+                      <ArrowIcon />
+                    </a>
+                  </span>
+                </span>
+              </div>
             </div>
-          </div>
-
-          <div className={styles.discovery}>
-            <div className={styles.categories} aria-label="Filter articles by category">
-              {categories.map((category) => (
-                <button
-                  key={category}
-                  className={activeCategory === category ? styles.activeCategory : undefined}
-                  type="button"
-                  aria-pressed={activeCategory === category}
-                  onClick={() => setActiveCategory(category)}
-                >
-                  {category}
-                </button>
-              ))}
-            </div>
-            <label className={styles.search}>
-              <span className="sr-only">Search articles</span>
-              <SearchIcon />
-              <input
-                type="search"
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                placeholder="Search blogs"
-              />
-            </label>
           </div>
         </div>
       </section>
+
+      <BlogFilter
+        categories={categories}
+        activeCategory={activeCategory}
+        onCategoryChange={setActiveCategory}
+        query={query}
+        onQueryChange={setQuery}
+      />
 
       {isFiltered ? (
         <section className={`${styles.shell} ${styles.results}`} aria-live="polite">
@@ -143,7 +208,7 @@ export function BlogIndex() {
             </div>
           </section>
 
-          <section className={styles.latest} aria-labelledby="latest-title">
+          <section className={styles.latest} id="latest" aria-labelledby="latest-title">
             <div className={`${styles.shell} ${styles.latestGrid}`}>
               <div>
                 <header className={styles.sectionHeader}>
@@ -199,40 +264,47 @@ export function BlogIndex() {
         <div className={styles.newsletterMark} aria-hidden="true">
           J/S
         </div>
-        <div className={styles.newsletterCopy}>
-          <p className={styles.eyebrow}>One useful email</p>
-          <h2 id="newsletter-title">Get the next blog update.</h2>
-          <p>Practical software and growth insights. No noise, and no daily inbox clutter.</p>
+        <div className={styles.newsletterInner}>
+          <div className={styles.newsletterCopy}>
+            <p className={styles.eyebrow}>One useful email</p>
+            <h2 id="newsletter-title">Get the next blog update.</h2>
+            <p>Practical software and growth insights. No noise, and no daily inbox clutter.</p>
+          </div>
+          <form className={styles.newsletterForm} onSubmit={subscribe}>
+            {subscriptionStatus ? (
+              <p className={styles.newsletterDone} role="status" aria-live="polite">
+                <span className={styles.newsletterDoneTick} aria-hidden="true">
+                  <svg viewBox="0 0 20 20" fill="none">
+                    <path d="M4 10.5 8.5 15 16 6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </span>
+                {subscriptionStatus}
+              </p>
+            ) : (
+              <>
+                <label className={styles.newsletterField}>
+                  <span className="sr-only">Work email address</span>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
+                    placeholder="Work email address"
+                    required
+                  />
+                  <button type="submit">
+                    <span className={styles.newsletterBtnLabel}>Subscribe</span>
+                    <ArrowIcon />
+                  </button>
+                </label>
+                <p className={styles.newsletterHint}>
+                  One email per update. Unsubscribe anytime.
+                </p>
+              </>
+            )}
+          </form>
         </div>
-        <form className={styles.newsletterForm} onSubmit={subscribe}>
-          <label>
-            <span className="sr-only">Work email address</span>
-            <input
-              type="email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              placeholder="Work email address"
-              required
-            />
-          </label>
-          <button type="submit">
-            Subscribe <ArrowIcon />
-          </button>
-          <p role="status" aria-live="polite">
-            {subscriptionStatus}
-          </p>
-        </form>
       </section>
 
-      <SharedCTA
-        headline="Want this thinking on your project?"
-        lede="Bring us the problem behind the reading — we'll reply in one business day with clear next steps."
-        primaryLabel="Start a conversation"
-        primaryHref="/contact-us"
-        secondaryLabel="See our work"
-        secondaryHref="/case-studies"
-        image="https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=1600&auto=format&fit=crop"
-      />
     </main>
   );
 }
@@ -304,15 +376,6 @@ function ArticleCard({
         </div>
       </Link>
     </article>
-  );
-}
-
-function SearchIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <circle cx="11" cy="11" r="6.5" stroke="currentColor" strokeWidth="1.6" />
-      <path d="m16 16 4 4" stroke="currentColor" strokeWidth="1.6" />
-    </svg>
   );
 }
 

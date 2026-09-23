@@ -14,13 +14,13 @@
   font-family: var(--font-inter), Inter, sans-serif;
 }
 .shell {
-  width: min(100% - 10vw, 1320px);
+  width: var(--home-shell-width, min(1360px, calc(100% - 64px)));
   margin-inline: auto;
 }
 .hero {
   position: relative;
   min-height: calc(100svh - 88px);
-  padding: clamp(72px, 8vh, 104px) 5vw clamp(56px, 7vw, 88px);
+  padding: clamp(72px, 8vh, 104px) 0 clamp(56px, 7vw, 88px);
   border-bottom: 1px solid var(--ink);
   background: #fff;
   color: var(--ink);
@@ -42,7 +42,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1.25fr) minmax(390px, 0.75fr);
   gap: clamp(3rem, 7vw, 7rem);
-  width: min(100%, 1320px);
+  width: var(--home-shell-width, min(1360px, calc(100% - 64px)));
   margin: auto;
   align-items: end;
 }
@@ -1259,6 +1259,7 @@
 .headingIntro {
   grid-column: 2;
   max-width: 730px;
+  margin-top: clamp(22px, 2.5vw, 34px);
   color: var(--muted);
   font:
     400 clamp(16px, 1.35vw, 20px)/1.62 var(--font-inter),
@@ -1750,9 +1751,6 @@
   opacity: 1;
   transform: none;
 }
-.ownershipLedger article:hover {
-  padding-left: 62px;
-}
 .ledgerIndex {
   position: absolute;
   left: 0;
@@ -2155,14 +2153,14 @@
   .page {
     --section-space: 56px;
     --section-content-gap: 30px;
-    --ownership-indent: 38px;
+    --ownership-indent: 56px;
   }
   .shell {
-    width: calc(100% - 2.5rem);
+    width: calc(100% - 32px);
   }
   .hero {
     min-height: auto;
-    padding: 52px 1.25rem 48px;
+    padding: 52px 16px 48px;
   }
   .hero::before {
     display: none;
@@ -2324,18 +2322,22 @@
   }
   .ownershipLedger article {
     min-height: 0;
-    padding: 28px 0 28px var(--ownership-indent);
+    padding: 26px 0;
     grid-template-columns: 1fr;
-    gap: 18px;
+    gap: 14px;
   }
-  .ownershipLedger article:hover {
-    padding-left: 44px;
+  /* Index becomes its own line on mobile — overlap-proof.
+     Higher specificity + top/left reset: the base absolute rule and the
+     `article > *` relative rule both lose. */
+  .ownershipLedger article > .ledgerIndex {
+    position: static;
+    top: auto;
+    left: auto;
+    display: block;
+    margin: 0 0 6px;
   }
   .ownershipLedger article > strong {
     align-self: start;
-  }
-  .ledgerIndex {
-    top: 33px;
   }
   .faqList button {
     grid-template-columns: 34px 1fr 24px;
@@ -2573,13 +2575,6 @@
   }
   .techGroups span {
     min-height: 72px;
-  }
-  .ownershipLedger article,
-  .ownershipLedger article:hover {
-    padding-left: var(--ownership-indent);
-  }
-  .ledgerIndex {
-    top: 31px;
   }
   .ctaBridge span {
     max-width: 28ch;

@@ -36,15 +36,17 @@ export function ScrollRestore() {
         // On home the site loader covers the screen, so no veil is needed —
         // showing one there would flash white over the loader animation.
         if (pathname !== "/") {
-          setVeil(true);
-          setFading(false);
           timer = window.setTimeout(() => {
-            setFading(true);
-            window.setTimeout(() => {
-              setVeil(false);
-              setFading(false);
-            }, 450);
-          }, 350);
+            setVeil(true);
+            setFading(false);
+            timer = window.setTimeout(() => {
+              setFading(true);
+              window.setTimeout(() => {
+                setVeil(false);
+                setFading(false);
+              }, 450);
+            }, 350);
+          }, 0);
         }
       }
 

@@ -70,7 +70,6 @@ export function useServiceReveal<T extends HTMLElement>() {
         section.querySelectorAll<HTMLElement>("[data-motion-heading]").forEach((heading) => {
           const kicker = heading.querySelector<HTMLElement>("[data-motion-heading-kicker]");
           const intro = heading.querySelector<HTMLElement>("[data-motion-heading-intro]");
-          const headingRule = heading.querySelector<HTMLElement>("[data-motion-heading-rule]");
 
           if (kicker) {
             gsap.from(kicker, {
@@ -90,24 +89,6 @@ export function useServiceReveal<T extends HTMLElement>() {
               ease: "power3.out",
               scrollTrigger: { trigger: heading, start: "top 88%", once: true },
             });
-          }
-
-          if (headingRule) {
-            gsap.fromTo(
-              headingRule,
-              { scaleX: 0 },
-              {
-                scaleX: 1,
-                transformOrigin: "left center",
-                ease: "none",
-                scrollTrigger: {
-                  trigger: headingRule,
-                  start: "top 92%",
-                  end: "top 68%",
-                  scrub: 0.4,
-                },
-              },
-            );
           }
         });
 
