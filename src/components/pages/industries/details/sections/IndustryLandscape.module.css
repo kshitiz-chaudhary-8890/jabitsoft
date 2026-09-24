@@ -1,0 +1,171 @@
+.section {
+  --ind-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ind-hairline: rgb(16 20 24 / 12%);
+  padding: clamp(88px, 11vw, 144px) 0;
+  background: #fff;
+  border-bottom: 1px solid var(--ind-hairline);
+}
+
+.shell {
+  width: var(--home-shell-width, min(1360px, calc(100% - 64px)));
+  margin-inline: auto;
+}
+
+.eyebrow {
+  grid-column: 1 / -1;
+  margin: 0 0 28px;
+  color: #8a9199;
+  font: 500 13px/1.4 Inter, sans-serif;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.45fr);
+  gap: 20px clamp(48px, 7vw, 112px);
+  align-items: end;
+  margin-bottom: clamp(48px, 6vw, 80px);
+}
+
+.title {
+  max-width: 18ch;
+  margin: 0;
+  color: #101418;
+  font-family: "Plus Jakarta Sans", Inter, sans-serif;
+  font-size: clamp(34px, 4.2vw, 60px);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.032em;
+}
+
+.intro {
+  max-width: 46ch;
+  margin: 0;
+  color: #5b636f;
+  font: 400 clamp(15px, 1.2vw, 16px) / 1.7 Inter, sans-serif;
+}
+
+/* Split field: forces on white | opportunities on ink */
+.field {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(340px, 0.75fr);
+  gap: clamp(40px, 5vw, 80px);
+  align-items: stretch;
+}
+
+.sideLabel,
+.sideLabelInk {
+  margin: 0 0 20px;
+  font: 600 10.5px/1 Inter, sans-serif;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.sideLabel {
+  color: #8a9199;
+}
+
+.sideLabelInk {
+  color: rgb(255 255 255 / 50%);
+}
+
+/* Forces — numbered rows on hairline rules */
+.force {
+  position: relative;
+  display: grid;
+  grid-template-columns: clamp(36px, 4vw, 56px) minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+  padding: clamp(20px, 2.2vw, 26px) 0;
+}
+
+.rule {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background: var(--ind-hairline);
+}
+
+.forceIndex {
+  padding-top: 3px;
+  color: #b6bcc3;
+  font: 600 12px/1 Inter, sans-serif;
+  letter-spacing: 0.1em;
+  transition: color 240ms var(--ind-ease);
+}
+
+.force:hover .forceIndex {
+  color: #101418;
+}
+
+.force h3 {
+  margin: 0 0 8px;
+  color: #101418;
+  font-family: "Plus Jakarta Sans", Inter, sans-serif;
+  font-size: clamp(18px, 1.6vw, 21px);
+  font-weight: 650;
+  letter-spacing: -0.015em;
+}
+
+.force p {
+  margin: 0;
+  max-width: 46ch;
+  color: #5b636f;
+  font: 400 14.5px/1.62 Inter, sans-serif;
+}
+
+/* Opportunity field — ink anchor */
+.opportunityField {
+  padding: clamp(28px, 3vw, 40px) clamp(26px, 2.8vw, 36px);
+  background: #0d0f12;
+  border-radius: 24px;
+  transition: transform 320ms var(--ind-ease), box-shadow 320ms var(--ind-ease);
+}
+
+.opportunityField:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 28px 56px -32px rgb(13 15 18 / 45%);
+}
+
+.opportunity {
+  padding: clamp(18px, 2vw, 24px) 0;
+}
+
+.opportunity + .opportunity {
+  border-top: 1px solid rgb(255 255 255 / 12%);
+}
+
+.opportunity h3 {
+  margin: 0 0 8px;
+  color: #fff;
+  font-family: "Plus Jakarta Sans", Inter, sans-serif;
+  font-size: clamp(18px, 1.6vw, 21px);
+  font-weight: 650;
+  letter-spacing: -0.015em;
+}
+
+.opportunity p {
+  margin: 0;
+  color: rgb(255 255 255 / 62%);
+  font: 400 14.5px/1.62 Inter, sans-serif;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .opportunityField {
+    transition: none;
+  }
+}
+
+@media (max-width: 1024px) {
+  .field {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .head {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+}

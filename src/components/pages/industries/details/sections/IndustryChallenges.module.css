@@ -1,0 +1,110 @@
+.section {
+  --ind-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ind-hairline: rgb(16 20 24 / 12%);
+  padding: clamp(88px, 11vw, 144px) 0;
+  background: #fff;
+  border-bottom: 1px solid var(--ind-hairline);
+}
+
+.shell {
+  width: var(--home-shell-width, min(1360px, calc(100% - 64px)));
+  margin-inline: auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
+  gap: clamp(48px, 7vw, 112px);
+  align-items: start;
+}
+
+/* Sticky statement — pins while the rows scroll past */
+.sticky {
+  position: sticky;
+  top: clamp(112px, 14vh, 140px);
+}
+
+.eyebrow {
+  margin: 0 0 28px;
+  color: #8a9199;
+  font: 500 13px/1.4 Inter, sans-serif;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.title {
+  max-width: 14ch;
+  margin: 0;
+  color: #101418;
+  font-family: "Plus Jakarta Sans", Inter, sans-serif;
+  font-size: clamp(34px, 4vw, 56px);
+  font-weight: 700;
+  line-height: 1.16;
+  letter-spacing: -0.032em;
+}
+
+.note {
+  max-width: 42ch;
+  margin: 24px 0 0;
+  color: #5b636f;
+  font: 400 clamp(15px, 1.2vw, 16px) / 1.7 Inter, sans-serif;
+}
+
+/* Challenge rows */
+.rows {
+  border-bottom: 1px solid var(--ind-hairline);
+}
+
+.row {
+  position: relative;
+  display: grid;
+  grid-template-columns: clamp(44px, 5vw, 64px) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+  padding: clamp(28px, 3vw, 38px) 0;
+}
+
+.rule {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background: var(--ind-hairline);
+}
+
+.rowIndex {
+  padding-top: 4px;
+  color: #101418;
+  font-family: "Plus Jakarta Sans", Inter, sans-serif;
+  font-size: clamp(18px, 1.8vw, 24px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.rowBody h3 {
+  margin: 0 0 10px;
+  max-width: 30ch;
+  color: #101418;
+  font-family: "Plus Jakarta Sans", Inter, sans-serif;
+  font-size: clamp(20px, 1.9vw, 26px);
+  font-weight: 650;
+  letter-spacing: -0.02em;
+}
+
+.rowBody p {
+  margin: 0;
+  max-width: 52ch;
+  color: #5b636f;
+  font: 400 15px/1.65 Inter, sans-serif;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 44px;
+  }
+
+  .sticky {
+    position: static;
+  }
+}

@@ -106,31 +106,28 @@
   background: var(--about-line);
 }
 
-/* ---------- Objective — manifesto statement + support ---------- */
+/* ---------- Objective — centered manifesto ---------- */
 
 .objectiveRow {
-  display: grid;
+  max-width: 1000px;
   margin-top: clamp(24px, 3vw, 40px);
-  grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
-  gap: 20px clamp(32px, 5vw, 88px);
-  align-items: start;
+  text-align: left;
 }
 
 .objectiveStatement {
   margin: 0;
   color: var(--about-heading-color);
   font-family: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", sans-serif;
-  font-size: clamp(28px, 3vw, 48px);
-  font-weight: 600;
-  letter-spacing: -0.028em;
-  line-height: 1.12;
+  font-size: clamp(30px, 3.6vw, 54px);
+  font-weight: 650;
+  letter-spacing: -0.03em;
+  line-height: 1.18;
   text-wrap: balance;
 }
 
 .objectiveNote {
-  max-width: 30ch;
-  margin: 0;
-  padding-top: 10px;
+  max-width: 52ch;
+  margin: clamp(18px, 2.2vw, 26px) 0 0;
   color: var(--about-copy-color);
   font:
     400 15.5px/1.7 var(--font-inter),
@@ -139,53 +136,71 @@
   text-wrap: pretty;
 }
 
-/* ---------- Mission & Vision — statement ledger ---------- */
+/* ---------- Mission & Vision — paired cards ---------- */
+
+.statements {
+  display: flex;
+  flex-direction: column;
+  margin-top: clamp(56px, 6.5vw, 92px);
+}
 
 .statement {
-  margin-top: clamp(64px, 7.5vw, 104px);
+  position: relative;
+  padding: clamp(40px, 5vw, 72px) 0;
+  border-top: 1px solid var(--about-line);
+  overflow: clip;
 }
 
-.statementHead {
-  display: flex;
-  align-items: center;
-  gap: 24px;
+.statement:last-child {
+  border-bottom: 1px solid var(--about-line);
 }
 
-.statementHead::after {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background: var(--about-line);
+.ghostWord {
+  position: absolute;
+  top: 50%;
+  right: -0.5%;
+  transform: translateY(-52%);
+  color: transparent;
+  -webkit-text-stroke: 1px rgb(16 20 24 / 14%);
+  font-family: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", sans-serif;
+  font-size: clamp(90px, 15vw, 230px);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
 }
 
 .statementTitle {
-  margin: 0;
+  position: relative;
+  margin: 0 0 clamp(16px, 2vw, 24px);
   color: var(--about-heading-color);
-}
-
-.statementGrid {
-  display: grid;
-  margin-top: clamp(20px, 2.6vw, 32px);
-  grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
-  gap: 20px clamp(32px, 5vw, 88px);
-  align-items: start;
+  font:
+    600 15px/1.4 var(--font-inter),
+    Inter,
+    sans-serif;
+  letter-spacing: 0.02em;
 }
 
 .statementLead {
+  position: relative;
   margin: 0;
+  max-width: 22ch;
   color: var(--about-heading-color);
   font-family: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", sans-serif;
-  font-size: clamp(23px, 2.4vw, 34px);
-  font-weight: 500;
-  letter-spacing: -0.025em;
-  line-height: 1.22;
+  font-size: clamp(26px, 3vw, 42px);
+  font-weight: 650;
+  letter-spacing: -0.028em;
+  line-height: 1.15;
   text-wrap: balance;
 }
 
 .statementCopy {
-  max-width: 44ch;
-  margin: 0;
-  padding-top: 6px;
+  position: relative;
+  margin: 16px 0 0;
+  max-width: 52ch;
   color: var(--about-copy-color);
   font:
     400 15.5px/1.7 var(--font-inter),
@@ -194,7 +209,15 @@
   text-wrap: pretty;
 }
 
-/* ---------- Values — index ledger ---------- */
+/* ---------- Values — asymmetric card grid ---------- */
+
+.valuesHead {
+  margin-top: clamp(64px, 7.5vw, 104px);
+}
+
+.valuesHead .objectivesHead {
+  margin-top: 0;
+}
 
 .valuesIntro {
   max-width: 62ch;
@@ -209,77 +232,52 @@
 
 .valuesList {
   margin-top: clamp(24px, 3vw, 40px);
+  border-top: 1px solid var(--about-line);
 }
 
 .valueRow {
-  position: relative;
   display: grid;
-  padding: clamp(24px, 3vw, 36px) 0;
-  border-top: 1px solid var(--about-line);
-  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-  gap: 10px clamp(32px, 5vw, 88px);
-  align-items: baseline;
-  transition: color 260ms ease, padding 260ms ease;
-}
-
-.valueRow::before {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  background: var(--about-dark, #101216);
-  content: "";
-  transform: scaleY(0);
-  transform-origin: center;
-  transition: transform 380ms cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-.valueRow > * {
-  position: relative;
-  z-index: 1;
+  grid-template-columns: 64px minmax(0, 5fr) minmax(0, 6fr);
+  gap: 8px clamp(20px, 3vw, 56px);
+  align-items: center;
+  padding: clamp(26px, 3vw, 38px) clamp(8px, 1.4vw, 20px);
+  border-bottom: 1px solid var(--about-line);
+  transition: background-color 260ms ease;
 }
 
 .valueRow:hover {
-  padding-inline: clamp(16px, 2vw, 24px);
-  color: #fff;
+  background: #f6f7f8;
 }
 
-.valueRow:hover::before {
-  transform: scaleY(1);
-}
-
-.valueRow:hover .valueName {
-  color: #fff;
-}
-
-.valueRow:hover .valueDesc {
-  color: rgba(255, 255, 255, 0.72);
-}
-
-.valueRow:last-child {
-  border-bottom: 1px solid var(--about-line);
+.valueIndex {
+  color: var(--about-heading-color);
+  font:
+    700 13px/1 var(--font-inter),
+    Inter,
+    sans-serif;
+  letter-spacing: 0.14em;
+  opacity: 0.35;
 }
 
 .valueName {
   margin: 0;
   color: var(--about-heading-color);
   font-family: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", sans-serif;
-  font-size: clamp(19px, 1.7vw, 24px);
-  font-weight: 600;
+  font-size: clamp(20px, 1.9vw, 28px);
+  font-weight: 650;
   letter-spacing: -0.025em;
   line-height: 1.2;
   text-wrap: balance;
-  transition: color 250ms ease;
 }
 
 .valueDesc {
   margin: 0;
   color: var(--about-copy-color);
   font:
-    400 clamp(15.5px, 1.15vw, 17px) / 1.68 var(--font-inter),
+    400 15px/1.65 var(--font-inter),
     Inter,
     sans-serif;
   text-wrap: pretty;
-  transition: color 250ms ease;
 }
 
 .valuesClose {
@@ -296,6 +294,16 @@
 
 /* ---------- Mobile ---------- */
 
+@media (max-width: 900px) {
+  .valueRow {
+    grid-template-columns: 48px minmax(0, 1fr);
+  }
+
+  .valueDesc {
+    grid-column: 2;
+  }
+}
+
 @media (max-width: 680px) {
   .intro {
     grid-template-columns: 1fr;
@@ -311,18 +319,22 @@
     gap: 16px;
   }
 
-  .statement {
-    margin-top: 56px;
-  }
-
-  .statementGrid {
-    grid-template-columns: 1fr;
-    gap: 14px;
+  .ghostWord {
+    font-size: clamp(64px, 20vw, 120px);
+    opacity: 0.7;
   }
 
   .valueRow {
     grid-template-columns: 1fr;
-    padding: 20px 0;
+    gap: 8px;
+  }
+
+  .valueIndex {
+    grid-column: 1;
+  }
+
+  .valueDesc {
+    grid-column: 1;
   }
 }
 

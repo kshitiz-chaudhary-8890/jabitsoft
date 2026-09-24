@@ -87,7 +87,7 @@ describe("Header", () => {
     expect(trigger).toHaveAttribute("aria-expanded", "true");
     expect(screen.getByRole("link", { name: /SaaS & Platforms/i })).toHaveAttribute(
       "href",
-      "/services?industry=saas",
+      "/industries/saas-platforms",
     );
   });
 

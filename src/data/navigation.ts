@@ -10,23 +10,33 @@ export const headerNavigation = [
 export const industryNavigation = [
   {
     label: "SaaS & Platforms",
-    href: "/services?industry=saas",
+    href: "/industries/saas-platforms",
     description: "Products, integrations, and cloud foundations built to scale.",
   },
   {
     label: "Healthcare",
-    href: "/services?industry=healthcare",
+    href: "/industries/healthcare",
     description: "Dependable patient, operations, and data systems for care teams.",
   },
   {
-    label: "Fintech & Payments",
-    href: "/services?industry=fintech",
-    description: "Secure platforms for transactions, reporting, and customer trust.",
+    label: "Government",
+    href: "/services?industry=government",
+    description: "Secure, accessible digital services for public-sector teams and citizens.",
+  },
+  {
+    label: "Retail",
+    href: "/industries/retail",
+    description: "Search, inventory, and checkout systems that hold up in season.",
   },
   {
     label: "Manufacturing & Logistics",
-    href: "/services?industry=operations",
-    description: "Connected workflows that make complex operations visible and efficient.",
+    href: "/industries/manufacturing",
+    description: "Production, dispatch, and tracking systems for operations teams.",
+  },
+  {
+    label: "Robotics & Automation",
+    href: "/industries/automation",
+    description: "Software that connects robots, sensors, and workflows into dependable automation.",
   },
 ] as const;
 

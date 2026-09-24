@@ -145,35 +145,28 @@ export function OurStory() {
           </p>
         </div>
 
-        <div data-reveal className={styles.statement}>
-          <div className={styles.statementHead}>
-            <h3 className={styles.statementTitle}>Mission</h3>
-          </div>
-          <div className={styles.statementGrid}>
-            <p className={styles.statementLead}>
-              To empower businesses with smart, secure, and scalable software solutions.
-            </p>
-            <p className={styles.statementCopy}>
-              We focus on creating technology that delivers modern design, seamless performance, and
-              long-term support ensuring every product drives real impact and measurable growth.
-            </p>
-          </div>
-        </div>
-
-        <div data-reveal className={styles.statement}>
-          <div className={styles.statementHead}>
-            <h3 className={styles.statementTitle}>Vision</h3>
-          </div>
-          <div className={styles.statementGrid}>
-            <p className={styles.statementLead}>
-              To be a globally trusted technology partner recognized for innovation, quality, and
-              customer success.
-            </p>
-            <p className={styles.statementCopy}>
-              We aim to build future-ready software that enhances efficiency, simplifies complexity,
-              and creates better digital experiences for businesses worldwide.
-            </p>
-          </div>
+        <div data-reveal className={styles.statements}>
+          {[
+            {
+              name: "Mission",
+              lead: "To empower businesses with smart, secure, and scalable software solutions.",
+              copy: "We focus on creating technology that delivers modern design, seamless performance, and long-term support ensuring every product drives real impact and measurable growth.",
+            },
+            {
+              name: "Vision",
+              lead: "To be a globally trusted technology partner recognized for innovation, quality, and customer success.",
+              copy: "We aim to build future-ready software that enhances efficiency, simplifies complexity, and creates better digital experiences for businesses worldwide.",
+            },
+          ].map((s) => (
+            <div key={s.name} className={styles.statement}>
+              <span className={styles.ghostWord} aria-hidden="true">
+                {s.name}
+              </span>
+              <h3 className={styles.statementTitle}>{s.name}</h3>
+              <p className={styles.statementLead}>{s.lead}</p>
+              <p className={styles.statementCopy}>{s.copy}</p>
+            </div>
+          ))}
         </div>
 
         <div data-reveal className={styles.valuesHead}>
@@ -186,8 +179,11 @@ export function OurStory() {
           </p>
         </div>
         <div data-reveal className={styles.valuesList}>
-          {VALUES.map((v) => (
+          {VALUES.map((v, i) => (
             <div key={v.name} className={styles.valueRow}>
+              <span className={styles.valueIndex} aria-hidden="true">
+                {String(i + 1).padStart(2, "0")}
+              </span>
               <p className={styles.valueName}>{v.name}</p>
               <p className={styles.valueDesc}>{v.desc}</p>
             </div>

@@ -204,9 +204,10 @@ export function AboutHero() {
         }
 
         .jabit-abhero__display {
-          margin: 0;
+          margin: clamp(26px, 3.6vw, 46px) 0 0;
+          max-width: 920px;
           font-family: var(--font-oswald), "Arial Narrow", sans-serif;
-          font-size: clamp(48px, 5.5vw, 80px);
+          font-size: clamp(44px, 5vw, 72px);
           font-weight: 500;
           line-height: 1.05;
           letter-spacing: -0.01em;
@@ -239,7 +240,8 @@ export function AboutHero() {
         }
 
         .jabit-abhero__side {
-          padding-bottom: 12px;
+          padding-bottom: 6px;
+          text-align: right;
         }
 
         .jabit-abhero__sub {
@@ -250,12 +252,14 @@ export function AboutHero() {
           line-height: 1.3;
           letter-spacing: -0.01em;
           color: #0c0f16;
+          text-align: right;
           text-wrap: pretty;
         }
 
         .jabit-abhero__actions {
           display: flex;
           flex-wrap: wrap;
+          justify-content: flex-end;
           gap: 14px;
           margin-top: 30px;
         }

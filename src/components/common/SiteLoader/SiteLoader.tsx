@@ -8,22 +8,34 @@ const WORDS = ["Welcome", "to", "JabitSoft"];
 
 const SEEN_KEY = "jabit-loader-seen";
 
+// Loader shows at most once per calendar day (local time).
+function todayStamp() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(
+    d.getDate(),
+  ).padStart(2, "0")}`;
+}
+
+function seenToday() {
+  try {
+    return (
+      window.localStorage.getItem(SEEN_KEY) === todayStamp() ||
+      document.cookie.split("; ").some((c) => c === `${SEEN_KEY}=${todayStamp()}`)
+    );
+  } catch {
+    return false;
+  }
+}
+
 export function SiteLoader() {
   const [leaving, setLeaving] = useState(false);
   const [gone, setGone] = useState(false);
   const [reduced, setReduced] = useState(false);
 
-  // Runs before paint: repeat visitors never see a flash of the loader,
-  // and server HTML always matches the first client render.
+  // Runs before paint: same-day repeat visitors never see a flash of the
+  // loader, and server HTML always matches the first client render.
   useLayoutEffect(() => {
-    let seen = false;
-    try {
-      seen =
-        window.localStorage.getItem(SEEN_KEY) === "1" ||
-        document.cookie.split("; ").some((c) => c === `${SEEN_KEY}=1`);
-    } catch {
-      seen = false;
-    }
+    const seen = seenToday();
     if (seen) {
       // Intentionally synchronous pre-paint: hiding the loader before first
       // paint is the whole point — deferring would flash it on screen.
@@ -31,12 +43,13 @@ export function SiteLoader() {
       setGone(true);
     } else {
       try {
-        window.localStorage.setItem(SEEN_KEY, "1");
+        window.localStorage.setItem(SEEN_KEY, todayStamp());
       } catch {
         /* storage unavailable */
       }
       try {
-        document.cookie = `${SEEN_KEY}=1; max-age=31536000; path=/; SameSite=Lax`;
+        // 24h expiry keeps the cookie in sync with the daily cadence.
+        document.cookie = `${SEEN_KEY}=${todayStamp()}; max-age=86400; path=/; SameSite=Lax`;
       } catch {
         /* cookies unavailable */
       }

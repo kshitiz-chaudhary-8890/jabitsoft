@@ -319,7 +319,9 @@ export function HeaderMenu() {
                             <span className={styles.megaItemBody}>
                               <span className={styles.megaItemTitle}>
                                 {entry.label}
-                                <ArrowIcon className={styles.megaItemArrow} />
+                                <span className={styles.megaItemArrowCircle}>
+                                  <ArrowIcon kind="right" className={styles.megaItemArrow} />
+                                </span>
                               </span>
                               <span className={styles.megaItemDescription}>
                                 {entry.description}

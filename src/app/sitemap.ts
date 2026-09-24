@@ -4,6 +4,7 @@ import { resolveSiteUrl } from "@/lib/seo/metadata";
 import { serviceNavigation } from "@/data/navigation";
 import { blogArticles } from "@/data/blog";
 import { caseStudyDetails } from "@/components/pages/case-studies/detailData";
+import { industryPages } from "@/components/pages/industries/details";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const siteUrl = resolveSiteUrl();
@@ -35,6 +36,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
     ...serviceNavigation.map((service) => ({
       url: new URL(service.href.replace(/^\//, ""), siteUrl).href,
+    })),
+    ...Object.keys(industryPages).map((slug) => ({
+      url: new URL(`industries/${slug}`, siteUrl).href,
     })),
   ];
 }
