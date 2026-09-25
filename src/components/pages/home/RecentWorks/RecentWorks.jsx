@@ -1,69 +1,73 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const projects = [
   {
-    name: "FlowOps",
-    category: "Operations Platform",
-    year: "2026",
+    name: "Koala Living E-commerce Website",
+    category: "Digital Commerce",
+    focus: "AU · UAE",
     intro:
-      "A real-time operations platform built to give teams one clear view of dispatch, capacity, tracking, and reporting.",
+      "A furniture and homewares shopping experience for Koala Living customers in Australia and the UAE.",
     build:
-      "We redesigned the operational workflow around faster decision-making, connected live data sources, and reusable modules that can scale as new teams and locations are added.",
+      "The storefront brings product discovery and online shopping together across two regional stores, with collections spanning living, dining, bedroom, décor and more.",
     outcome:
-      "The result is a calmer operational workspace with fewer hand-offs, faster dispatch decisions, and a cleaner foundation for future automation.",
-    impact: "42%",
-    impactLabel: "faster dispatch",
-    delivery: "12 weeks",
-    stack: ["Next.js", "Node.js", "PostgreSQL", "AWS"],
-    capabilities: ["Product Engineering", "Cloud", "Analytics", "Integrations"],
+      "A digital storefront shaped around browsing, comparing and shopping for furniture and home essentials.",
+    capabilities: ["E-commerce", "Product Discovery", "Regional Storefronts"],
+    visual: "commerce",
     tone: "rw-blue",
-    visual: "operations",
     image:
       "https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=1400&q=88",
   },
   {
-    name: "Nexa AI",
-    category: "AI Automation",
-    year: "2026",
+    name: "Koala Living POS System",
+    category: "Retail Technology",
+    focus: "In-store retail",
     intro:
-      "An agentic AI workspace that connects business data, internal tools, and approval workflows while keeping humans in control.",
+      "A point-of-sale system created for the in-store retail experience at Koala Living.",
     build:
-      "The platform combines reasoning, retrieval, tool execution, review states, and audit trails in one workflow so teams can automate repetitive work without losing visibility.",
+      "A focused POS experience for handling customer purchases and everyday checkout workflows in a furniture retail setting.",
     outcome:
-      "Teams get faster reporting and task completion while maintaining traceability, approval controls, and a reliable path from AI output to business action.",
-    impact: "3.4×",
-    impactLabel: "faster reporting",
-    delivery: "10 weeks",
-    stack: ["LLMs", "Python", "Vector DB", "Azure"],
-    capabilities: ["Agentic AI", "Automation", "Data", "Workflow Design"],
+      "Built around a clear, staff-friendly path from selecting products to completing a sale.",
+    capabilities: ["Point of Sale", "Retail Workflows", "Checkout"],
+    visual: "pos",
     tone: "rw-dark",
-    visual: "ai",
     image:
-      "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1400&q=88",
+      "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1400&q=88",
   },
   {
-    name: "CoreERP",
-    category: "Business Systems",
-    year: "2025",
+    name: "Koala EPR",
+    category: "Enterprise Systems",
+    focus: "Business operations",
     intro:
-      "A modular ERP system connecting finance, inventory, people, reporting, and day-to-day operations across distributed teams.",
+      "An enterprise platform built to support connected business operations for Koala Living.",
     build:
-      "We structured the product around reusable business modules, role-based permissions, live reporting, and API-first integrations so the system can evolve without becoming difficult to maintain.",
+      "A central digital workspace for bringing essential operational information and workflows into one place.",
     outcome:
-      "Core operations now run through one connected platform with clearer ownership, more reliable data, and significantly less dependency on disconnected spreadsheets and manual reporting.",
-    impact: "99.9%",
-    impactLabel: "platform uptime",
-    delivery: "16 weeks",
-    stack: ["React", "APIs", "SQL", "Cloud"],
-    capabilities: ["ERP", "Integrations", "Reporting", "DevOps"],
+      "Designed to give teams a more connected foundation for day-to-day business workflows.",
+    capabilities: ["Enterprise Platform", "Workflow Design", "Business Systems"],
+    visual: "epr",
     tone: "rw-slate",
-    visual: "erp",
     image:
       "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1400&q=88",
+  },
+  {
+    name: "Logistics System for Move My Stuff",
+    category: "Logistics Technology",
+    focus: "Moving operations",
+    intro:
+      "A logistics system for Move My Stuff, designed around the coordination involved in moving services.",
+    build:
+      "A purpose-built digital platform to help bring moving-related information and operational workflows together.",
+    outcome:
+      "A clearer digital foundation for coordinating the moving journey from the customer and operations perspectives.",
+    capabilities: ["Logistics", "Operations Workflows", "Product Engineering"],
+    visual: "logistics",
+    tone: "rw-blue",
+    image:
+      "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1400&q=88",
   },
 ];
 
@@ -91,8 +95,48 @@ function ProjectVisual({ project }) {
 
         <div className="rw-visual__top">
           <span>{project.category}</span>
-          <b>{project.year}</b>
+          <b>{project.focus}</b>
         </div>
+
+        {project.visual === "commerce" && (
+          <div className="rw-visual__overlay">
+            <div className="rw-visual__panel">
+              <small>Koala Living</small>
+              <strong>Furniture &amp; homewares</strong>
+              <span>Australia · United Arab Emirates</span>
+            </div>
+          </div>
+        )}
+
+        {project.visual === "pos" && (
+          <div className="rw-visual__overlay">
+            <div className="rw-visual__panel">
+              <small>Koala Living</small>
+              <strong>Retail point of sale</strong>
+              <span>In-store checkout experience</span>
+            </div>
+          </div>
+        )}
+
+        {project.visual === "epr" && (
+          <div className="rw-visual__overlay">
+            <div className="rw-visual__panel">
+              <small>Koala Living</small>
+              <strong>Enterprise platform</strong>
+              <span>Connected business workflows</span>
+            </div>
+          </div>
+        )}
+
+        {project.visual === "logistics" && (
+          <div className="rw-visual__overlay">
+            <div className="rw-visual__panel">
+              <small>Move My Stuff</small>
+              <strong>Logistics system</strong>
+              <span>Moving operations, brought together</span>
+            </div>
+          </div>
+        )}
 
         {project.visual === "operations" && (
           <div className="rw-visual__overlay rw-visual__overlay--ops">
@@ -156,6 +200,42 @@ export default function RecentWorks() {
   const sectionRef = useRef(null);
   const stageRef = useRef(null);
   const stackRef = useRef(null);
+  const [activeProjectIndex, setActiveProjectIndex] = useState(0);
+
+  const scrollToProject = (index) => {
+    const stack = stackRef.current;
+    const target = stack?.querySelectorAll(".recent-work-card")[index];
+    if (!stack || !target) return;
+
+    const stackRect = stack.getBoundingClientRect();
+    const targetRect = target.getBoundingClientRect();
+    const left =
+      stack.scrollLeft +
+      targetRect.left -
+      stackRect.left -
+      (stack.clientWidth - target.clientWidth) / 2;
+
+    stack.scrollTo({ left, behavior: "smooth" });
+    setActiveProjectIndex(index);
+  };
+
+  const updateActiveProject = () => {
+    const stack = stackRef.current;
+    if (!stack) return;
+
+    const cards = [...stack.querySelectorAll(".recent-work-card")];
+    const center = stack.getBoundingClientRect().left + stack.clientWidth / 2;
+    const closest = cards.reduce(
+      (best, card, index) => {
+        const rect = card.getBoundingClientRect();
+        const distance = Math.abs(rect.left + rect.width / 2 - center);
+        return distance < best.distance ? { index, distance } : best;
+      },
+      { index: 0, distance: Infinity },
+    );
+
+    setActiveProjectIndex(closest.index);
+  };
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -177,7 +257,7 @@ export default function RecentWorks() {
 
     const mm = gsap.matchMedia();
 
-    mm.add("(min-width: 681px)", () => {
+    mm.add("(min-width: 1051px)", () => {
       const ctx = gsap.context(() => {
         // Skiper17-style sticky-card setup:
         // first card is visible, remaining cards wait below the viewport.
@@ -404,20 +484,60 @@ export default function RecentWorks() {
         aria-labelledby="recent-works-title"
       >
         <header className="section-title centered recent-works__head">
-          <p className="recent-works__eyebrow">(Selected software projects)</p>
+          <p className="recent-works__eyebrow">(A selection of our work)</p>
           <h2 id="recent-works-title" data-reveal-heading>
             <span className="section-heading-fill">
               Recent Works
             </span>
           </h2>
           <p className="recent-works__subhead">
-            A closer look at the platforms, products, and business systems we
-            design and engineer for growing teams.
+            From customer-facing commerce to the systems behind retail and
+            logistics, explore digital products built around real business needs.
           </p>
         </header>
 
+        <div className="recent-works__mobile-nav" aria-label="Recent works carousel controls">
+          <button
+            type="button"
+            className="recent-works__nav-arrow"
+            aria-label="Previous project"
+            disabled={activeProjectIndex === 0}
+            onClick={() => scrollToProject(activeProjectIndex - 1)}
+          >
+            <span aria-hidden="true">←</span>
+          </button>
+
+          <div className="recent-works__nav-progress">
+            <span className="recent-works__nav-count" aria-live="polite">
+              {String(activeProjectIndex + 1).padStart(2, "0")} / {String(projects.length).padStart(2, "0")}
+            </span>
+            <div className="recent-works__nav-dots">
+              {projects.map((project, index) => (
+                <button
+                  type="button"
+                  key={project.name}
+                  className={index === activeProjectIndex ? "is-active" : ""}
+                  aria-label={`Show ${project.name}`}
+                  aria-current={index === activeProjectIndex ? "true" : undefined}
+                  onClick={() => scrollToProject(index)}
+                />
+              ))}
+            </div>
+          </div>
+
+          <button
+            type="button"
+            className="recent-works__nav-arrow"
+            aria-label="Next project"
+            disabled={activeProjectIndex === projects.length - 1}
+            onClick={() => scrollToProject(activeProjectIndex + 1)}
+          >
+            <span aria-hidden="true">→</span>
+          </button>
+        </div>
+
         <div ref={stageRef} className="recent-works__pin-stage">
-          <div ref={stackRef} className="recent-works__stack">
+          <div ref={stackRef} className="recent-works__stack" onScroll={updateActiveProject}>
             {projects.map((project, index) => (
             <article
               className={`recent-work-card ${project.tone}`}
@@ -434,8 +554,8 @@ export default function RecentWorks() {
                   <span className="rw-card__category">{project.category}</span>
 
                   <span className="rw-card__year">
-                    <small>Year</small>
-                    {project.year}
+                    <small>Focus</small>
+                    {project.focus}
                   </span>
                 </div>
 
@@ -446,12 +566,12 @@ export default function RecentWorks() {
 
                     <div className="rw-card__story">
                       <div>
-                        <span>What we built</span>
+                        <span>The project</span>
                         <p>{project.build}</p>
                       </div>
 
                       <div>
-                        <span>Outcome</span>
+                        <span>Designed for</span>
                         <p>{project.outcome}</p>
                       </div>
                     </div>
@@ -472,26 +592,10 @@ export default function RecentWorks() {
                 </div>
 
                 <div className="rw-card__footer">
-                  <div className="rw-card__metric">
-                    <span>Impact</span>
-                    <strong>{project.impact}</strong>
-                    <small>{project.impactLabel}</small>
-                  </div>
-
-                  <div className="rw-card__metric">
-                    <span>Delivery</span>
-                    <strong>{project.delivery}</strong>
-                    <small>from discovery to launch</small>
-                  </div>
-
-                  <div className="rw-card__tech">
-                    <span>Tech stack</span>
-                    <div>
-                      {project.stack.map((item) => (
-                        <b key={item}>{item}</b>
-                      ))}
-                    </div>
-                  </div>
+                  <p className="rw-card__footer-note">
+                    <span>Have a similar challenge?</span>
+                    Let’s build a solution around your business.
+                  </p>
 
                   <a className="rw-card__link" href="#contact" data-site-button data-button-variant="primary">
                     View case study
@@ -502,6 +606,12 @@ export default function RecentWorks() {
             </article>
             ))}
           </div>
+        </div>
+        <div className="recent-works__all-case-studies">
+          <a href="/case-studies" data-site-button data-button-variant="primary">
+            View all case studies
+            <ArrowUpRight />
+          </a>
         </div>
       </section>
 
@@ -2034,6 +2144,602 @@ export default function RecentWorks() {
               transform: none !important;
               will-change: auto;
             }
+          }
+        }
+
+        .rw-card__footer {
+          display: flex;
+          min-height: 72px;
+          padding-top: 18px;
+          align-items: center;
+          justify-content: space-between;
+          gap: 24px;
+          border-top: 1px solid rgba(255, 255, 255, 0.14);
+        }
+
+        .recent-works__all-case-studies {
+          position: relative;
+          z-index: 2;
+          display: flex;
+          justify-content: center;
+          margin: 30px auto 0;
+          padding: 0 20px;
+        }
+
+        .recent-works__all-case-studies a {
+          display: inline-flex;
+          min-height: 48px;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+        }
+
+        .recent-works__all-case-studies svg {
+          width: 16px;
+          height: 16px;
+          fill: none;
+          stroke: currentColor;
+          stroke-width: 1.7;
+          stroke-linecap: round;
+          stroke-linejoin: round;
+        }
+
+        .rw-card__footer-note {
+          display: grid;
+          gap: 5px;
+          margin: 0;
+          color: rgba(255, 255, 255, 0.75);
+          font-family: Inter, sans-serif;
+          font-size: 12px;
+          line-height: 1.5;
+        }
+
+        .rw-card__footer-note span {
+          color: rgba(255, 255, 255, 0.48);
+          font-size: 9px;
+          font-weight: 600;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+        }
+
+        .rw-visual__top b {
+          max-width: 45%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        @media (max-width: 1050px) {
+          .rw-card__footer {
+            display: flex;
+          }
+
+          .rw-card__link {
+            display: inline-flex;
+          }
+        }
+
+        @media (max-width: 680px) {
+          .rw-card__footer {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 12px;
+          }
+
+          .rw-card__link {
+            display: inline-flex;
+          }
+        }
+
+        @media (max-width: 680px) {
+          .recent-works__stack {
+            display: flex;
+            width: min(calc(100% - 32px), 540px);
+            height: auto;
+            min-height: 0;
+            margin: 24px auto 0;
+            padding: 0 0 8px;
+            flex-direction: column;
+            gap: 18px;
+            overflow: visible;
+          }
+
+          .recent-works .recent-work-card,
+          .recent-works .recent-work-card:last-child {
+            position: relative;
+            inset: auto;
+            flex: none;
+            width: 100%;
+            height: auto;
+            min-height: 0;
+            max-height: none;
+            margin: 0;
+            scroll-snap-align: none;
+            scroll-snap-stop: normal;
+            content-visibility: visible;
+            contain-intrinsic-size: auto;
+          }
+
+          .rw-card__content {
+            padding: 14px;
+          }
+
+          .rw-card__main {
+            padding: 15px 0 14px;
+          }
+
+          .rw-card__visual-wrap {
+            order: -1;
+            margin: 0 0 16px;
+          }
+
+          .rw-visual__image-frame {
+            height: clamp(190px, 55vw, 230px);
+          }
+
+          .rw-card__copy h3 {
+            font-size: clamp(27px, 7vw, 32px);
+            line-height: 1.08;
+          }
+
+          .rw-card__intro {
+            margin-top: 9px;
+            font-size: 12px;
+            line-height: 1.55;
+          }
+
+          .rw-card__story {
+            margin-top: 14px;
+            gap: 11px;
+          }
+
+          .rw-card__story > div {
+            padding-top: 10px;
+          }
+
+          .rw-card__story p {
+            font-size: 10.5px;
+            line-height: 1.5;
+          }
+
+          .rw-card__capabilities {
+            margin-top: 13px;
+          }
+
+          .rw-card__footer {
+            padding-top: 13px;
+          }
+
+          .recent-works__all-case-studies {
+            margin-top: 22px;
+          }
+        }
+
+        @media (max-width: 680px) {
+          .recent-works {
+            padding: 52px 0 62px;
+            overflow: hidden;
+          }
+
+          .recent-works__head {
+            width: min(calc(100% - 36px), 540px);
+            margin-bottom: 0;
+          }
+
+          .recent-works__head h2 {
+            font-size: clamp(34px, 9vw, 40px);
+            line-height: 1.08;
+          }
+
+          .recent-works__subhead {
+            margin-top: 10px;
+            font-size: 13px;
+            line-height: 1.55;
+          }
+
+          .recent-works__stack {
+            width: min(calc(100% - 28px), 540px);
+            margin: 22px auto 0;
+            padding: 0 0 4px;
+            gap: 14px;
+          }
+
+          .recent-works .recent-work-card,
+          .recent-works .recent-work-card:last-child {
+            border-radius: 22px;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16);
+          }
+
+          .rw-card__content {
+            display: block;
+            height: auto;
+            padding: 12px;
+          }
+
+          .rw-card__top {
+            grid-template-columns: auto minmax(0, 1fr) auto;
+            gap: 8px;
+          }
+
+          .rw-card__category {
+            grid-column: auto;
+            grid-row: auto;
+            max-width: 100%;
+            min-height: 26px;
+            margin: 0;
+            padding-inline: 9px;
+            overflow: hidden;
+            font-size: 8px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+
+          .rw-card__year {
+            gap: 5px;
+            font-size: 9px;
+            white-space: nowrap;
+          }
+
+          .rw-card__year small {
+            font-size: 7px;
+          }
+
+          .rw-card__main {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            padding: 15px 0 14px;
+          }
+
+          .rw-card__visual-wrap {
+            order: -1;
+            width: 100%;
+            margin: 0 0 15px;
+            place-items: stretch;
+          }
+
+          .rw-visual__image-frame {
+            height: clamp(190px, 57vw, 235px);
+            border-radius: 15px;
+          }
+
+          .rw-visual__caption {
+            display: none;
+          }
+
+          .rw-visual__top {
+            top: 10px;
+            right: 10px;
+            left: 10px;
+          }
+
+          .rw-visual__top span,
+          .rw-visual__top b {
+            min-height: 24px;
+            padding-inline: 8px;
+            font-size: 7px;
+          }
+
+          .rw-visual__overlay {
+            right: 10px;
+            bottom: 10px;
+            left: 10px;
+          }
+
+          .rw-visual__panel {
+            max-width: 88%;
+            padding: 10px 11px;
+          }
+
+          .rw-visual__panel strong {
+            font-size: 12px;
+          }
+
+          .rw-visual__panel > span {
+            font-size: 7px;
+          }
+
+          #main-content .recent-works .rw-card__copy h3 {
+            font-size: clamp(27px, 7.2vw, 34px) !important;
+            font-weight: 700 !important;
+            line-height: 1.04 !important;
+            letter-spacing: -0.04em !important;
+          }
+
+          .rw-card__intro {
+            max-width: 44ch;
+            margin-top: 8px;
+            font-size: 12.5px;
+            line-height: 1.52;
+          }
+
+          .rw-card__story {
+            display: none;
+          }
+
+          .rw-card__capabilities {
+            margin-top: 13px;
+          }
+
+          .rw-card__capabilities > div {
+            margin-top: 7px;
+            gap: 5px;
+          }
+
+          .rw-card__capabilities b {
+            min-height: 25px;
+            padding-inline: 8px;
+            font-size: 8px;
+          }
+
+          .rw-card__footer {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 10px;
+            padding-top: 12px;
+          }
+
+          .rw-card__footer-note {
+            font-size: 10px;
+          }
+
+          .rw-card__link {
+            display: inline-flex;
+            width: 100%;
+            min-height: 42px;
+            justify-content: center;
+          }
+
+          .recent-works__all-case-studies {
+            margin-top: 20px;
+          }
+        }
+
+        @media (min-width: 681px) and (max-width: 1050px) {
+          .recent-works__pin-stage {
+            display: block;
+            height: auto;
+            min-height: 0;
+            overflow: visible;
+            transform: none;
+          }
+
+          .recent-works__stack {
+            display: flex;
+            width: min(calc(100% - 48px), 680px);
+            height: auto;
+            min-height: 0;
+            max-height: none;
+            margin: 28px auto 0;
+            flex-direction: column;
+            gap: 20px;
+            overflow: visible;
+          }
+
+          .recent-works .recent-work-card,
+          .recent-works .recent-work-card:last-child {
+            position: relative;
+            top: auto;
+            grid-area: auto;
+            width: 100%;
+            height: auto;
+            min-height: 0;
+            max-height: none;
+            margin: 0;
+            transform: none;
+            will-change: auto;
+          }
+
+          .rw-card__content {
+            display: block;
+            height: auto;
+            padding: 22px;
+          }
+
+          .rw-card__main {
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
+            gap: 0;
+          }
+
+          .rw-card__visual-wrap {
+            order: -1;
+            width: 100%;
+            margin: 0 0 20px;
+            place-items: stretch;
+          }
+
+          .rw-visual {
+            width: 100%;
+            max-width: none;
+          }
+
+          .rw-visual__image-frame {
+            height: 300px;
+          }
+
+          #main-content .recent-works .rw-card__copy h3 {
+            font-size: clamp(34px, 5vw, 44px) !important;
+            font-weight: 700 !important;
+            line-height: 1.08 !important;
+            letter-spacing: -0.04em !important;
+          }
+
+          .rw-card__story {
+            display: none;
+          }
+
+          .rw-card__footer {
+            display: flex;
+            align-items: center;
+          }
+
+          .rw-card__link {
+            display: inline-flex;
+          }
+        }
+
+        .recent-works__mobile-nav {
+          display: none;
+        }
+
+        @media (max-width: 1050px) {
+          .recent-works__pin-stage {
+            display: block;
+            height: auto;
+            min-height: 0;
+            overflow: visible;
+          }
+
+          .recent-works__stack {
+            display: flex;
+            height: auto;
+            min-height: 0;
+            margin: 22px auto 0;
+            padding: 0 14px 8px;
+            flex-direction: row;
+            align-items: stretch;
+            gap: 12px;
+            overflow-x: auto;
+            overflow-y: hidden;
+            scroll-snap-type: x mandatory;
+            scroll-padding-inline: 14px;
+            overscroll-behavior-x: contain;
+            scrollbar-width: none;
+            touch-action: pan-x pan-y;
+            -webkit-overflow-scrolling: touch;
+          }
+
+          .recent-works__stack::-webkit-scrollbar {
+            display: none;
+          }
+
+          .recent-works .recent-work-card,
+          .recent-works .recent-work-card:last-child {
+            flex: 0 0 min(78vw, 680px);
+            width: min(78vw, 680px);
+            height: auto;
+            margin: 0;
+            scroll-snap-align: center;
+            scroll-snap-stop: always;
+          }
+
+          .rw-card__content {
+            display: flex;
+            height: 100%;
+            flex-direction: column;
+          }
+
+          .rw-card__main {
+            flex: 1;
+          }
+
+          .rw-card__footer {
+            margin-top: auto;
+          }
+
+          .recent-works__mobile-nav {
+            display: flex;
+            width: min(calc(100% - 40px), 360px);
+            margin: 15px auto 0;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+          }
+
+          .recent-works__nav-arrow {
+            display: grid;
+            width: 42px;
+            height: 42px;
+            flex: 0 0 42px;
+            place-items: center;
+            border: 0;
+            border-radius: 50%;
+            background: #0d5d45;
+            color: #fff;
+            font-size: 21px;
+            line-height: 1;
+            cursor: pointer;
+          }
+
+          .recent-works__nav-arrow:disabled {
+            background: #dbe6e1;
+            color: #6f8b80;
+            cursor: default;
+          }
+
+          .recent-works__nav-arrow:focus-visible,
+          .recent-works__nav-dots button:focus-visible {
+            outline: 2px solid #0d5d45;
+            outline-offset: 3px;
+          }
+
+          .recent-works__nav-progress {
+            display: flex;
+            min-width: 0;
+            align-items: center;
+            gap: 12px;
+          }
+
+          .recent-works__nav-count {
+            color: #213d34;
+            font-family: Inter, sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+          }
+
+          .recent-works__nav-dots {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+          }
+
+          .recent-works__nav-dots button {
+            width: 7px;
+            height: 7px;
+            padding: 0;
+            border: 0;
+            border-radius: 999px;
+            background: #c8d5cf;
+            cursor: pointer;
+            transition: width 180ms ease, background-color 180ms ease;
+          }
+
+          .recent-works__nav-dots button.is-active {
+            width: 22px;
+            background: #0d5d45;
+          }
+
+          .recent-works__all-case-studies {
+            margin-top: 22px;
+          }
+        }
+
+        @media (max-width: 680px) {
+          .recent-works__nav-arrow,
+          .recent-works__nav-arrow:disabled {
+            background: #000;
+            color: #fff;
+          }
+
+          .recent-works__nav-arrow:disabled {
+            opacity: 0.38;
+          }
+
+          .recent-works__nav-dots button.is-active {
+            background: #000;
+          }
+
+          .recent-works .rw-card__link,
+          .recent-works__all-case-studies a,
+          .recent-works .rw-card__link:hover,
+          .recent-works__all-case-studies a:hover {
+            border-color: #000 !important;
+            background: #000 !important;
+            color: #fff !important;
           }
         }
 

@@ -137,7 +137,7 @@ export function Leadership() {
             <Image
               data-leader-image
               className={styles.portraitImage}
-              src="/images/baldeep-singh-founder.webp"
+              src="https://ik.imagekit.io/5bwd4hel7/About%20us/Leadership/baldeep-singh-founder.webp"
               alt="Baldeep Singh, Founder and CEO of JabitSoft"
               fill
               sizes="(max-width: 900px) 100vw, 48vw"

@@ -7,16 +7,26 @@
   white-space: nowrap;
 }
 
+.reveal-heading__char-mask {
+  display: inline-block;
+  overflow: hidden;
+  height: 1em;
+  vertical-align: top;
+  line-height: 1;
+}
+
 .reveal-heading__char {
   display: inline-block;
-  opacity: 0;
-  transform: translate3d(0, 30px, 0);
-  will-change: transform, opacity;
+  transform: translate3d(0, 100%, 0);
+  will-change: transform;
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .reveal-heading__char-mask {
+    overflow: visible;
+  }
+
   .reveal-heading__char {
-    opacity: 1;
     transform: none;
     will-change: auto;
   }

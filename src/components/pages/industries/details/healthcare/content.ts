@@ -1,215 +1,123 @@
 import type { IndustryDetailData } from "../types";
 
 export const healthcareContent: IndustryDetailData = {
-  label: "Healthcare",
-  slug: "healthcare",
-  kicker: "Industries — Healthcare",
+  label: "Healthcare", slug: "healthcare", kicker: "Healthcare software development",
   hero: {
-    headline: "Clinical software that holds up in production.",
-    lede: "We build patient-facing apps, clinical tools, and back-office automation inside your repos — integrated with your EHR and your security controls.",
-    primaryCta: "Map your roadmap",
+    headline: "Clinical software that works where care happens.",
+    lede: "From patient portals and appointment systems to clinical workflows and connected platforms, we build healthcare software designed around the people who use it every day.",
+    primaryCta: "Discuss your healthcare project", secondaryCta: "See what we build",
     stats: [
-      { value: "HIPAA-aware", label: "Least-privilege access by design" },
-      { value: "EHR-integrated", label: "HL7 and FHIR connections" },
-      { value: "Audit-ready", label: "Clear logs and change history" },
-      { value: "In your repos", label: "Your team owns the code" },
+      { value: "Portals", label: "Patient-facing experiences" },
+      { value: "Workflows", label: "Clinical and administrative systems" },
+      { value: "Scheduling", label: "Appointments and availability" },
+      { value: "Integrations", label: "Connected healthcare platforms" },
     ],
-    ticker: [
-      "Patient intake",
-      "Triage assist",
-      "Appointment automation",
-      "Records search",
-      "Claims processing",
-      "Care reminders",
-      "EHR integration",
-      "Referral routing",
+    ticker: ["Patient portals", "Clinical workflows", "Appointment systems", "Integrations", "Automation", "Healthcare platforms"],
+  },
+  whatWeBuild: {
+    title: "Software built around the way care works.",
+    intro: "Healthcare teams don't need another disconnected tool. We design and engineer systems around patients, clinicians, administrators, and the workflows connecting them.",
+    items: [
+      { title: "Patient Portals", text: "Give patients one place to manage appointments, information, forms, communication, and services." },
+      { title: "Clinical Workflow Systems", text: "Turn complex clinical and administrative processes into structured, easier-to-manage digital workflows." },
+      { title: "Appointment & Scheduling Platforms", text: "Build scheduling experiences around providers, locations, services, availability, and patient needs." },
+      { title: "Healthcare Operations Platforms", text: "Connect day-to-day administrative and operational workflows through purpose-built software." },
+      { title: "System Integrations", text: "Connect healthcare applications with existing systems and approved third-party services through APIs and integration layers." },
+      { title: "Workflow Automation", text: "Reduce repetitive administrative work with rules, notifications, task automation, and AI-assisted workflows where appropriate." },
     ],
   },
   landscape: {
     title: "Care runs on software now.",
-    intro:
-      "Health systems are digitizing intake, scheduling, and follow-up. Payers and providers both need cleaner data and tighter operations.",
+    intro: "Every appointment, handoff, record, notification, and follow-up can depend on the systems behind it. When those systems create friction, both staff and patients feel it.",
+    opportunityTitle: "Better software should remove friction.",
     forces: [
-      {
-        title: "Digital front doors",
-        text: "Patients expect online intake, scheduling, and messaging — tied directly to the record, not floating beside it.",
-      },
-      {
-        title: "Interoperability pressure",
-        text: "FHIR APIs and payer rules push data sharing forward. Systems must exchange records without manual re-entry.",
-      },
-      {
-        title: "Staff capacity gaps",
-        text: "Front-desk and billing teams carry heavy repetitive work. Automation now covers intake, reminders, and routing.",
-      },
-      {
-        title: "Tighter documentation needs",
-        text: "Audits and prior auth demand complete records. Teams need search and summaries they can trust.",
-      },
+      { title: "Digital front door", text: "Patients increasingly interact with providers through digital touchpoints before and after a visit." },
+      { title: "Interoperability pressure", text: "Healthcare workflows often span multiple applications, teams, and data sources." },
+      { title: "Staff capacity gaps", text: "Administrative work consumes time that teams could spend on higher-value tasks." },
+      { title: "Growing patient expectations", text: "People expect healthcare technology to feel as intuitive as the digital services they use elsewhere." },
     ],
     opportunities: [
-      {
-        title: "Remove intake bottlenecks",
-        text: "Digital forms, insurance checks, and pre-visit prep cut waiting-room paperwork.",
-      },
-      {
-        title: "Connect the record",
-        text: "FHIR integrations sync scheduling, clinical, and billing data — no more copying between systems.",
-      },
-      {
-        title: "Automate follow-up",
-        text: "Reminders, recalls, and care plans run on schedule while staff workload stays flat.",
-      },
+      { title: "Connect the workflow", text: "Bring fragmented steps into clearer, structured processes." },
+      { title: "Reduce repetitive work", text: "Automate routine administrative actions where appropriate." },
+      { title: "Keep people informed", text: "Use notifications, status visibility, and clear handoffs to improve coordination." },
     ],
   },
   challenges: {
-    title: "Healthcare breaks generic software.",
-    intro:
-      "Clinical workflows carry consent, safety, and billing rules that off-the-shelf tools miss.",
+    title: "Healthcare workflows don't fit generic software.",
+    intro: "Healthcare combines complex workflows, multiple roles, sensitive information, and operational dependencies. Software has to account for that complexity from the beginning.",
     items: [
-      {
-        title: "Fragmented patient records",
-        text: "Data lives across EHR modules, faxes, and portals — staff hunt for history before every visit.",
-      },
-      {
-        title: "No-show schedules",
-        text: "Manual booking and reminder calls leave gaps. Slots go empty while waitlists grow.",
-      },
-      {
-        title: "Triage overload",
-        text: "Nurses field high message and call volumes. Urgent cases compete with routine requests.",
-      },
-      {
-        title: "Claims rework",
-        text: "Missing codes, eligibility errors, and denials stall payment. Billing reworks the same claims.",
-      },
-      {
-        title: "Consent and access risk",
-        text: "Role-based access and audit trails are mandatory. Generic apps rarely enforce them correctly.",
-      },
+      { title: "Fragmented patient records", text: "Important information can sit across different applications and workflows, making a complete view difficult." },
+      { title: "Scheduling complexity", text: "Providers, services, locations, availability, and patient requirements make healthcare scheduling more than a simple calendar." },
+      { title: "Critical handoffs", text: "A missed task or unclear transition between teams can disrupt the entire workflow." },
+      { title: "Different roles, different needs", text: "Clinicians, administrators, managers, and patients need different information and permissions." },
+      { title: "Privacy and access requirements", text: "Healthcare systems need carefully designed authentication, permissions, auditability, and data handling based on project requirements." },
     ],
   },
   howWeHelp: {
-    title: "How Jabisoft helps Healthcare.",
-    intro:
-      "We design, build, and ship inside your repos and your cloud — your team reviews every pull request and keeps full ownership.",
+    title: "How Jabitsoft helps healthcare teams.",
+    intro: "We design and engineer healthcare software around real workflows—not generic templates that teams have to work around.",
     items: [
-      {
-        title: "We build AI search over records",
-        text: "We connect notes, labs, and documents to fast retrieval — staff find history without digging.",
-        tags: ["Copilots", "Retrieval", "EHR data"],
-      },
-      {
-        title: "We engineer patient apps",
-        text: "We build portals, intake flows, and messaging in your stack — auth, roles, and audit logging included.",
-        tags: ["Portals", "RBAC", "APIs"],
-      },
-      {
-        title: "We automate scheduling work",
-        text: "We automate reminders, rescheduling, and waitlist backfill — the schedule stays full with less phone time.",
-        tags: ["Reminders", "Backfill", "Messaging"],
-      },
-      {
-        title: "We run regulated cloud setups",
-        text: "We set up isolated environments, backups, and access controls that pass security review.",
-        tags: ["Isolation", "Backups", "Access controls"],
-      },
-      {
-        title: "We clean clinical data flows",
-        text: "We build pipelines for HL7 and FHIR feeds, claims, and quality measures — one trusted source for reports.",
-        tags: ["FHIR", "Pipelines", "Quality measures"],
-      },
-      {
-        title: "We modernize legacy tools",
-        text: "We replace fax-era workflows and fragile scripts with maintained services — without disrupting clinic hours.",
-        tags: ["Migration", "Integrations", "Support"],
-      },
+      { title: "We understand the workflow first", text: "Before building, we map users, processes, handoffs, dependencies, and existing systems." },
+      { title: "We design around different roles", text: "Patients, clinicians, administrators, and managers get experiences designed around what they actually need to do." },
+      { title: "We connect existing systems", text: "Where appropriate, APIs and integrations help new software work with the technology already in place." },
+      { title: "We automate repetitive processes", text: "Notifications, routing, status updates, forms, and administrative tasks can be automated to reduce manual effort." },
+      { title: "We build for long-term change", text: "Architecture is designed so products can evolve as workflows, integrations, and business requirements change." },
+      { title: "We stay beyond launch", text: "We can continue improving, maintaining, and extending the platform as requirements evolve." },
     ],
   },
   useCases: {
     title: "What we build for care teams.",
-    intro:
-      "Practical systems for intake, scheduling, records, and billing — each shipped in your environment.",
+    intro: "From patient-facing experiences to the systems behind them, we build connected software around healthcare operations.",
     items: [
-      {
-        title: "Digital patient intake",
-        text: "Intake with insurance capture and consent — charts arrive complete before the visit.",
-        points: ["Online forms and ID capture", "Eligibility checks", "EHR write-back"],
-      },
-      {
-        title: "Triage assist queues",
-        text: "Message sorting and urgency signals for nursing teams — urgent requests surface first.",
-        points: ["Urgency routing", "Summary drafts", "Escalation rules"],
-      },
-      {
-        title: "Appointment automation",
-        text: "Reminders, confirmations, and self-rescheduling — gaps fill from the waitlist automatically.",
-        points: ["SMS and email reminders", "Self-serve rescheduling", "Waitlist backfill"],
-      },
-      {
-        title: "Records search",
-        text: "Search across notes, PDFs, and scans with citations — staff verify answers in the source chart.",
-        points: ["Unified clinical search", "Source citations", "Role-based access"],
-      },
-      {
-        title: "Claims processing",
-        text: "Scrubbing, coding support, and denial tracking — billing sees what needs fixing before submission.",
-        points: ["Eligibility verification", "Code checks", "Denial worklists"],
-      },
-      {
-        title: "Care reminders",
-        text: "Recall and care-plan outreach tied to due dates — patients get nudges until they act.",
-        points: ["Preventive recall lists", "Care-plan messaging", "Outcome tracking"],
-      },
+      { title: "Digital Patient Intake", text: "Forms, patient information, document collection, consent workflows, and pre-visit processes.", points: ["Patient Experience", "Forms", "Workflows"] },
+      { title: "Triage & Task Queues", text: "Structured queues that help teams route requests, assign work, manage priorities, and track status.", points: ["Workflow", "Routing", "Operations"] },
+      { title: "Appointment Automation", text: "Scheduling, reminders, confirmations, rescheduling, availability, and follow-up workflows.", points: ["Scheduling", "Automation", "Notifications"] },
+      { title: "Patient Portals", text: "A central digital experience for appointments, information, forms, requests, and communication." },
+      { title: "Clinical Dashboards", text: "Role-based views that surface relevant tasks, activity, status, and operational information." },
+      { title: "Healthcare Integrations", text: "APIs and integration services that connect applications and reduce disconnected workflows." },
+    ],
+  },
+  developmentProcess: {
+    title: "From clinical workflow to working software.",
+    intro: "Healthcare software starts with understanding the process—not choosing the technology.",
+    steps: [
+      { title: "Discover", text: "Understand users, workflows, existing systems, constraints, and project requirements." },
+      { title: "Map", text: "Document journeys, roles, permissions, handoffs, data flows, and integrations." },
+      { title: "Design", text: "Create interfaces and system architecture around real operational scenarios." },
+      { title: "Build", text: "Develop the platform in focused, testable iterations with regular stakeholder feedback." },
+      { title: "Integrate & Validate", text: "Connect required systems and validate workflows, permissions, edge cases, and expected behavior." },
+      { title: "Launch & Improve", text: "Deploy, monitor, support, and continue evolving the product as requirements change." },
     ],
   },
   businessImpact: {
-    title: "After Jabisoft, clinics run calmer.",
-    intro:
-      "No invented numbers — each outcome below is made measurable in the product and reviewed with your team.",
+    title: "Better software. Less operational friction.",
+    intro: "When systems match the way teams actually work, everyday healthcare operations become easier to manage.",
     dimensions: [
-      {
-        name: "Intake moves faster",
-        before: "Clipboard paperwork and re-entry",
-        text: "Patients complete intake before arrival. The front desk starts visits with verified data.",
-        tag: "Intake",
-      },
-      {
-        name: "Schedules stay full",
-        before: "No-shows and empty slots",
-        text: "Automated reminders and backfill keep slots covered. Staff manage exceptions only.",
-        tag: "Scheduling",
-      },
-      {
-        name: "Triage finds order",
-        before: "Mixed urgent and routine inbox",
-        text: "Routed queues show urgency and context. Teams respond to the right cases first.",
-        tag: "Triage",
-      },
-      {
-        name: "Records answer questions",
-        before: "Chart hunting across systems",
-        text: "One search returns history with sources. Staff act without chasing files.",
-        tag: "Records",
-      },
-      {
-        name: "Claims go out clean",
-        before: "Denials and rework loops",
-        text: "Pre-submit checks catch errors early. Billing works a clear queue.",
-        tag: "Billing",
-      },
-      {
-        name: "Follow-up happens",
-        before: "Missed recalls and gaps",
-        text: "Outreach runs on due dates automatically. More patients close the loop.",
-        tag: "Care",
-      },
+      { name: "Intake becomes structured", before: "Disconnected intake steps", text: "Move patient information from disconnected steps into clearer digital workflows.", tag: "Intake" },
+      { name: "Scheduling becomes easier to manage", before: "Scattered appointment updates", text: "Bring availability, appointments, confirmations, changes, and reminders into connected processes.", tag: "Scheduling" },
+      { name: "Teams know what needs attention", before: "Unclear outstanding work", text: "Queues, statuses, assignments, and notifications provide clearer visibility into outstanding work.", tag: "Operations" },
+      { name: "Follow-up becomes systematic", before: "Manual reminders and memory", text: "Use defined workflows and automation to reduce reliance on manual reminders and individual memory.", tag: "Follow-up" },
+    ],
+  },
+  integrations: {
+    title: "Built to work with the systems around it.",
+    intro: "Healthcare software rarely operates alone. We design integration layers and APIs that help platforms exchange information with the systems and services required by the workflow.",
+    items: ["Practice Management Systems", "Scheduling Systems", "Patient Portals", "Communication Services", "Payment Platforms", "Identity & Authentication", "Reporting & Analytics", "Third-party APIs"],
+  },
+  faq: {
+    title: "Healthcare software development questions.",
+    items: [
+      { question: "Can Jabitsoft build a healthcare platform from scratch?", answer: "Yes. We can work from early product definition through UX, architecture, development, integrations, deployment, and ongoing improvement." },
+      { question: "Can you modernise an existing healthcare system?", answer: "Yes. Depending on the existing architecture, we can redesign interfaces, replace workflows, introduce new services, develop integrations, or progressively modernise parts of the platform." },
+      { question: "Can you integrate with our existing systems?", answer: "Integration requirements are assessed during discovery. Where supported interfaces or APIs are available, we can design integrations around the required workflow and data exchange." },
+      { question: "Do you build patient-facing applications?", answer: "Yes. This can include patient portals, appointment experiences, intake workflows, forms, notifications, and other digital patient interactions." },
+      { question: "Can you automate healthcare workflows?", answer: "Yes. Appropriate administrative workflows can use automation for routing, notifications, status changes, task creation, document processing, and similar repetitive processes." },
+      { question: "How do you approach security and privacy?", answer: "Security, access control, data handling, audit requirements, hosting, and applicable regulatory requirements should be defined for each project and incorporated into the architecture and development process." },
     ],
   },
   cta: {
-    title: "Fix one clinical workflow this quarter.",
-    text: "Bring us your intake bottleneck, scheduling gap, or records mess. We scope it, build it in your repos, and hand over clean code.",
-    button: "Talk to Our Experts",
-    secondaryButton: "Start a Conversation",
+    title: "Fix the workflow that's slowing your team down.",
+    text: "Whether you're replacing a manual process, connecting existing systems, or building a new healthcare platform, let's start with the workflow that needs to work better.",
+    button: "Discuss your project", secondaryButton: "Talk to our team",
   },
 };

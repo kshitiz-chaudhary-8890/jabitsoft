@@ -122,6 +122,7 @@
   border-radius: 24px;
   transition: transform 320ms var(--ind-ease), box-shadow 320ms var(--ind-ease);
 }
+.opportunityTitle { max-width: 18ch; margin: 0 0 16px; color: #fff; font: 650 clamp(23px, 2.3vw, 32px)/1.15 "Plus Jakarta Sans", Inter, sans-serif; letter-spacing: -0.035em; }
 
 .opportunityField:hover {
   transform: translateY(-4px);

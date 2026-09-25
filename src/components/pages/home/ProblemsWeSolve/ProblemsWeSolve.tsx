@@ -27,6 +27,7 @@ import { createPortal } from "react-dom";
 import { animate, useReducedMotion } from "motion/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Reveal } from "@/components/motion/reveal";
 
 import styles from "./ProblemsWeSolve.module.css";
 
@@ -1532,14 +1533,16 @@ export default function ProblemsWeSolve() {
       <div className={styles.inner}>
         {/* ---------------- header ---------------- */}
         <header className={styles.header}>
-          <p className={styles.eyebrow}>(Problems we solve)</p>
+          <Reveal as="p" className={styles.eyebrow}>
+            (Problems we solve)
+          </Reveal>
           <h2 id="problems-we-solve-title" className={styles.title} data-heading-fill="">
             Friction slows growth.
           </h2>
-          <p className={styles.subtitle}>
+          <Reveal as="p" className={styles.subtitle}>
             We remove the bottlenecks that slow teams down — across systems, operations and
             digital journeys.
-          </p>
+          </Reveal>
         </header>
 
         {/* ---------------- 01 · evidence ---------------- */}
@@ -1550,7 +1553,7 @@ export default function ProblemsWeSolve() {
             <p className={styles.partNote}>Illustrative signals, not client benchmarks.</p>
           </div>
 
-          <ul className={styles.stats}>
+          <Reveal as="ul" className={styles.stats}>
             {EVIDENCE.map((item, i) => (
               <li key={item.id} className={styles.stat}>
                 <span className={styles.statTop}>
@@ -1565,7 +1568,7 @@ export default function ProblemsWeSolve() {
                 <span className={styles.srOnly}>{item.basis}</span>
               </li>
             ))}
-          </ul>
+          </Reveal>
         </div>
 
         {/* ---------------- 02 · problem ledger ---------------- */}
@@ -1598,7 +1601,7 @@ export default function ProblemsWeSolve() {
             </div>
           </aside>
 
-          <ul className={styles.entries}>
+          <Reveal as="ul" className={styles.entries}>
             {PROBLEMS.map((problem, i) => (
               <li key={problem.id} className={styles.entry}>
                 <button
@@ -1626,7 +1629,7 @@ export default function ProblemsWeSolve() {
                 </button>
               </li>
             ))}
-          </ul>
+          </Reveal>
 
           <p className={styles.ledgerFoot}>
             <span className={styles.ledgerFootMark} aria-hidden="true">

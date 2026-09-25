@@ -3,15 +3,16 @@
 import { useLayoutEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { RevealGroup } from "@/components/motion/reveal";
 
 const stats = [
   {
     label: "Projects Delivered",
     value: 26,
     suffix: "+",
-    title: "Products built for real business needs",
+    title: "Built around the way teams work",
     description:
-      "Web platforms, mobile apps, ERP systems, cloud solutions and AI-led products delivered for teams that needed reliable execution and room to scale.",
+      "From web platforms and apps to ERP and cloud, each project starts with the way your team works.",
     image:
       "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=1400&q=84",
   },
@@ -19,9 +20,9 @@ const stats = [
     label: "Client Satisfaction",
     value: 98,
     suffix: "%",
-    title: "Partnerships built on clarity",
+    title: "A smoother path from kickoff to launch",
     description:
-      "Clear communication, practical decisions and dependable delivery keep projects moving from first discussion through launch and support.",
+      "Clear communication, practical decisions and dependable delivery shape every stage of collaboration.",
     image:
       "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&q=84",
   },
@@ -29,9 +30,9 @@ const stats = [
     label: "Core Service Areas",
     value: 6,
     suffix: "",
-    title: "One technology partner, six capabilities",
+    title: "Six capabilities, one delivery team",
     description:
-      "Agentic AI, cloud consulting, mobile apps, ERP systems, web platforms and digital growth brought together under one delivery team.",
+      "Agentic AI, cloud consulting, mobile apps, ERP systems, web platforms and digital growth—all connected under one team.",
     image:
       "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=84",
   },
@@ -66,7 +67,7 @@ export default function CompanyStats() {
 
     const ctx = gsap.context(() => {
       gsap.fromTo(
-        "[data-company-stats-reveal]",
+        ".company-stats-clean__intro",
         { autoAlpha: 0, y: 44, scale: 0.985 },
         {
           autoAlpha: 1,
@@ -171,14 +172,12 @@ export default function CompanyStats() {
 
               <h2 id="company-stats-clean-title" data-reveal-heading>
                 <span className="section-heading-fill">
-                  Software built around real business outcomes.
+                  The experience behind software that moves business forward.
                 </span>
               </h2>
 
               <p className="company-stats-clean__copy">
-                We combine product thinking, design and engineering to build
-                digital systems that solve operational problems, improve customer
-                experiences and create a stronger foundation for growth.
+                From product strategy and design to engineering, launch and ongoing support, we help teams turn complex needs into reliable digital products.
               </p>
 
               <div className="company-stats-clean__capabilities">
@@ -186,7 +185,7 @@ export default function CompanyStats() {
                   <span className="company-stats-clean__capability-dot" />
                   <div>
                     <strong>Product & Experience</strong>
-                    <p>Strategy, UX and interfaces designed around real user needs.</p>
+                    <p>Shape products, UX and interfaces around real customer needs.</p>
                   </div>
                 </div>
 
@@ -194,7 +193,7 @@ export default function CompanyStats() {
                   <span className="company-stats-clean__capability-dot" />
                   <div>
                     <strong>Engineering & Scale</strong>
-                    <p>Web, mobile, cloud, ERP and AI systems built to grow reliably.</p>
+                    <p>Connect web, mobile, cloud and ERP into systems ready to evolve.</p>
                   </div>
                 </div>
 
@@ -202,7 +201,7 @@ export default function CompanyStats() {
                   <span className="company-stats-clean__capability-dot" />
                   <div>
                     <strong>Support & Improvement</strong>
-                    <p>Ongoing optimization, maintenance and product evolution after launch.</p>
+                    <p>Keep products reliable with ongoing maintenance and thoughtful iteration.</p>
                   </div>
                 </div>
 
@@ -210,7 +209,7 @@ export default function CompanyStats() {
                   <span className="company-stats-clean__capability-dot" />
                   <div>
                     <strong>Performance & Growth</strong>
-                    <p>Speed, SEO, analytics and continuous improvements focused on measurable business growth.</p>
+                    <p>Improve speed, SEO and analytics in line with business priorities.</p>
                   </div>
                 </div>
               </div>
@@ -222,7 +221,7 @@ export default function CompanyStats() {
 
           </div>
 
-          <div className="company-stats-clean__cards">
+          <RevealGroup className="company-stats-clean__cards">
             <article
               className="company-stats-clean__card company-stats-clean__card--featured"
               data-company-stats-reveal
@@ -293,7 +292,7 @@ export default function CompanyStats() {
                 </article>
               ))}
             </div>
-          </div>
+          </RevealGroup>
         </div>
       </section>
 

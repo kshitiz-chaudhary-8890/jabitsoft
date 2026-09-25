@@ -29,12 +29,13 @@ describe("Header", () => {
       ),
     ).toEqual([
       ["About", "/about-us", ""],
-      ["Industries", "/services", ""],
       ["Services", "/services", ""],
       ["Case Studies", "/case-studies", ""],
       ["Blog", "/blogs", ""],
       ["Contact Us", "/contact-us", ""],
     ]);
+    expect(screen.queryByRole("link", { name: "Industries" })).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Industries" })).toBeInTheDocument();
     expect(screen.queryByRole("link", { name: "Home" })).not.toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: "Open services submenu" }).querySelector("svg"),
@@ -88,6 +89,10 @@ describe("Header", () => {
     expect(screen.getByRole("link", { name: /SaaS & Platforms/i })).toHaveAttribute(
       "href",
       "/industries/saas-platforms",
+    );
+    expect(screen.getByRole("link", { name: /Government/i })).toHaveAttribute(
+      "href",
+      "/industries/government",
     );
   });
 

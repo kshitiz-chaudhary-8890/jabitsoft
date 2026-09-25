@@ -1,12 +1,12 @@
 "use client";
 
-import { useLayoutEffect, useRef, useState } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useLayoutEffect, useRef } from "react";
 import { useReducedMotion } from "motion/react";
 import { MapPin, Shield, Clock, ArrowUpRight, Star } from "lucide-react";
-import RevealHeading from "@/components/common/RevealHeading";
-const marqueeReviews = [
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Reveal, RevealGroup } from "@/components/motion/reveal";
+const unusedPlaceholderReviews = [
   {
     name: "Ananya S.",
     context: "Lumora Labs · Web Platform",
@@ -30,47 +30,118 @@ const marqueeReviews = [
   },
 ];
 
+const featuredTestimonials = [
+  { name: "Koala Living", service: "ERP Services · Custom Software Development", quote: "Partnering with Jabit Soft has been transformative. Their expertise in ERP and POS delivered a seamless, efficient system that elevated our operations. Exceptional service, timely delivery, and a true game-changer for our business!" },
+  { name: "Turnpoint Technologies", service: "Website Solutions · SEO / Digital Marketing", quote: "We were striving to establish our digital footprint, and found a trusted partner in Jabit Soft. Their expertise, prompt delivery, and collaborative approach transformed our website, boosted visibility, and enhanced customer experience. A successful project that sets the stage for future growth." },
+  { name: "Indian Ocean Naval Symposium (IONS)", service: "Website Solutions", quote: "Jabit Soft delivered an outstanding redevelopment of the IONS website. Their creativity, deep understanding of our requirements, and seamless execution resulted in a modern, engaging platform. The process was efficient, collaborative, and the final outcome exceeded expectations, a remarkable transformation for our digital presence." },
+  { name: "Move My Stuff", service: "Custom Software Development", quote: "Jabit Soft transformed our operations with a customized software solution. Administrative efficiency improved by 60%, customer interaction quality doubled, and issue resolution time dropped significantly. Their expertise and commitment delivered a system that truly empowers our business." },
+  { name: "Sparky Warehouse", service: "Website Solutions", quote: "Jabit Soft transformed our business with a cutting-edge e-commerce website. They expertly displayed our top-notch products worldwide, boosting Sparky Warehouse’s reputation as a leading innovator in the industry. Great teamwork and excellent outcomes!" },
+  { name: "Defence Colony Club", service: "Website Solutions", quote: "We’re thrilled with Jabit Soft’s work on our Defence Colony Club website. Their team is a dream to work with. They are professional, creative, and always responsive. Highly impressed with the final work." },
+  { name: "Hummer X Limousines", service: "SEO / Digital Marketing", quote: "Jabit Soft’s SEO service for our Hummer X Limousines website was outstanding. Their expertise dramatically boosted our online visibility, driving a surge in relevant traffic and measurable business growth. Truly a partner we highly recommend." },
+  { name: "Sparky Warehouse", service: "SEO / Digital Marketing", quote: "Jabit Soft transformed our business visibility through strategic SEO and digital marketing. Their expertise showcased our products worldwide, elevating Sparky Warehouse’s reputation as an industry innovator. Exceptional teamwork, timely execution, and measurable outcomes made this collaboration a true success." },
+  { name: "Car Lelo", service: "ERP Services · Billing & Invoice Software", quote: "Jabit Soft exceeded expectations in implementing our CRM and loan panel. Their team displayed exceptional expertise, delivering a seamless integration that significantly improved our business processes. Thanks Team!" },
+  { name: "Used Cars", service: "Website Solutions", quote: "We are really happy with Jabit Soft’s work. The website they developed for Used Cars is amazing, we are now getting more and more customers. Exceptional service, transforming our platform into the ultimate destination for pre-owned vehicle seekers. Amazing Work!" },
+  { name: "Dr. Bhim Rao Ambedkar College", service: "Website Solutions", quote: "Impressed with Jabit Soft’s proficiency in developing our website. Amazing work I received from Jabit Soft’s team. Exceptional service; would gladly recommend." },
+  { name: "Delhi Arthritis and Rheumatology Clinic", service: "Website Solutions", quote: "Jabit Soft did an awesome job creating our clinic website. They really understood what we wanted and made it easy for patients. Super friendly team, highly recommended for any website needs!" },
+  { name: "Dr. Lalit Duggal", service: "Website Solutions", quote: "I am extremely pleased with Jabit Soft’s implementation of Dr. Lalit Duggal’s vision. Their team’s expertise, attention to detail, and timely delivery. Highly recommend their services!" },
+  { name: "Dr. Rajat Chopra", service: "Website Solutions", quote: "I was thoroughly impressed with Jabit Soft’s work on my website. They were attentive, creative, and delivered a site that’s not only sleek but also user-friendly. Highly recommend their expertise and professionalism!" },
+  { name: "Kohli Ads", service: "Website Solutions", quote: "Glad to work with Jabit Soft as they developed my website and it works very well. Thanks, Team." },
+  { name: "Property Club", service: "Website Solutions", quote: "Jabit Soft fulfilled all my requirements which we needed in our Property Club website. Their team’s expertise and attention to detail transformed our vision into a user-friendly, visually stunning platform." },
+  { name: "Sanjivni Rheumatology & Infertility Center", service: "Website Solutions", quote: "Jabit Soft truly brought our vision to life. Their dedication, innovative approach, and responsiveness made the collaboration a pleasure. Exceptional results; highly recommend their web development expertise." },
+];
+
+const testimonialImages = {
+  "Sparky Warehouse": "https://ik.imagekit.io/5bwd4hel7/Homepage/testimonial/Sparky.jpg",
+  "Used Cars": "https://ik.imagekit.io/5bwd4hel7/Homepage/testimonial/Used%20Carss.jpg",
+  "Indian Ocean Naval Symposium (IONS)": "https://ik.imagekit.io/5bwd4hel7/Homepage/testimonial/IONSS.jpg",
+  "Property Club": "https://ik.imagekit.io/5bwd4hel7/Homepage/testimonial/Property%20CLub.jpg",
+  "Delhi Arthritis and Rheumatology Clinic": "https://ik.imagekit.io/5bwd4hel7/Homepage/testimonial/DARC.jpg",
+  "Move My Stuff": "https://ik.imagekit.io/5bwd4hel7/Homepage/testimonial/Move%20my%20stuff.jpg",
+  "Kohli Ads": "https://ik.imagekit.io/5bwd4hel7/Homepage/testimonial/Kohli%20Ads.jpg",
+  "Dr. Bhim Rao Ambedkar College": "https://ik.imagekit.io/5bwd4hel7/Homepage/testimonial/BR%20Ambedakar%20cllg.jpg",
+  "Koala Living": "https://ik.imagekit.io/5bwd4hel7/Homepage/testimonial/Koala%20Livingg.jpg",
+  "Car Lelo": "https://ik.imagekit.io/5bwd4hel7/Homepage/testimonial/Car%20Lelo.jpg",
+  "Dr. Lalit Duggal": "https://ik.imagekit.io/5bwd4hel7/Homepage/testimonial/Dr.%20Lalit.jpg",
+  "Dr. Rajat Chopra": "https://ik.imagekit.io/5bwd4hel7/Homepage/testimonial/Dr.%20Rajat%20Chopra.jpg",
+  "Hummer X Limousines": "https://ik.imagekit.io/5bwd4hel7/Homepage/testimonial/HummerX.jpg",
+  "Turnpoint Technologies": "https://ik.imagekit.io/5bwd4hel7/Homepage/testimonial/Turnpoint.jpg",
+};
+
+const marqueeReviews = featuredTestimonials
+  .filter(({ name }) => name !== "Koala Living")
+  .map(({ name, service, quote }) => ({ name, context: service, quote, image: testimonialImages[name] }));
+
 const features = [
-  { icon: MapPin, label: "Noida-born, delivering worldwide" },
-  { icon: Shield, label: "Defense, Navy & Air Force-grade trust" },
-  { icon: Clock, label: "Long-term partnerships since 2007" },
+  { icon: MapPin, label: "Solutions shaped around your workflow" },
+  { icon: Shield, label: "Clear, collaborative delivery" },
+  { icon: Clock, label: "Support beyond launch" },
 ];
 
 export default function ClientResults() {
+  const sectionRef = useRef(null);
   const reduced = useReducedMotion();
 
+  useLayoutEffect(() => {
+    const section = sectionRef.current;
+    const heading = section?.querySelector(".section-heading-fill");
+    if (!section || !heading) return undefined;
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches) return undefined;
+
+    gsap.registerPlugin(ScrollTrigger);
+    const context = gsap.context(() => {
+      gsap.fromTo(
+        heading,
+        { backgroundSize: "0% 100%, 100% 100%" },
+        {
+          backgroundSize: "100% 100%, 100% 100%",
+          ease: "none",
+          scrollTrigger: {
+            trigger: heading,
+            start: "top 94%",
+            end: "top 36%",
+            scrub: 0.65,
+            invalidateOnRefresh: true,
+          },
+        },
+      );
+    }, section);
+
+    const refreshFrame = requestAnimationFrame(() => ScrollTrigger.refresh());
+
+    return () => {
+      cancelAnimationFrame(refreshFrame);
+      context.revert();
+    };
+  }, []);
+
   return (
-    <section className="ts-section" aria-labelledby="client-results-title">
+    <section ref={sectionRef} className="ts-section" aria-labelledby="client-results-title">
       <div className="ts-wrap">
         {/* ---------- Header row ---------- */}
         <header className="cr-heading ts-header">
           <div className="ts-header-left">
-            <p data-cr-intro className="cr-eyebrow">
+            <Reveal as="p" data-cr-intro className="cr-eyebrow">
               Client Results
-            </p>
-            <h2 id="client-results-title">
-              <RevealHeading as="span">What clients say about our work</RevealHeading>
+            </Reveal>
+            <h2 id="client-results-title" className="ts-title">
+              <span className="section-heading-fill">What clients say about our work</span>
             </h2>
           </div>
-          <p data-cr-intro className="cr-subhead ts-lede">
+          <Reveal as="p" data-cr-intro className="cr-subhead ts-lede" delay={0.16}>
             Every product we ship is built on trust, clarity, and long-term support — in the words
             of the teams we build with.
-          </p>
+          </Reveal>
         </header>
 
         {/* ---------- Three-column grid ---------- */}
-        <div className="ts-grid">
+        <RevealGroup className="ts-grid" delay={0.16}>
           {/* Left — stats / CTA card */}
           <div className="ts-stats">
-            <div className="ts-rating-row">
-              <div className="ts-rating">
-                <strong>5.0</strong>
-                <span>/5</span>
-              </div>
-              <p className="ts-rating-note">
-                Based on <strong>50+ verified</strong>
-                <br />
-                client reviews
+            <div className="ts-stats-intro">
+              <span className="ts-card-eyebrow">How we work</span>
+              <h3 className="ts-card-heading">Built around your business—not a template.</h3>
+              <p className="ts-card-copy">
+                We bring practical engineering and dependable support together to turn complex workflows into software your team can rely on.
               </p>
             </div>
 
@@ -84,11 +155,11 @@ export default function ClientResults() {
             </ul>
 
             <div className="ts-cta">
-              <p className="ts-cta-kicker">Ready to start your project?</p>
-              <p className="ts-cta-title">Let&rsquo;s build it!</p>
+              <p className="ts-cta-kicker">Have an idea in mind?</p>
+              <p className="ts-cta-title">Let&rsquo;s make it work.</p>
               <div className="ts-cta-buttons">
                 <a className="ts-cta-pill" href="mailto:hello@jabitsoft.com?subject=New%20Project" data-site-button data-button-variant="primary">
-                  Start a project
+                  Talk to our team
                 </a>
                 <a
                   className="ts-cta-round"
@@ -105,7 +176,7 @@ export default function ClientResults() {
           <div className="ts-photo">
             <img
               src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=1200"
-              alt="Lumora Labs team collaborating on their web platform project"
+              alt="Client team collaborating on a project"
               referrerPolicy="no-referrer"
               loading="lazy"
               decoding="async"
@@ -113,10 +184,9 @@ export default function ClientResults() {
             <div className="ts-photo-veil" />
             <div className="ts-photo-caption">
               <p className="ts-photo-quote">
-                &ldquo;We expected an agency — we found a team that treats the product like their
-                own.&rdquo;
+                “Partnering with Jabit Soft has been transformative. Their expertise in ERP and POS delivered a seamless, efficient system that elevated our operations. Exceptional service, timely delivery, and a true game-changer for our business!”
               </p>
-              <p className="ts-photo-attribution">— Lumora Labs, Web Platform</p>
+              <p className="ts-photo-attribution">— Koala Living · ERP Services &amp; Custom Software Development</p>
             </div>
           </div>
 
@@ -124,7 +194,7 @@ export default function ClientResults() {
           <div className="ts-marquee" aria-label="More client reviews">
             <div
               className="ts-track"
-              style={reduced ? undefined : { animation: "marquee-up 30s linear infinite" }}
+              style={reduced ? undefined : { animation: "marquee-up 75s linear infinite" }}
             >
               {[...marqueeReviews, ...marqueeReviews].map((review, index) => (
                 <article className="ts-review-card" key={`${review.name}-${index}`}>
@@ -133,17 +203,15 @@ export default function ClientResults() {
                       <Star key={i} size={12} className="ts-star" />
                     ))}
                   </div>
-                  <blockquote>{`“${review.quote}”`}</blockquote>
+                  <blockquote>{review.quote}</blockquote>
                   <footer>
-                    <img
-                      src={review.avatar}
-                      alt=""
-                      referrerPolicy="no-referrer"
-                      loading="lazy"
-                      decoding="async"
-                    />
+                    {review.image ? (
+                      <img className="ts-review-avatar" src={review.image} alt="" loading="lazy" decoding="async" />
+                    ) : (
+                      <span className="ts-review-avatar" aria-hidden="true">{review.name.slice(0, 1)}</span>
+                    )}
                     <div>
-                      <strong>{`— ${review.name}`}</strong>
+                      <strong>{review.name}</strong>
                       <span>{review.context}</span>
                     </div>
                   </footer>
@@ -151,7 +219,7 @@ export default function ClientResults() {
               ))}
             </div>
           </div>
-        </div>
+        </RevealGroup>
       </div>
 
       <style>{`
@@ -222,44 +290,34 @@ export default function ClientResults() {
           background: #f8f8f8;
         }
 
-        .ts-rating-row {
-          display: flex;
-          align-items: flex-start;
-          gap: 12px;
+        .ts-stats-intro {
           margin-bottom: 28px;
         }
 
-        .ts-rating {
-          display: flex;
-          align-items: baseline;
-          gap: 2px;
-        }
-
-        .ts-rating strong {
-          font-size: 48px;
+        .ts-card-eyebrow {
+          color: #718873;
+          font-size: 10px;
           font-weight: 700;
-          line-height: 1;
-          letter-spacing: -0.02em;
-          color: #111110;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
         }
 
-        .ts-rating span {
-          font-size: 16px;
-          font-weight: 400;
-          color: #898888;
+        .ts-card-heading {
+          margin: 12px 0 14px;
+          color: #141414;
+          font-family: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", sans-serif;
+          font-size: clamp(25px, 2vw, 30px);
+          font-weight: 650;
+          letter-spacing: -0.045em;
+          line-height: 1.12;
         }
 
-        .ts-rating-note {
+        .ts-card-copy {
           margin: 0;
-          padding-top: 6px;
-          font-size: 13px;
-          font-weight: 500;
-          line-height: 1.3;
-          color: #555455;
-        }
-
-        .ts-rating-note strong {
-          color: #111110;
+          color: #67716d;
+          font-size: 14px;
+          font-weight: 400;
+          line-height: 1.6;
         }
 
         .ts-features {
@@ -409,7 +467,7 @@ export default function ClientResults() {
 
         .ts-photo-quote {
           margin: 0 0 12px;
-          font-size: clamp(17px, 1.6vw, 20px);
+          font-size: clamp(15px, 1.35vw, 17px);
           font-weight: 500;
           line-height: 1.4;
         }
@@ -440,6 +498,11 @@ export default function ClientResults() {
           padding: 8px;
         }
 
+        .ts-marquee:hover .ts-track,
+        .ts-marquee:focus-within .ts-track {
+          animation-play-state: paused !important;
+        }
+
         .ts-review-card {
           display: flex;
           flex-direction: column;
@@ -464,10 +527,10 @@ export default function ClientResults() {
 
         .ts-review-card blockquote {
           margin: 0 0 16px;
+          color: #67716d;
           font-size: 14px;
           font-weight: 400;
           line-height: 1.6;
-          color: #67716d;
           text-wrap: pretty;
         }
 
@@ -476,14 +539,26 @@ export default function ClientResults() {
           align-items: center;
           gap: 12px;
           margin-top: auto;
+          padding-top: 12px;
+          border-top: 1px solid #f1f1f1;
         }
 
-        .ts-review-card footer img {
+        .ts-review-avatar {
+          display: grid;
+          flex: 0 0 auto;
           width: 40px;
           height: 40px;
+          place-items: center;
           border-radius: 50%;
+          background: #f1f3f1;
+          color: #4f5f53;
+          font-size: 14px;
+          font-weight: 650;
+        }
+
+        img.ts-review-avatar {
+          display: block;
           object-fit: cover;
-          box-shadow: 0 1px 2px rgba(17, 17, 17, 0.1);
         }
 
         .ts-review-card footer strong {
@@ -495,10 +570,11 @@ export default function ClientResults() {
 
         .ts-review-card footer span {
           display: block;
-          margin-top: 1px;
+          margin-top: 3px;
+          color: #898888;
           font-size: 12px;
           font-weight: 500;
-          color: #898888;
+          line-height: 1.4;
         }
 
         /* ---------- Responsive ---------- */
@@ -546,15 +622,14 @@ export default function ClientResults() {
             grid-column: auto;
           }
 
-          .ts-track {
-            height: 100%;
-          }
         }
 
         @media (prefers-reduced-motion: reduce) {
           .ts-track {
             animation: none !important;
           }
+
+          .ts-featured-quote { animation: none; }
 
           .ts-photo img {
             transition: none;

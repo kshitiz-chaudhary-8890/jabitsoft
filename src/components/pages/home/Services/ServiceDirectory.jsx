@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { RevealGroup } from "@/components/motion/reveal";
 
 const services = [
   {
@@ -119,28 +120,8 @@ export default function ServiceDirectory() {
       }
 
       const list = section.querySelector(".service-directory__list");
-      const rows = list
-        ? gsap.utils.toArray(".service-directory__row", list)
-        : [];
 
-      if (rows.length) {
-        gsap.fromTo(
-          rows,
-          { autoAlpha: 0, y: 34 },
-          {
-            autoAlpha: 1,
-            y: 0,
-            duration: 0.68,
-            stagger: 0.065,
-            ease: "power4.out",
-            scrollTrigger: {
-              trigger: list,
-              start: "top 88%",
-              once: true,
-            },
-          }
-        );
-
+      if (list) {
         gsap.fromTo(
           gsap.utils.toArray(".service-directory__divider", list),
           { scaleX: 0 },
@@ -184,7 +165,7 @@ export default function ServiceDirectory() {
           </p>
         </header>
 
-        <div className="service-directory__list">
+        <RevealGroup className="service-directory__list">
           {services.map((service) => (
             <article
               className="service-directory__row"
@@ -212,7 +193,7 @@ export default function ServiceDirectory() {
               </span>
             </article>
           ))}
-        </div>
+        </RevealGroup>
       </div>
 
       <style>{`

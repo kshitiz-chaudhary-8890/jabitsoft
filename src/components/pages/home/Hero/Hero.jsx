@@ -14,11 +14,10 @@ const LINKS = [
   ["ERP", "/services"],
 ];
 
-// Single swap point: point these at a video CDN (Cloudinary/Bunny/Mux) later
-// without touching markup. Local same-origin file starts fastest today and
-// matches the <link rel="preload"> in src/app/page.tsx.
-const VIDEO_SRC = "/videos/hero-tunnel.mp4";
-const VIDEO_POSTER = "/videos/hero-tunnel.jpg";
+// Matches the <link rel="preload"> in src/app/page.tsx.
+// Optimized via ImageKit: 98MB orig -> ~6.7MB (w-1280, q-60) for fast hero load.
+const VIDEO_SRC =
+  "https://ik.imagekit.io/5bwd4hel7/Homepage/hero%20section/41117e3d-f711-49d4-b209-da87ac4bd99e.mp4?tr=q-60,w-1280,f-mp4";
 
 function Arrow() {
   return (
@@ -33,6 +32,26 @@ export default function Hero() {
   const bgRef = useRef(null);
   const shellRef = useRef(null);
   useHomeHeroReveal(sectionRef, shellRef);
+
+  useEffect(() => {
+    const video = bgRef.current;
+    if (!video) return undefined;
+
+    const preference = window.matchMedia?.("(prefers-reduced-motion: reduce)");
+    if (!preference) return undefined;
+
+    const syncPlayback = () => {
+      if (preference.matches) {
+        video.pause();
+      } else {
+        video.play().catch(() => {});
+      }
+    };
+
+    syncPlayback();
+    preference.addEventListener?.("change", syncPlayback);
+    return () => preference.removeEventListener?.("change", syncPlayback);
+  }, []);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -80,7 +99,6 @@ export default function Hero() {
           loop
           playsInline
           preload="auto"
-          poster={VIDEO_POSTER}
           aria-hidden="true"
         >
           <source
@@ -204,7 +222,13 @@ export default function Hero() {
           position: absolute;
           inset: 0;
           z-index: 1;
-          background: transparent;
+          background: linear-gradient(
+            180deg,
+            rgba(2, 6, 12, 0.18) 0%,
+            rgba(2, 6, 12, 0.06) 32%,
+            rgba(2, 6, 12, 0.46) 68%,
+            rgba(2, 6, 12, 0.78) 100%
+          );
           pointer-events: none;
         }
 
@@ -468,10 +492,6 @@ export default function Hero() {
         }
 
         @media (prefers-reduced-motion: reduce) {
-          .jabit-hero__video {
-            display: none;
-          }
-
           .jabit-hero__ghost:hover,
           .jabit-hero__white:hover {
             translate: none;

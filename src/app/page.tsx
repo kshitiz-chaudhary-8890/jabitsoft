@@ -14,7 +14,12 @@ export default function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(schema) }}
       />
-      <link rel="preload" href="/videos/hero-tunnel.mp4" as="video" type="video/mp4" />
+      <link
+        rel="preload"
+        href="https://ik.imagekit.io/5bwd4hel7/Homepage/hero%20section/41117e3d-f711-49d4-b209-da87ac4bd99e.mp4?tr=q-60,w-1280,f-mp4"
+        as="video"
+        type="video/mp4"
+      />
       <SiteLoader />
       <HomepageClient />
       <SharedCTA

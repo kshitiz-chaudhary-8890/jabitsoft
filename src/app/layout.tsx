@@ -26,7 +26,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <body>
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{if(localStorage.getItem("jabit-loader-seen")==="1"){document.documentElement.classList.add("jl-seen")}}catch(e){}`,
+            __html: `try{var k="jabit-loader-seen",d=new Date(),t=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");if(localStorage.getItem(k)===t||document.cookie.split(";").some(function(c){return c.trim()===k+"="+t})){document.documentElement.classList.add("jl-seen")}}catch(e){}`,
           }}
         />
         <AppProviders>

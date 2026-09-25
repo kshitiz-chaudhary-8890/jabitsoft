@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { RevealGroup } from "@/components/motion/reveal";
 import styles from "./SharedCTA.module.css";
 
 export type SharedCTAProps = {
@@ -38,7 +39,7 @@ export function SharedCTA({
             aria-hidden="true"
             style={{ backgroundImage: `url("${image}")` }}
           />
-          <div className={styles.content}>
+          <RevealGroup className={styles.content} delay={0.08}>
             <h2 className={styles.display}>{headline}</h2>
             <p className={styles.lede}>{lede}</p>
             <div className={styles.actions}>
@@ -51,7 +52,7 @@ export function SharedCTA({
                 <Arrow />
               </Link>
             </div>
-          </div>
+          </RevealGroup>
         </div>
       </div>
     </section>

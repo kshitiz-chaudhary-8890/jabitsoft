@@ -18,47 +18,47 @@ import styles from "./OfficeGallery.module.css";
 
 const images = [
   {
-    src: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1800&q=88",
+    src: "https://ik.imagekit.io/5bwd4hel7/About%20us/Office%20Images/IMG_0656.JPG-scaled.jpeg",
     alt: "Bright modern engineering workspace with open collaborative desks",
     caption: "Open engineering studio configured for rapid cross-functional alignment",
   },
   {
-    src: "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1800&q=88",
+    src: "https://ik.imagekit.io/5bwd4hel7/About%20us/Office%20Images/IMG_0653.JPG.jpeg",
     alt: "Contemporary office lounge prepared for informal discussions",
     caption: "Breakout lounge designed for spontaneous architectural reviews",
   },
   {
-    src: "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1800&q=88",
+    src: "https://ik.imagekit.io/5bwd4hel7/About%20us/Office%20Images/IMG_0655.JPG-scaled.jpeg",
     alt: "Team discussing product roadmap around a meeting table",
     caption: "Sprint planning and technical roadmap review in session",
   },
   {
-    src: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1800&q=88",
+    src: "https://ik.imagekit.io/5bwd4hel7/About%20us/Office%20Images/IMG_0641.jpeg",
     alt: "Open office interior with ample natural daylight",
     caption: "Natural daylight and quiet zones to protect deep technical focus",
   },
   {
-    src: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1800&q=88",
+    src: "https://ik.imagekit.io/5bwd4hel7/About%20us/Office%20Images/IMG_0651.JPG.jpeg",
     alt: "Modern high-ceiling engineering lab and tech workspace",
     caption: "Dedicated hardware and software testing environment",
   },
   {
-    src: "https://images.unsplash.com/photo-1497366412874-3415097a27e7?auto=format&fit=crop&w=1800&q=88",
+    src: "https://ik.imagekit.io/5bwd4hel7/About%20us/Office%20Images/IMG_0654.JPG.jpeg",
     alt: "Quiet meeting room with acoustic glass partitions",
     caption: "Acoustic-treated conference room for focused client strategy syncs",
   },
   {
-    src: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1800&q=88",
+    src: "https://ik.imagekit.io/5bwd4hel7/About%20us/Office%20Images/1761134064537%20(1).jpg",
     alt: "Engineers collaborating inside a spacious design office",
     caption: "Cross-disciplinary design pairing and interaction prototyping",
   },
   {
-    src: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1800&q=88",
+    src: "https://ik.imagekit.io/5bwd4hel7/About%20us/Office%20Images/IMG_0650.JPG.jpeg",
     alt: "Engineering team conducting architecture review",
     caption: "Core engineering group collaborating on live system topologies",
   },
   {
-    src: "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=1800&q=88",
+    src: "https://ik.imagekit.io/5bwd4hel7/About%20us/Office%20Images/DSC08546-scaled.jpg",
     alt: "Minimalist open studio with natural sunlight and ergonomic desks",
     caption: "Ergonomic workstations structured for continuous deep work",
   },

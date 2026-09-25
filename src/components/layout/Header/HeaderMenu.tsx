@@ -174,7 +174,10 @@ export function HeaderMenu() {
     setActiveHref(href);
   };
 
-  const contact = headerNavigation.find((item) => "isAction" in item && item.isAction);
+  const contact = headerNavigation.find(
+    (item): item is Extract<(typeof headerNavigation)[number], { isAction: true }> =>
+      "isAction" in item && item.isAction,
+  );
 
   // Industries and Services both resolve to /services, so matching href alone
   // would mark both triggers active on the services route. Only the "Services"
@@ -182,7 +185,7 @@ export function HeaderMenu() {
   const isItemActive = (item: (typeof headerNavigation)[number]): boolean => {
     if (activeHref === null) return false;
     if ("menu" in item && item.menu === "industries") return false;
-    return activeHref === item.href;
+    return "href" in item && activeHref === item.href;
   };
 
   return (
@@ -236,6 +239,7 @@ export function HeaderMenu() {
             const menu = megaMenus[menuKind];
             const menuId = `${navigationId}-${menuKind}`;
             const isMenuOpen = openMenu === menuKind;
+            const itemHref = "href" in item ? item.href : undefined;
 
             return (
               <div
@@ -249,16 +253,30 @@ export function HeaderMenu() {
                 }}
               >
                 <div className={styles.menuTriggerRow}>
-                  <Link
-                    className={styles.menuLink}
-                    href={item.href}
-                    data-nav-item
-                    aria-current={isItemActive(item) ? "page" : undefined}
-                    onClick={() => selectDestination(item.href)}
-                    onFocus={() => openMegaMenu(menuKind, true)}
-                  >
-                    {item.label}
-                  </Link>
+                  {itemHref ? (
+                    <Link
+                      className={styles.menuLink}
+                      href={itemHref}
+                      data-nav-item
+                      aria-current={isItemActive(item) ? "page" : undefined}
+                      onClick={() => selectDestination(itemHref)}
+                      onFocus={() => openMegaMenu(menuKind, true)}
+                    >
+                      {item.label}
+                    </Link>
+                  ) : (
+                    <button
+                      className={styles.menuLink}
+                      type="button"
+                      data-nav-item
+                      aria-expanded={isMenuOpen}
+                      aria-controls={menuId}
+                      onClick={() => setOpenMenu(isMenuOpen ? null : menuKind)}
+                      onFocus={() => openMegaMenu(menuKind, true)}
+                    >
+                      {item.label}
+                    </button>
+                  )}
                   <button
                     className={styles.menuToggle}
                     type="button"
@@ -299,14 +317,16 @@ export function HeaderMenu() {
                       <div className={styles.megaIntro}>
                         <strong className={styles.megaTitle}>{menu.title}</strong>
                         <p className={styles.megaDescription}>{menu.description}</p>
-                        <Link
-                          className={styles.megaViewAll}
-                          href={item.href}
-                          onClick={() => selectDestination(item.href)}
-                        >
-                          {menu.viewAllLabel}
-                          <ArrowIcon kind="up-right" className={styles.arrowUpRight} />
-                        </Link>
+                        {itemHref ? (
+                          <Link
+                            className={styles.megaViewAll}
+                            href={itemHref}
+                            onClick={() => selectDestination(itemHref)}
+                          >
+                            {menu.viewAllLabel}
+                            <ArrowIcon kind="up-right" className={styles.arrowUpRight} />
+                          </Link>
+                        ) : null}
                       </div>
                       <div className={styles.megaGrid}>
                         {menu.items.map((entry) => (
@@ -314,7 +334,7 @@ export function HeaderMenu() {
                             className={styles.megaItem}
                             href={entry.href}
                             key={entry.href}
-                            onClick={() => selectDestination(item.href)}
+                            onClick={() => selectDestination(entry.href)}
                           >
                             <span className={styles.megaItemBody}>
                               <span className={styles.megaItemTitle}>
@@ -372,6 +392,8 @@ export function HeaderMenu() {
               </div>
             );
           }
+
+          if (!("href" in item)) return null;
 
           return (
             <Link

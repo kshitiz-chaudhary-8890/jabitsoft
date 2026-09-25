@@ -1,215 +1,85 @@
 import type { IndustryDetailData } from "../types";
 
 export const automationContent: IndustryDetailData = {
-  label: "Automation",
-  slug: "automation",
-  kicker: "Industries — Automation",
+  label: "Robotics & Automation", slug: "automation", kicker: "Robotics & automation software",
   hero: {
-    headline: "Run cells and fleets without guesswork.",
-    lede: "We build software that connects robots, sensors, and operators — live status, clear alerts, and code in your repos.",
-    primaryCta: "Get a build plan",
+    headline: "Run robots and automated operations without guesswork.",
+    lede: "From robot management and real-time monitoring to workflow automation and system integrations, we build the software that connects machines, people, and operations.",
+    primaryCta: "Discuss your automation project", secondaryCta: "See what we build",
     stats: [
-      { value: "Live view", label: "Cell and fleet status" },
-      { value: "Traceable", label: "Sensor-to-action logs" },
-      { value: "Maintainable", label: "Documented code, your repos" },
-      { value: "Supported", label: "Handover and runbooks" },
+      { value: "Robotics", label: "Robot & fleet management" },
+      { value: "Automation", label: "Workflow orchestration" },
+      { value: "Monitoring", label: "Real-time status & alerts" },
+      { value: "Integrations", label: "Machines, software & APIs" },
     ],
-    ticker: [
-      "PLC integration",
-      "Robot fleets",
-      "Sensor pipelines",
-      "Vision inspection",
-      "Status dashboards",
-      "Work triggers",
-      "Downtime alerting",
-      "Audit logs",
-    ],
+    ticker: ["Robot management", "Workflow automation", "Real-time monitoring", "Fleet control", "System integration", "Telemetry", "Alerts", "Operator dashboards", "Data & analytics", "Remote operations"],
   },
   landscape: {
-    title: "Automation shops run mixed systems.",
-    intro:
-      "Plants combine new robots with old controllers, separate dashboards, and manual checks. Software has to tie them together.",
+    title: "Automation depends on connected systems.",
+    intro: "Robots, sensors, machines, business applications, and people often operate across different systems. The real challenge is making them communicate, coordinate, and respond as one operation.",
+    opportunityTitle: "Connect the physical and digital operation.",
     forces: [
-      {
-        title: "Mixed fleets",
-        text: "Different robot brands, controllers, and vintages run side by side. Integration work never stops.",
-      },
-      {
-        title: "Sensor overload",
-        text: "Cells stream temperature, vibration, and cycle data. Operators need signals, not raw feeds.",
-      },
-      {
-        title: "Labor gaps",
-        text: "Fewer technicians cover more cells. Dashboards and alerts have to carry more of the load.",
-      },
-      {
-        title: "Audit pressure",
-        text: "Customers and regulators ask for traceable actions. Logs must show what happened and when.",
-      },
+      { title: "Mixed technology", text: "Automation environments often combine hardware, software, sensors, APIs, and legacy systems from different vendors." },
+      { title: "Disconnected operations", text: "When systems don't communicate clearly, teams spend more time coordinating tasks and resolving exceptions manually." },
+      { title: "Limited visibility", text: "Operators need a reliable view of robot status, tasks, faults, utilisation, and operational performance." },
+      { title: "Manual intervention", text: "Automation loses value when routine exceptions, assignments, approvals, and updates still require unnecessary human coordination." },
     ],
     opportunities: [
-      {
-        title: "Connect the cell",
-        text: "Link PLCs, robots, and sensors into one operational view — action from a single screen.",
-      },
-      {
-        title: "Catch defects early",
-        text: "Vision and sensor checks at the station stop bad parts before they move downstream.",
-      },
-      {
-        title: "Standardize response",
-        text: "Turn tribal fixes into defined workflows — every shift follows the same downtime playbook.",
-      },
+      { title: "Connected control", text: "Bring robots, machines, workflows, and operational systems into coordinated software experiences." },
+      { title: "Real-time visibility", text: "Give operators clearer insight into status, activity, faults, and operational events." },
+      { title: "Workflow orchestration", text: "Coordinate tasks, rules, systems, and human actions through structured automation workflows." },
     ],
   },
   challenges: {
-    title: "What slows automation teams.",
-    intro:
-      "Most delays come from disconnected tools and unclear ownership, not hardware.",
+    title: "What creates friction in automated operations.",
+    intro: "Automation becomes harder to manage when machines, software, workflows, and operational data evolve independently.",
     items: [
-      {
-        title: "Blind cells",
-        text: "Status lives on local HMIs or vendor tools. Supervisors cannot see the full floor at once.",
-      },
-      {
-        title: "Noisy alerts",
-        text: "Sensors fire too many unranked warnings. Technicians ignore them or chase the wrong fault.",
-      },
-      {
-        title: "Manual handoffs",
-        text: "Downtime, maintenance, and quality updates move by radio and paper. Actions get lost between shifts.",
-      },
-      {
-        title: "Fragile integrations",
-        text: "One-off scripts connect robots and databases. Small changes break the whole chain.",
-      },
-      {
-        title: "No defect trace",
-        text: "Vision results and rework notes sit apart. Teams cannot prove what was checked.",
-      },
+      { title: "Disconnected systems", text: "Robots, machines, sensors, and business applications operate separately instead of sharing information through connected workflows." },
+      { title: "Noisy alerts", text: "Too many unstructured alerts make it difficult for operators to identify what actually requires attention." },
+      { title: "Manual handoffs", text: "Automated processes still depend on people transferring information or triggering the next step manually." },
+      { title: "Fragile integrations", text: "Point-to-point connections become difficult to maintain as hardware, applications, and operational requirements change." },
+      { title: "Limited operational visibility", text: "Without a unified view, teams struggle to understand robot status, workflow progress, faults, and system performance." },
     ],
   },
   howWeHelp: {
-    title: "How Jabisoft helps Automation.",
-    intro:
-      "We build in your repos alongside your controls and ops teams. You keep the code, docs, and integrations.",
+    title: "How Jabitsoft helps robotics & automation teams.",
+    intro: "We build the software that connects automated equipment with operators, workflows, data, and the business systems around it.",
     items: [
-      {
-        title: "We build fleet software",
-        text: "We build fleet dashboards, job controls, and operator views matched to your floor — run daily by your team.",
-        tags: ["Dashboards", "Job controls", "Operator views"],
-      },
-      {
-        title: "We pipe sensor data",
-        text: "We ingest PLC, SCADA, and sensor streams into clean stores — reliable inputs for alerts.",
-        tags: ["Ingestion", "Clean stores", "Alert inputs"],
-      },
-      {
-        title: "We tool vision inspection",
-        text: "We build capture, review, and disposition apps around your cameras — quality clears parts faster.",
-        tags: ["Capture", "Review queues", "Disposition"],
-      },
-      {
-        title: "We encode workflows",
-        text: "We turn downtime, maintenance, and escalation steps into working software — one process every shift.",
-        tags: ["Playbooks", "Task queues", "Escalations"],
-      },
-      {
-        title: "We set up cloud and edge",
-        text: "We set up cloud services, edge gateways, and access controls — a clear system your IT manages.",
-        tags: ["Gateways", "Access controls", "Cloud"],
-      },
-      {
-        title: "We replace fragile scripts",
-        text: "We swap one-off scripts for tested services with docs — change integrations without fear.",
-        tags: ["Tested services", "Docs", "Support"],
-      },
+      { title: "We build robot management platforms", text: "Create software for robot status, assignments, activity, availability, faults, and operational oversight." },
+      { title: "We connect machines and software", text: "Integrate robotics and automation systems with supported APIs, business applications, databases, cloud platforms, and operational software." },
+      { title: "We build operator interfaces", text: "Give operators clear dashboards and control experiences for monitoring activity, responding to events, and managing workflows." },
+      { title: "We automate operational workflows", text: "Coordinate rules, tasks, notifications, approvals, system actions, and human intervention across automated processes." },
+      { title: "We make automation observable", text: "Capture operational events and telemetry to support dashboards, alerts, reporting, diagnostics, and performance analysis." },
+      { title: "We design for evolving systems", text: "Build modular software and integration layers that can adapt as equipment, workflows, and operational requirements change." },
     ],
   },
   useCases: {
-    title: "Automation builds we ship.",
-    intro:
-      "Practical systems for floors running robots, sensors, and manual stations.",
+    title: "Robotics & automation software we build.",
+    intro: "From robot management and operator interfaces to monitoring and orchestration, we build the software layer around automated operations.",
     items: [
-      {
-        title: "Robot fleet dashboards",
-        text: "One view for robot state, jobs, and faults across cells — assign work and clear stops.",
-        points: ["Fleet status and queue", "Faults with context", "Role-based views"],
-      },
-      {
-        title: "Sensor monitoring",
-        text: "PLC and sensor streams feeding thresholds and trends — drift spotted before lines stop.",
-        points: ["Thresholds and trends", "Ranked routing", "History search"],
-      },
-      {
-        title: "Workflow orchestration",
-        text: "Downtime and maintenance steps as defined tasks — handoffs with owner, time, and notes.",
-        points: ["Downtime playbooks", "Task queues", "Handover records"],
-      },
-      {
-        title: "Vision inspection",
-        text: "Operators review images, accept or reject, log reasons — quality keeps a complete record.",
-        points: ["Image review queue", "Accept and reject reasons", "History export"],
-      },
-      {
-        title: "Downtime response",
-        text: "Stops page the right technician with machine context — response and resolution logged.",
-        points: ["Stop detection", "Context attached", "Resolution log"],
-      },
-      {
-        title: "Performance analytics",
-        text: "Cycle counts, stops, and rework feeding simple reports — standups run on facts.",
-        points: ["Cycle summaries", "Rework tracking", "Cell comparison"],
-      },
+      { title: "Robot & Fleet Management", text: "Manage robot availability, assignments, task status, utilisation, exceptions, and operational activity from a central platform.", points: ["Robotics", "Fleet", "Operations"] },
+      { title: "Real-Time Monitoring", text: "Track machine and robot status, operational events, faults, telemetry, and performance through live dashboards.", points: ["Monitoring", "Telemetry", "Alerts"] },
+      { title: "Workflow Orchestration", text: "Coordinate automated tasks, business rules, system actions, and human intervention across complex workflows.", points: ["Automation", "Workflows", "Rules"] },
+      { title: "Operator Control Interfaces", text: "Build intuitive interfaces that help operators monitor systems, manage tasks, review events, and respond to exceptions.", points: ["UX", "Control", "Operations"] },
+      { title: "Automation Integrations", text: "Connect robotics platforms, machines, sensors, databases, cloud services, ERP, and other supported systems.", points: ["APIs", "Integration", "Connected Systems"] },
+      { title: "Alerts & Exception Management", text: "Turn system events into structured alerts, escalation workflows, assignments, and resolution processes.", points: ["Alerts", "Exceptions", "Automation"] },
     ],
   },
   businessImpact: {
-    title: "After Jabisoft, floors share one picture.",
-    intro:
-      "No invented numbers — each outcome below is made measurable in the product and reviewed with your team.",
+    title: "After Jabitsoft, automation becomes easier to operate.",
+    intro: "Connected software gives teams clearer visibility into robots, workflows, exceptions, and the systems keeping automated operations moving.",
     dimensions: [
-      {
-        name: "Cells stay visible",
-        before: "Status in separate vendor tools",
-        text: "Teams see cells, robots, and jobs in one dashboard — no more tool-hopping.",
-        tag: "Visibility",
-      },
-      {
-        name: "Stops get owners",
-        before: "Downtime by radio and memory",
-        text: "Stops route to the right owner with context attached — response starts immediately.",
-        tag: "Response",
-      },
-      {
-        name: "Quality stays linked",
-        before: "Notes apart from parts",
-        text: "Vision reviews and dispositions stay linked to each lot — proof on demand.",
-        tag: "Quality",
-      },
-      {
-        name: "Crews work queues",
-        before: "Shift-dependent tasks",
-        text: "Maintenance works defined queues with clear ownership — nothing depends on who is on.",
-        tag: "Reliability",
-      },
-      {
-        name: "Systems stay extensible",
-        before: "Scripts break on change",
-        text: "Services use tested interfaces your team extends — integrations stop being fragile.",
-        tag: "Engineering",
-      },
-      {
-        name: "Knowledge stays yours",
-        before: "Vendors hold code and know-how",
-        text: "Your repos hold the code, docs, and runbooks — independence by default.",
-        tag: "Ownership",
-      },
+      { name: "System status becomes visible", before: "Status spread across tools", text: "Give teams a clearer view of robot, machine, task, and workflow status from connected interfaces.", tag: "Visibility" },
+      { name: "Exceptions get attention faster", before: "Unstructured alerts", text: "Structured alerts help operators identify, assign, and respond to issues that actually require intervention.", tag: "Alerts" },
+      { name: "Workflows stay connected", before: "Disconnected process steps", text: "Coordinate automated processes with the people and business systems required to complete them.", tag: "Workflows" },
+      { name: "Manual handoffs decrease", before: "Repetitive coordination", text: "Replace repetitive coordination and system updates with structured automated workflows.", tag: "Automation" },
+      { name: "Integrations become easier to manage", before: "Fragile point-to-point connections", text: "Use clearer integration layers to connect automation systems with the software surrounding them.", tag: "Integrations" },
+      { name: "Operational data becomes useful", before: "Events without context", text: "Turn events, telemetry, task history, and system activity into dashboards, reporting, and operational insight.", tag: "Data" },
     ],
   },
   cta: {
-    title: "Show us your floor and your stack.",
-    text: "We review your cells, robots, and current tools, then propose a build in your repos — with the engineers who will ship it.",
-    button: "Talk to Our Experts",
-    secondaryButton: "Start a Conversation",
+    title: "Bring us your toughest automation challenge.",
+    text: "Disconnected robots. Manual handoffs. Limited visibility. Fragile integrations. Too many systems to monitor. We'll help turn the complexity around your automation into software that's easier to operate and evolve.",
+    button: "Discuss your project", secondaryButton: "Talk to our team",
   },
 };

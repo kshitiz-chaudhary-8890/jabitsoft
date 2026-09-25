@@ -62,7 +62,8 @@ export default function AboutUsPage() {
     legalName: "JabitSoft Pvt. Ltd.",
     description,
     founderName: "Baldeep Singh",
-    founderImageUrl: "/images/baldeep-singh-founder.webp",
+    founderImageUrl:
+      "https://ik.imagekit.io/5bwd4hel7/About%20us/Leadership/baldeep-singh-founder.webp",
     foundingDate: "2007",
   });
 

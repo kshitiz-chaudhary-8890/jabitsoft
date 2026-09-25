@@ -3,14 +3,23 @@
 import { useLayoutEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { RevealGroup } from "@/components/motion/reveal";
 
 const logos = [
-  "https://framerusercontent.com/images/3cWSgJFsUVvZeOw9LdQmTOSVFhE.svg?width=58&height=32",
-  "https://framerusercontent.com/images/nfabfL1KTOOmw22T9soWodkE5Q.svg?width=127&height=32",
-  "https://framerusercontent.com/images/pFmkT2mGzyfTzJsLN2Lr3fdbIk.svg",
-  "https://framerusercontent.com/images/oqkjAivG8qVmaPBg07Z4Yst8rwk.svg?width=162&height=32",
-  "https://framerusercontent.com/images/nmwtsE1SWD34rSXL3OhLE7CTn0.svg?width=83&height=32",
-  "https://framerusercontent.com/images/zhMiNUjAyE25vd6XOETCIwS38.svg?width=131&height=32",
+  "https://ik.imagekit.io/5bwd4hel7/Homepage/Client%20logos/Koala-Living-Logo.png",
+  "https://ik.imagekit.io/5bwd4hel7/Homepage/Client%20logos/yash-clinic-logo.png",
+  "https://ik.imagekit.io/5bwd4hel7/Homepage/Client%20logos/Turnpoint-logo.png",
+  "https://ik.imagekit.io/5bwd4hel7/Homepage/Client%20logos/Dr-ajesh-logo.png",
+  "https://ik.imagekit.io/5bwd4hel7/Homepage/Client%20logos/Crystalhealthcare-logo.png",
+  "https://ik.imagekit.io/5bwd4hel7/Homepage/Client%20logos/Sparky-logo.png",
+  "https://ik.imagekit.io/5bwd4hel7/Homepage/Client%20logos/Dagsistech-logo.png",
+  "https://ik.imagekit.io/5bwd4hel7/Homepage/Client%20logos/IONS-logo.png",
+  "https://ik.imagekit.io/5bwd4hel7/Homepage/Client%20logos/DCC-logo.png",
+  "https://ik.imagekit.io/5bwd4hel7/Homepage/Client%20logos/Group-823.png",
+  "https://ik.imagekit.io/5bwd4hel7/Homepage/Client%20logos/Book-a-Mover-logo.png",
+  "https://ik.imagekit.io/5bwd4hel7/Homepage/Client%20logos/paisa-lello-logo.png",
+  "https://ik.imagekit.io/5bwd4hel7/Homepage/Client%20logos/Sanjivini-logo.png",
+  "https://ik.imagekit.io/5bwd4hel7/Homepage/Client%20logos/Property-club-logo.png",
 ];
 
 export default function ClientMarquee() {
@@ -37,7 +46,7 @@ export default function ClientMarquee() {
       });
 
       if (!reduced) {
-        const intro = section.querySelectorAll("[data-cm-intro]");
+        const intro = section.querySelectorAll("header [data-cm-intro]");
         gsap.set(intro, { autoAlpha: 0, y: 26 });
         gsap
           .timeline({
@@ -95,25 +104,27 @@ export default function ClientMarquee() {
           </p>
         </header>
 
-        <div className="trust-showcase__logos-block" data-cm-intro>
-          <div className="client-logos" aria-label="Selected client logos">
-            <div className="client-logo-track">
-              {[0, 1].map((group) => (
-                <div
-                  className="client-logo-group"
-                  aria-hidden={group === 1 ? "true" : undefined}
-                  key={group}
-                >
-                  {logos.map((logo, index) => (
-                    <div className="client-logo-item" key={`${group}-${index}`}>
-                      <img src={logo} alt="" aria-hidden="true" loading="lazy" />
-                    </div>
-                  ))}
-                </div>
-              ))}
+        <RevealGroup>
+          <div className="trust-showcase__logos-block" data-cm-intro>
+            <div className="client-logos" aria-label="Selected client logos">
+              <div className="client-logo-track">
+                {[0, 1].map((group) => (
+                  <div
+                    className="client-logo-group"
+                    aria-hidden={group === 1 ? "true" : undefined}
+                    key={group}
+                  >
+                    {logos.map((logo, index) => (
+                      <div className="client-logo-item" key={`${group}-${index}`}>
+                        <img src={logo} alt="" aria-hidden="true" loading="lazy" />
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
+        </RevealGroup>
       </div>
 
       <style>{`
@@ -228,7 +239,7 @@ export default function ClientMarquee() {
           max-width: 156px;
           max-height: 38px;
           object-fit: contain;
-          filter: grayscale(1) contrast(0.95) brightness(0.82);
+          filter: brightness(0);
           opacity: 0.72;
           transition:
             opacity 200ms ease,
@@ -251,7 +262,7 @@ export default function ClientMarquee() {
 
           .trust-showcase .client-logo-item:hover img {
             opacity: 0.9;
-            filter: grayscale(0.1) saturate(0.9);
+            filter: brightness(0);
           }
         }
 

@@ -3,6 +3,7 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { RevealGroup } from "@/components/motion/reveal";
 
 const faqs = [
   {
@@ -45,7 +46,6 @@ export default function FAQ() {
   const [openIndex, setOpenIndex] = useState(1);
   const sectionRef = useRef(null);
   const headerRef = useRef(null);
-  const itemRefs = useRef([]);
   const answerRefs = useRef([]);
 
   useLayoutEffect(() => {
@@ -59,7 +59,7 @@ export default function FAQ() {
     gsap.registerPlugin(ScrollTrigger);
 
     if (reduced) {
-      gsap.set([headerRef.current, ...itemRefs.current], {
+      gsap.set(headerRef.current, {
         clearProps: "all",
         autoAlpha: 1,
         y: 0,
@@ -71,11 +71,6 @@ export default function FAQ() {
       gsap.set(headerRef.current, {
         autoAlpha: 0,
         y: 34,
-      });
-
-      gsap.set(itemRefs.current, {
-        autoAlpha: 0,
-        y: 30,
       });
 
       const tl = gsap.timeline({
@@ -91,17 +86,7 @@ export default function FAQ() {
         y: 0,
         duration: 0.64,
         ease: "power4.out",
-      }).to(
-        itemRefs.current,
-        {
-          autoAlpha: 1,
-          y: 0,
-          duration: 0.56,
-          stagger: 0.065,
-          ease: "power4.out",
-        },
-        "-=0.28",
-      );
+      });
 
       const headingFill = section.querySelector(".section-heading-fill");
       if (headingFill) {
@@ -222,15 +207,12 @@ export default function FAQ() {
             </p>
           </header>
 
-          <div className="faq-ref__list">
+          <RevealGroup className="faq-ref__list">
             {faqs.map((faq, index) => {
               const open = openIndex === index;
 
               return (
                 <article
-                  ref={(node) => {
-                    itemRefs.current[index] = node;
-                  }}
                   className={`faq-ref__item ${open ? "is-open" : ""}`}
                   key={faq.question}
                 >
@@ -269,7 +251,7 @@ export default function FAQ() {
                 </article>
               );
             })}
-          </div>
+          </RevealGroup>
 
           <div className="faq-ref__footer-copy">
             <span>Have a project or another question?</span>

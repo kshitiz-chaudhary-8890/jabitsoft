@@ -34,11 +34,13 @@ function splitText(text, path) {
       <span className="reveal-heading__word" data-reveal-word key={key}>
         {Array.from(part).map((character, characterIndex) => (
           <span
-            className="reveal-heading__char"
-            data-reveal-char
+            className="reveal-heading__char-mask"
+            data-reveal-char-mask
             key={`${key}-${characterIndex}`}
           >
-            {character}
+            <span className="reveal-heading__char" data-reveal-char>
+              {character}
+            </span>
           </span>
         ))}
       </span>
@@ -93,12 +95,11 @@ export default function RevealHeading({
     const context = gsap.context(() => {
       gsap.fromTo(
         characters,
-        { y: 30, opacity: 0 },
+        { yPercent: 100 },
         {
-          y: 0,
-          opacity: 1,
-          duration: 0.34,
-          stagger: 0.018,
+          yPercent: 0,
+          duration: 0.76,
+          stagger: Math.min(0.035, 0.45 / characters.length),
           ease: "power3.out",
           scrollTrigger: {
             trigger: heading,

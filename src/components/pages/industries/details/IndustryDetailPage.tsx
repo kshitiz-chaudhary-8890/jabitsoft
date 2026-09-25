@@ -7,16 +7,20 @@ import { IndustryChallenges } from "./sections/IndustryChallenges";
 import { HowWeHelp } from "./sections/HowWeHelp";
 import { UseCases } from "./sections/UseCases";
 import { BusinessImpact } from "./sections/BusinessImpact";
+import { IndustryAdditions } from "./sections/IndustryAdditions";
 
 export function IndustryDetailPage({ data }: { data: IndustryDetailData }) {
   return (
     <main id="main-content">
       <IndustryHero data={data} />
+      <IndustryAdditions data={data} placement="early" />
       <IndustryLandscape data={data} />
       <IndustryChallenges data={data} />
       <HowWeHelp data={data} />
       <UseCases data={data} />
+      <IndustryAdditions data={data} placement="beforeImpact" />
       <BusinessImpact data={data} />
+      <IndustryAdditions data={data} placement="late" />
       <SharedCTA
         headline={data.cta.title}
         lede={data.cta.text}

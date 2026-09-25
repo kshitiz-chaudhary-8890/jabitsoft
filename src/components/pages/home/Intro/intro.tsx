@@ -4,6 +4,7 @@ import { useLayoutEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Reveal } from "@/components/motion/reveal";
 
 type CapabilityId = "ai" | "apps" | "cloud" | "growth";
 
@@ -14,44 +15,49 @@ type Capability = {
   title: string;
   description: string;
   cta: string;
+  href: string;
 };
 
 const capabilities: Capability[] = [
   {
     id: "ai",
     label: "Agentic AI",
-    detail: "Agentic systems",
-    title: "AI that moves work forward",
+    detail: "Workflow automation",
+    title: "Automate repeatable work with AI",
     description:
-      "Practical AI agents that reason, use tools, and automate business workflows with clear human oversight.",
-    cta: "AI",
+      "We connect AI agents to your tools and processes to handle defined tasks, with people in control at every step.",
+    cta: "Explore AI services",
+    href: "/services/agentic-ai-development",
   },
   {
     id: "apps",
     label: "Web & Mobile",
     detail: "Digital products",
-    title: "Made for what’s next",
+    title: "Launch products people can rely on",
     description:
-      "Modern web and mobile experiences designed for real users, reliable delivery, and long-term maintainability.",
-    cta: "products",
+      "We design and build web and mobile products around real user needs, dependable engineering, and room to grow.",
+    cta: "Explore web & mobile",
+    href: "/services/website-solutions",
   },
   {
     id: "cloud",
     label: "Cloud & ERP",
-    detail: "Connected systems",
-    title: "One connected business",
+    detail: "Connected operations",
+    title: "Make your business systems work together",
     description:
-      "Cloud foundations, integrations, and ERP workflows that connect operations, data, and teams into dependable systems.",
-    cta: "systems",
+      "Connect cloud platforms, ERP, and business data to reduce manual handoffs and give teams a clearer view of operations.",
+    cta: "Explore cloud & ERP",
+    href: "/services/erp-services",
   },
   {
     id: "growth",
     label: "SEO & Growth",
-    detail: "Digital growth",
-    title: "Be found. Be chosen.",
+    detail: "Search visibility",
+    title: "Help the right customers find you",
     description:
-      "Technical SEO, content, analytics, and campaigns aligned around visibility, qualified traffic, and measurable growth.",
-    cta: "growth",
+      "Technical SEO, useful content, and performance campaigns that bring qualified visitors to your business.",
+    cta: "Explore SEO & growth",
+    href: "/services/seo-digital-marketing",
   },
 ];
 
@@ -128,18 +134,18 @@ export default function Intro() {
       <div className="ij-shell">
         <header className="ij-header">
           <p data-ij-intro className="cr-eyebrow">
-            The possibilities with Jabit
+            What you can build with JabitSoft
           </p>
           <h2 id="intro-heading" data-ij-intro>
-            <span className="section-heading-fill">Build what moves your business forward</span>
+            <span className="section-heading-fill">Build, connect and grow with technology that works</span>
           </h2>
           <p data-ij-intro className="cr-subhead ij-lede">
-            Build something new. Simplify what exists. Reach the people who matter. Find the
-            expertise to take your next step.
+            From AI automation and digital products to connected systems and search growth, we help
+            you plan and deliver the next step for your business.
           </p>
         </header>
 
-        <div className="ij-filters" aria-label="Filter capabilities">
+        <Reveal className="ij-filters" aria-label="Filter capabilities">
           {[{ id: "all", label: "Explore all" } as const, ...capabilities].map((item) => (
             <button
               type="button"
@@ -151,7 +157,7 @@ export default function Intro() {
               {item.label}
             </button>
           ))}
-        </div>
+        </Reveal>
 
         <div className="ij-grid">
           <AnimatePresence mode="popLayout">
@@ -182,8 +188,8 @@ export default function Intro() {
                 <h3 className="ij-card-title">{item.title}</h3>
                 <p className="ij-card-copy">{item.description}</p>
 
-                <a href="#contact" className="ij-card-cta" data-site-button data-button-variant="primary">
-                  Let’s talk {item.cta}
+                <a href={item.href} className="ij-card-cta" data-site-button data-button-variant="primary">
+                  {item.cta}
                   <ArrowIcon />
                 </a>
               </motion.article>
@@ -191,7 +197,9 @@ export default function Intro() {
           </AnimatePresence>
         </div>
 
-        <p className="ij-footnote">Different capabilities. One connected approach.</p>
+        <Reveal as="p" className="ij-footnote">
+          Different capabilities. One connected approach.
+        </Reveal>
       </div>
 
       <style>{`

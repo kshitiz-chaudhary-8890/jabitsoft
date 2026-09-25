@@ -8,13 +8,19 @@ import { gsap } from "gsap";
 import type { IndustryDetailData } from "../types";
 import styles from "./IndustryHero.module.css";
 
-const HillsBackground = dynamic(() => import("@/components/three/HillsBackground/HillsBackground"), {
-  ssr: false,
-});
+const HillsBackground = dynamic(
+  () => import("@/components/three/HillsBackground/HillsBackground"),
+  {
+    ssr: false,
+  },
+);
 
 function TrailingArrow({ tone }: { tone: "onInk" | "onSurface" }) {
   return (
-    <span className={tone === "onInk" ? styles.arrowOnInk : styles.arrowOnSurface} aria-hidden="true">
+    <span
+      className={tone === "onInk" ? styles.arrowOnInk : styles.arrowOnSurface}
+      aria-hidden="true"
+    >
       <svg viewBox="0 0 16 16" fill="none">
         <path
           d="M3.5 12.5 12.5 3.5M6 3.5h6.5V10"
@@ -78,7 +84,7 @@ export function IndustryHero({ data }: { data: IndustryDetailData }) {
           {words.map((word, i) => (
             <span key={`${word}-${i}`} className={styles.wordMask} aria-hidden="true">
               <span className={styles.wordInner}>{word}</span>
-              {i < words.length - 1 ? " " : ""}
+              {i < words.length - 1 ? " " : ""}
             </span>
           ))}
         </h1>
@@ -86,12 +92,22 @@ export function IndustryHero({ data }: { data: IndustryDetailData }) {
         <div className={styles.ledeRow}>
           <p className={styles.lede}>{hero.lede}</p>
           <div className={styles.actions}>
-            <Link href="/#contact" className={styles.primary} data-site-button data-button-variant="primary">
+            <Link
+              href="/#contact"
+              className={styles.primary}
+              data-site-button
+              data-button-variant="primary"
+            >
               {hero.primaryCta}
               <TrailingArrow tone="onInk" />
             </Link>
-            <Link href="/services/" className={styles.secondary} data-site-button data-button-variant="secondary">
-              Explore all services
+            <Link
+              href={data.whatWeBuild ? "#what-we-build" : hero.secondaryCta === "See what we build" ? "#industry-use-cases" : "/services/"}
+              className={styles.secondary}
+              data-site-button
+              data-button-variant="secondary"
+            >
+              {hero.secondaryCta ?? "Explore all services"}
               <TrailingArrow tone="onSurface" />
             </Link>
           </div>

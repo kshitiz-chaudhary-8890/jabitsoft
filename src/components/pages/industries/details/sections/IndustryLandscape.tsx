@@ -45,6 +45,7 @@ export function IndustryLandscape({ data }: { data: IndustryDetailData }) {
 
           <aside data-ind-item className={styles.opportunityField}>
             <p className={styles.sideLabelInk}>The opportunity</p>
+            {landscape.opportunityTitle ? <h3 className={styles.opportunityTitle}>{landscape.opportunityTitle}</h3> : null}
             {landscape.opportunities.map((opportunity) => (
               <div key={opportunity.title} className={styles.opportunity}>
                 <h3>{opportunity.title}</h3>

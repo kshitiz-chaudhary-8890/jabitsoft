@@ -3,27 +3,19 @@ import type { IndustryDetailData } from "../types";
 export const saasPlatformsContent: IndustryDetailData = {
   label: "SaaS & Platforms",
   slug: "saas-platforms",
-  kicker: "Industries — SaaS & Platforms",
+  kicker: "SaaS & platform software development",
   hero: {
     headline: "Build the platform your customers run their business on.",
     lede: "We engineer multi-tenant SaaS products end to end — the product, the billing, the integrations and the cloud foundations that stay dependable while usage compounds.",
     primaryCta: "Map your platform roadmap",
+    secondaryCta: "See what we build",
     stats: [
       { value: "Tenancy-first", label: "Isolation designed in from day one" },
       { value: "Billing-native", label: "Metering and entitlements in the codebase" },
       { value: "API-first", label: "Surfaces your customers build on" },
-      { value: "Release-safe", label: "Pipelines that ship daily, not carefully" },
+      { value: "Release-ready", label: "Tested delivery pipelines" },
     ],
-    ticker: [
-      "Multi-tenant architecture",
-      "Usage metering",
-      "Entitlements",
-      "SSO & RBAC",
-      "Webhooks",
-      "Zero-downtime releases",
-      "Cost controls",
-      "AI copilots",
-    ],
+    ticker: ["Multi-tenant SaaS", "Product engineering", "Cloud", "Integrations", "AI", "DevOps"],
   },
   landscape: {
     title: "The SaaS playbook is being rewritten.",
@@ -63,9 +55,8 @@ export const saasPlatformsContent: IndustryDetailData = {
     ],
   },
   challenges: {
-    title: "Five places every scaling platform breaks.",
-    intro:
-      "Not generic software pain — the specific failures that appear when real customers, real usage and enterprise expectations arrive at once.",
+    title: "Where scaling SaaS platforms break.",
+    intro: "As usage and customer expectations grow, product architecture, security, billing, integrations, and delivery all need to keep up.",
     items: [
       {
         title: "One tenant's peak becomes everyone's outage",
@@ -90,13 +81,13 @@ export const saasPlatformsContent: IndustryDetailData = {
     ],
   },
   howWeHelp: {
-    title: "How Jabisoft helps SaaS & platform teams.",
+    title: "How Jabitsoft helps SaaS & platform teams.",
     intro:
       "We work inside your repositories, against your roadmap — here is exactly what we do for SaaS and platform companies, mapped to the breaks above.",
     items: [
       {
         title: "We make you enterprise-deal ready",
-        text: "We build SSO, RBAC, audit trails, and data isolation directly into your product — so procurement passes and stalled demos turn into signed contracts.",
+        text: "We build SSO, RBAC, audit trails, and data isolation around your product requirements, helping teams prepare for enterprise security reviews.",
         tags: ["SSO / RBAC", "Audit trails", "Data isolation"],
       },
       {
@@ -111,12 +102,12 @@ export const saasPlatformsContent: IndustryDetailData = {
       },
       {
         title: "We stop one tenant breaking everyone",
-        text: "We design per-tenant isolation across your queues, data, and workers — so your biggest customer's peak hour never becomes everyone's outage.",
+        text: "We design tenant-aware limits across queues, data, and workers to reduce the risk that one customer's usage affects others.",
         tags: ["Tenancy model", "Per-tenant limits", "Load isolation"],
       },
       {
         title: "We make your releases boring",
-        text: "We put test automation and zero-downtime pipelines in place — so your team ships daily with confidence instead of shipping weekly with fear.",
+        text: "We build automated tests and release pipelines that help teams deploy changes with more confidence and clearer rollback options.",
         tags: ["Test automation", "Zero-downtime releases", "Release pipelines"],
       },
       {
@@ -129,7 +120,7 @@ export const saasPlatformsContent: IndustryDetailData = {
   useCases: {
     title: "What we put inside SaaS products.",
     intro:
-      "Six applications buyers recognize on a demo call — each shipped to production, each running on real tenant data.",
+      "Practical product capabilities for customer workflows, platform operations, and growth.",
     items: [
       {
         title: "Copilots your customers talk to",
@@ -139,7 +130,11 @@ export const saasPlatformsContent: IndustryDetailData = {
       {
         title: "Search that ends the ticket queue",
         text: "We ship semantic, permissions-aware search across records, docs, and history — customers self-serve instead of writing to support.",
-        points: ["Respects every permission", "Understands intent, not keywords", "Deflects repeat tickets"],
+        points: [
+          "Respects every permission",
+          "Understands intent, not keywords",
+          "Deflects repeat tickets",
+        ],
       },
       {
         title: "Onboarding that needs no calls",
@@ -164,45 +159,33 @@ export const saasPlatformsContent: IndustryDetailData = {
     ],
   },
   businessImpact: {
-    title: "After Jabisoft, your business runs different.",
+    title: "A platform that is easier to run and improve.",
     intro:
-      "If you work with us, this is what improves. No invented numbers — each outcome is made measurable in the product and reviewed with your team.",
+      "These are the practical changes the right product architecture and workflows can enable. The measures depend on your product and users.",
     dimensions: [
       {
-        name: "Releases ship daily",
-        before: "Every deploy needs a rollback plan",
-        text: "Automation carries the repeatable work and tests carry the risk — delivery stops depending on heroics.",
+        name: "Delivery becomes more predictable",
+        before: "Every release needs manual coordination",
+        text: "Automated tests and clear release steps help teams deploy and recover with more confidence.",
         tag: "Delivery",
       },
       {
-        name: "Manual work disappears",
-        before: "Queues and reconciliations eat weeks",
-        text: "Support and ops hand repetitive work to traceable automation — teams spend time on product, not chores.",
-        tag: "Operations",
-      },
-      {
-        name: "Spikes get absorbed",
-        before: "One tenant can take everyone down",
-        text: "Per-tenant isolation means your biggest customer's peak hour never becomes everyone's outage.",
+        name: "Tenant boundaries become clearer",
+        before: "Shared workloads affect other customers",
+        text: "Tenant-aware architecture helps teams manage access, workloads, and data boundaries as usage grows.",
         tag: "Scale",
       },
       {
-        name: "Customers self-serve",
-        before: "Support answers the same tickets",
-        text: "Answers, onboarding, and upgrades live inside the product — experience compounds into retention.",
+        name: "Customers can do more themselves",
+        before: "Routine tasks depend on support",
+        text: "Clear onboarding, search, and account tools make common tasks easier to complete in the product.",
         tag: "Experience",
       },
       {
-        name: "Decisions run on data",
-        before: "Roadmap debates run on opinions",
-        text: "Live usage, churn, and expansion signals sit behind every roadmap call your team makes.",
+        name: "Usage informs product decisions",
+        before: "Limited visibility into adoption",
+        text: "Product and operational data can show where customers engage, get stuck, and need a better workflow.",
         tag: "Insight",
-      },
-      {
-        name: "Usage turns into revenue",
-        before: "Pricing lives in spreadsheets",
-        text: "Metering and entitlements in the codebase turn usage into upgrades without an email thread.",
-        tag: "Revenue",
       },
     ],
   },
@@ -211,5 +194,116 @@ export const saasPlatformsContent: IndustryDetailData = {
     text: "Share your roadmap, architecture and growth targets. We will help define the safest, highest-value next step.",
     button: "Talk to Our Experts",
     secondaryButton: "Start a Conversation",
+  },
+  whatWeBuild: {
+    title: "What we build for SaaS companies.",
+    intro:
+      "From a first release to an established platform, we develop the product and the systems that support its growth.",
+    coreLabel: "SaaS platform",
+    items: [
+      {
+        title: "SaaS Product Development",
+        text: "From MVPs to mature multi-tenant platforms, we design and build the product around its users and business model.",
+        tags: ["Product engineering", "MVPs", "Platforms"],
+      },
+      {
+        title: "Multi-tenant Architecture",
+        text: "Architecture designed around organizations, users, roles, permissions, and data isolation.",
+        tags: ["Organizations", "Roles", "Data isolation"],
+      },
+      {
+        title: "Customer & Admin Portals",
+        text: "Dashboards, onboarding, account management, permissions, and internal operations in one product experience.",
+        tags: ["Onboarding", "Dashboards", "Accounts"],
+      },
+      {
+        title: "Subscriptions & Billing",
+        text: "Plans, subscriptions, usage, invoicing, upgrades, and billing integrations shaped to your commercial model.",
+        tags: ["Plans", "Usage", "Billing"],
+      },
+      {
+        title: "API & Integrations",
+        text: "Connect your product with the applications, data, and workflows your customers already use.",
+        tags: ["APIs", "Webhooks", "Integrations"],
+      },
+      {
+        title: "AI-powered SaaS Features",
+        text: "Agents, copilots, intelligent search, and AI-assisted workflows where they solve a clear product problem.",
+        tags: ["AI agents", "Search", "Automation"],
+      },
+    ],
+  },
+  developmentProcess: {
+    title: "From idea to a platform ready to scale.",
+    intro:
+      "A clear delivery path keeps product decisions, engineering work, and customer feedback connected.",
+    steps: [
+      { title: "Discover", text: "Understand the product, users, workflows, and business model." },
+      {
+        title: "Design",
+        text: "Define UX, architecture, integrations, and technical foundations.",
+      },
+      { title: "Build", text: "Develop the product in focused, testable iterations." },
+      { title: "Launch", text: "Deploy, monitor, test, and prepare the platform for real users." },
+      {
+        title: "Scale",
+        text: "Improve performance, automate operations, and evolve the product as usage grows.",
+      },
+    ],
+  },
+  technology: {
+    title: "Built on technology made to last.",
+    intro:
+      "We choose the stack around your product's requirements and existing systems, with room for integration and future change.",
+    items: [
+      "React & Next.js",
+      "Node.js",
+      "AWS & Azure",
+      "Docker & containers",
+      "REST APIs & webhooks",
+      "AI & LLM integrations",
+      "CI/CD pipelines",
+      "Data architecture",
+    ],
+    groups: [
+      { label: "Product", items: ["React & Next.js", "Node.js", "AI & LLM integrations"] },
+      { label: "Platform", items: ["Data architecture", "REST APIs & webhooks"] },
+      { label: "Delivery", items: ["AWS & Azure", "Docker & containers", "CI/CD pipelines"] },
+    ],
+  },
+  faq: {
+    title: "SaaS development questions.",
+    items: [
+      {
+        question: "Can you build a SaaS product from scratch?",
+        answer:
+          "Yes. We can help define the product, design the experience and architecture, build the platform, integrate the services it needs, and support its launch.",
+      },
+      {
+        question: "Can you modernize an existing SaaS platform?",
+        answer:
+          "Yes. We can assess the current product, identify the highest-impact changes, and modernize interfaces, workflows, architecture, and integrations in planned stages.",
+      },
+      {
+        question: "Do you work with multi-tenant architectures?",
+        answer:
+          "Yes. We design around organizations, users, roles, permissions, and data boundaries, based on the product's requirements and scale.",
+      },
+      {
+        question: "Can you integrate AI into an existing SaaS product?",
+        answer:
+          "Yes. We start with a specific user workflow, then assess the data, permissions, model behavior, and review controls needed to make the feature useful.",
+      },
+      {
+        question: "Can you handle third-party integrations and APIs?",
+        answer:
+          "Yes. We design and build APIs, webhooks, and integrations with supported third-party systems, with attention to data flow, errors, and ongoing maintenance.",
+      },
+      {
+        question: "Do you provide ongoing development after launch?",
+        answer:
+          "Yes. We can continue improving the product, adding features, refining performance, and supporting the platform as requirements change.",
+      },
+    ],
   },
 };

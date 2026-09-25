@@ -5,6 +5,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 import { blogArticles, getBlogImage } from "@/data/blog";
+import { RevealGroup } from "@/components/motion/reveal";
 
 const posts = blogArticles.map((article) => ({
   ...article,
@@ -35,7 +36,6 @@ export default function LatestBlog() {
 
     const ctx = gsap.context(() => {
       const header = section.querySelector(".latest-blog__header");
-      const cards = gsap.utils.toArray(".latest-blog__card", section);
 
       const entrance = gsap.timeline({
         scrollTrigger: {
@@ -49,21 +49,6 @@ export default function LatestBlog() {
 
       if (header) {
         entrance.fromTo(header, { autoAlpha: 0, y: 34 }, { autoAlpha: 1, y: 0, duration: 0.66 });
-      }
-
-      if (cards.length) {
-        entrance.fromTo(
-          cards,
-          { autoAlpha: 0, y: 46, scale: 0.985 },
-          {
-            autoAlpha: 1,
-            y: 0,
-            scale: 1,
-            duration: 0.72,
-            stagger: 0.075,
-          },
-          "-=0.3",
-        );
       }
 
       const headingFill = section.querySelector(".section-heading-fill");
@@ -126,7 +111,7 @@ export default function LatestBlog() {
             </div>
           </header>
 
-          <div
+          <RevealGroup
             className={`latest-blog__grid ${
               visiblePosts.length === 1 ? "latest-blog__grid--single" : ""
             }`}
@@ -168,7 +153,7 @@ export default function LatestBlog() {
                 <p className="latest-blog__excerpt">{post.excerpt}</p>
               </article>
             ))}
-          </div>
+          </RevealGroup>
         </div>
       </section>
 

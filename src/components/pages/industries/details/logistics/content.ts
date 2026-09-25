@@ -1,215 +1,87 @@
 import type { IndustryDetailData } from "../types";
 
 export const logisticsContent: IndustryDetailData = {
-  label: "Logistics",
-  slug: "logistics",
-  kicker: "Industries — Logistics",
+  label: "Transportation & Logistics", slug: "logistics", kicker: "Transportation & logistics software",
   hero: {
-    headline: "Move loads with clear dispatch control.",
-    lede: "We build dispatch, tracking, and billing software for carriers and brokers — every load, driver, and invoice in one place.",
-    primaryCta: "Get a build plan",
+    headline: "Keep every shipment moving.",
+    lede: "From booking and dispatch to fleet management, tracking, delivery, and automation, we build connected logistics software that keeps operations moving from pickup to proof of delivery.",
+    primaryCta: "Discuss your logistics project", secondaryCta: "See what we build",
     stats: [
-      { value: "Live view", label: "Load and driver tracking" },
-      { value: "Connected", label: "TMS and telematics links" },
-      { value: "Auditable", label: "Rate-to-invoice trail" },
-      { value: "In your repos", label: "Your team owns the code" },
+      { value: "Dispatch", label: "Planning & job allocation" },
+      { value: "Fleet", label: "Vehicles & driver operations" },
+      { value: "Tracking", label: "Shipment visibility" },
+      { value: "Integrations", label: "ERP, carriers & logistics systems" },
     ],
-    ticker: [
-      "Dispatch boards",
-      "Route planning",
-      "Driver messaging",
-      "GPS tracking",
-      "Warehouse tasks",
-      "Proof-of-delivery",
-      "Rate automation",
-      "Delay alerts",
-    ],
+    ticker: ["Transportation management", "Dispatch", "Fleet management", "Route planning", "Shipment tracking", "Driver apps", "Warehouse integration", "Proof of delivery", "Logistics automation", "Customer portals", "Analytics"],
   },
   landscape: {
-    title: "Logistics runs on thin margins.",
-    intro:
-      "Brokers and carriers juggle phones, spreadsheets, TMS tools, and driver apps. Small misses turn into detention, claims, and late invoices.",
+    title: "Logistics runs on coordination.",
+    intro: "Every shipment depends on people, vehicles, locations, schedules, inventory, and customers staying connected. When information is fragmented, delays and manual work quickly follow.",
+    opportunityTitle: "Better logistics starts with connected operations.",
     forces: [
-      {
-        title: "Fragmented tools",
-        text: "Quotes, dispatch, tracking, and billing live in different systems. Staff retype the same load data.",
-      },
-      {
-        title: "Driver communication load",
-        text: "Dispatchers chase updates by phone and text. Check calls eat the day.",
-      },
-      {
-        title: "Visibility demands",
-        text: "Shippers expect live ETAs and delivery proof. Manual updates no longer satisfy them.",
-      },
-      {
-        title: "Billing leakage",
-        text: "Accessorials and rate changes get missed. Invoices go out late or short.",
-      },
+      { title: "Dispatch complexity", text: "Jobs, drivers, vehicles, locations, time windows, and priorities need to be coordinated continuously." },
+      { title: "Limited shipment visibility", text: "Operations teams and customers need reliable status information from pickup through delivery." },
+      { title: "Manual processes", text: "Phone calls, spreadsheets, emails, and repeated data entry slow down otherwise straightforward workflows." },
+      { title: "Growing delivery expectations", text: "Customers increasingly expect accurate ETAs, real-time updates, and visibility throughout the delivery journey." },
     ],
     opportunities: [
-      {
-        title: "Unify the load lifecycle",
-        text: "Connect quote, dispatch, track, and invoice around one load record — no retyping.",
-      },
-      {
-        title: "Automate check-ins",
-        text: "Pull GPS and milestone events into customer updates — dispatchers handle exceptions only.",
-      },
-      {
-        title: "Clean up billing",
-        text: "Tie rates, PODs, and accessorials to invoicing — faster billing, fewer disputes.",
-      },
+      { title: "Real-time visibility", text: "Give operations teams a clearer view of jobs, vehicles, shipments, and delivery status." },
+      { title: "Smarter dispatch", text: "Help teams assign and coordinate work using availability, location, capacity, and operational requirements." },
+      { title: "Automated updates", text: "Trigger status changes, notifications, documents, and other routine actions as shipments move through the workflow." },
     ],
   },
   challenges: {
-    title: "What slows logistics teams.",
-    intro:
-      "Most cost comes from manual coordination and missing proof, not trucks.",
+    title: "What creates friction in transportation & logistics.",
+    intro: "As shipment volume, customers, drivers, locations, and delivery requirements grow, disconnected systems make operations harder to coordinate.",
     items: [
-      {
-        title: "Manual dispatch",
-        text: "Loads get assigned by phone and spreadsheet. Coverage takes too long and errors slip in.",
-      },
-      {
-        title: "Blind shipments",
-        text: "Tracking links sit outside the TMS. Dispatchers cannot answer location without calling.",
-      },
-      {
-        title: "Warehouse disconnects",
-        text: "Dock appointments and tasks run apart from dispatch. Drivers wait and slots slip.",
-      },
-      {
-        title: "Missing PODs",
-        text: "Delivery photos and signatures arrive late or incomplete. Billing and claims stall.",
-      },
-      {
-        title: "Rate confusion",
-        text: "Contract rates, spot quotes, and accessorials live apart. Invoices need rework.",
-      },
+      { title: "Disconnected dispatch", text: "Jobs, drivers, vehicles, and schedules sit across different tools, making day-to-day planning difficult." },
+      { title: "Limited shipment visibility", text: "Teams spend time chasing updates when shipment status and location aren't readily available." },
+      { title: "Manual job allocation", text: "Dispatchers repeatedly match jobs, capacity, drivers, vehicles, and delivery requirements by hand." },
+      { title: "Inefficient route planning", text: "Poorly coordinated routes can increase travel time, operational effort, and unnecessary mileage." },
+      { title: "Delivery exceptions", text: "Delays, failed deliveries, address issues, and other exceptions become difficult to manage without structured workflows." },
     ],
   },
   howWeHelp: {
-    title: "How Jabisoft helps Logistics.",
-    intro:
-      "We build in your repos and connect your TMS, telematics, and accounting tools — software your team uses daily.",
+    title: "How Jabitsoft helps transportation & logistics teams.",
+    intro: "We build connected software around the movement of goods—from booking and dispatch to tracking, delivery, and the operational workflows behind them.",
     items: [
-      {
-        title: "We build dispatch software",
-        text: "We build boards, assignment flows, and route views around your operation — faster coverage per load.",
-        tags: ["Boards", "Assignments", "Routing"],
-      },
-      {
-        title: "We integrate tracking",
-        text: "We connect GPS, ELD, and carrier feeds into live load views — status without check calls.",
-        tags: ["GPS feeds", "Live ETAs", "Milestones"],
-      },
-      {
-        title: "We build driver apps",
-        text: "We build simple mobile flows for check-in, tasks, and POD capture — steps completed on time.",
-        tags: ["Mobile flows", "POD capture", "Tasks"],
-      },
-      {
-        title: "We automate billing",
-        text: "We link rates, accessorials, and PODs to invoice generation — finance bills cleanly.",
-        tags: ["Rate rules", "Draft invoices", "Disputes"],
-      },
-      {
-        title: "We model delay signals",
-        text: "We model ETA, dwell, and delay signals from your data — action before customers complain.",
-        tags: ["ETA models", "Dwell alerts", "Escalations"],
-      },
-      {
-        title: "We clean up legacy",
-        text: "We replace spreadsheets and one-off scripts with maintained services — one system for staff.",
-        tags: ["Migration", "Clean data", "Support"],
-      },
+      { title: "We connect dispatch operations", text: "Bring jobs, schedules, drivers, vehicles, locations, and delivery requirements into clearer operational workflows." },
+      { title: "We build driver applications", text: "Give drivers mobile access to assigned jobs, navigation information, status updates, documents, photos, signatures, and proof of delivery." },
+      { title: "We make shipments visible", text: "Build tracking experiences that give internal teams and customers clearer visibility from pickup through delivery." },
+      { title: "We automate logistics workflows", text: "Automate job creation, assignment rules, notifications, status updates, documentation, and other repetitive operational processes." },
+      { title: "We connect logistics systems", text: "Integrate transportation platforms with ERP, warehouse, ecommerce, mapping, payment, carrier, and supported third-party systems." },
+      { title: "We turn operations into usable data", text: "Bring shipment, fleet, driver, customer, and delivery information together for dashboards, reporting, and operational analysis." },
     ],
   },
   useCases: {
-    title: "Logistics builds we ship.",
-    intro:
-      "Systems that cover the load from quote to cash.",
+    title: "Transportation & logistics software we build.",
+    intro: "From operational control platforms to driver and customer experiences, we build software across the transportation and delivery journey.",
     items: [
-      {
-        title: "Dispatch and routing",
-        text: "Open loads, drivers, and capacity in one board — assignments and updates flow to drivers.",
-        points: ["Load board", "Driver messaging", "Appointment view"],
-      },
-      {
-        title: "Fleet tracking",
-        text: "GPS and milestone events feeding live maps and ETAs — exceptions surface for action.",
-        points: ["Live map and ETA", "Milestone feed", "Exception queue"],
-      },
-      {
-        title: "Warehouse ops",
-        text: "Dock slots, inbound tasks, and staging linked to loads — faster driver turns.",
-        points: ["Slot scheduling", "Tasks by door", "Dwell view"],
-      },
-      {
-        title: "Proof-of-delivery",
-        text: "Signatures, photos, and notes captured at delivery — billing without chasing paperwork.",
-        points: ["Photo capture", "Load-linked POD", "Claim packets"],
-      },
-      {
-        title: "Rate and invoice automation",
-        text: "Rates, fuel tables, and accessorials generating draft invoices — finance reviews and sends.",
-        points: ["Rate rules", "Draft invoices", "Dispute notes"],
-      },
-      {
-        title: "Delay alerts",
-        text: "Late arrivals, long dwells, and missed milestones triggering alerts — proactive customer updates.",
-        points: ["Delay rules", "Status templates", "Escalations"],
-      },
+      { title: "Transportation Management Systems", text: "Manage bookings, jobs, dispatch, shipments, carriers, delivery workflows, and operational information from a connected platform.", points: ["TMS", "Operations", "Dispatch"] },
+      { title: "Fleet & Driver Management", text: "Manage drivers, vehicles, availability, assignments, job status, and day-to-day fleet operations.", points: ["Fleet", "Drivers", "Operations"] },
+      { title: "Real-Time Shipment Tracking", text: "Give teams and customers visibility into shipment progress, milestones, status changes, and delivery information.", points: ["Tracking", "Visibility", "Customer Experience"] },
+      { title: "Dispatch & Route Planning", text: "Help operations teams assign jobs, coordinate resources, plan routes, and respond to changing delivery requirements.", points: ["Dispatch", "Routing", "Planning"] },
+      { title: "Driver Mobile Apps", text: "Give drivers the tools they need to receive jobs, update statuses, capture photos and signatures, and complete deliveries from the field.", points: ["Mobile", "Drivers", "POD"] },
+      { title: "Customer Logistics Portals", text: "Let customers create bookings, track shipments, access delivery information, manage documents, and review job history.", points: ["Portal", "Self-Service", "Tracking"] },
+      { title: "Proof of Delivery", text: "Capture signatures, photos, timestamps, notes, and delivery confirmation digitally and connect them directly to the shipment record.", points: ["POD", "Mobile", "Automation"] },
+      { title: "Logistics Integrations", text: "Connect ERP, warehouse systems, ecommerce platforms, maps, payments, carriers, and supported third-party applications.", points: ["APIs", "Integrations", "Connected Systems"] },
     ],
   },
   businessImpact: {
-    title: "After Jabisoft, every load has one record.",
-    intro:
-      "No invented numbers — each outcome below is made measurable in the product and reviewed with your team.",
+    title: "After Jabitsoft, logistics runs more connected.",
+    intro: "When dispatch, drivers, shipments, customers, and operational data work together, teams get clearer visibility and spend less time coordinating work manually.",
     dimensions: [
-      {
-        name: "Coverage gets faster",
-        before: "Calls and sheets per load",
-        text: "Teams assign and confirm loads from a shared board — fewer touches per load.",
-        tag: "Speed",
-      },
-      {
-        name: "Status stays live",
-        before: "Driver check calls",
-        text: "Staff and customers see live location and milestones — answers without calling.",
-        tag: "Service",
-      },
-      {
-        name: "Turns get shorter",
-        before: "Docks and dispatch apart",
-        text: "Docks and drivers coordinate around linked slots — less waiting at doors.",
-        tag: "Turn time",
-      },
-      {
-        name: "Proof arrives complete",
-        before: "Late or partial PODs",
-        text: "Photos and signatures attach at delivery — billing and claims move immediately.",
-        tag: "Proof",
-      },
-      {
-        name: "Invoices go out right",
-        before: "Rework on rates",
-        text: "Invoices generate from the load record with support attached — cash flow steadies.",
-        tag: "Billing",
-      },
-      {
-        name: "Knowledge stays yours",
-        before: "Vendor-held know-how",
-        text: "Your repos hold the code, integrations, and docs — independence by default.",
-        tag: "Ownership",
-      },
+      { name: "Dispatch gets a clearer view", before: "Jobs scattered across tools", text: "See jobs, assignments, drivers, vehicles, and delivery status through connected operational workflows.", tag: "Dispatch" },
+      { name: "Shipments become easier to track", before: "Status updates are hard to find", text: "Give teams and customers clearer visibility into shipment status from pickup through delivery.", tag: "Tracking" },
+      { name: "Drivers stay connected", before: "Field updates rely on calls", text: "Mobile workflows keep drivers connected to assignments, updates, documents, and proof-of-delivery processes while in the field.", tag: "Drivers" },
+      { name: "Exceptions surface earlier", before: "Issues appear late", text: "Structured statuses and workflows make delays, failed deliveries, and other operational issues easier to identify and manage.", tag: "Exceptions" },
+      { name: "Manual coordination decreases", before: "Routine steps stay manual", text: "Automate routine updates, notifications, job actions, documentation, and other repetitive logistics processes.", tag: "Automation" },
+      { name: "Operational data becomes useful", before: "Information lives separately", text: "Bring shipment, driver, fleet, customer, and delivery information together for reporting and better operational visibility.", tag: "Data" },
     ],
   },
   cta: {
-    title: "Show us a lane and your tools.",
-    text: "We map your dispatch, tracking, and billing flow, then propose a build in your repos — with the engineers who will ship it.",
-    button: "Talk to Our Experts",
-    secondaryButton: "Start a Conversation",
+    title: "Bring us your toughest logistics workflow.",
+    text: "Manual dispatch. Disconnected tracking. Driver coordination. Delivery exceptions. Systems that don't talk to each other. Whatever is slowing your operation down, we'll help turn it into software that's easier to manage and ready to scale.",
+    button: "Discuss your project", secondaryButton: "Talk to our team",
   },
 };

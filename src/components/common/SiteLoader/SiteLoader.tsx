@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 import styles from "./SiteLoader.module.css";
 
@@ -31,11 +31,13 @@ export function SiteLoader() {
   const [leaving, setLeaving] = useState(false);
   const [gone, setGone] = useState(false);
   const [reduced, setReduced] = useState(false);
+  const shouldShow = useRef(true);
 
   // Runs before paint: same-day repeat visitors never see a flash of the
   // loader, and server HTML always matches the first client render.
   useLayoutEffect(() => {
     const seen = seenToday();
+    shouldShow.current = !seen;
     if (seen) {
       // Intentionally synchronous pre-paint: hiding the loader before first
       // paint is the whole point — deferring would flash it on screen.
@@ -57,6 +59,8 @@ export function SiteLoader() {
   }, []);
 
   useEffect(() => {
+    if (!shouldShow.current) return undefined;
+
     if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) {
       // Media-query state can only be read on the client; skipping the
       // loader for reduced-motion users must happen before its timers.

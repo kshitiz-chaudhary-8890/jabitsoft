@@ -152,6 +152,19 @@
   border-bottom: 1px solid var(--ind-hairline);
   background: radial-gradient(120% 140% at 50% 0%, #f2f4f6 0%, #e4e8eb 100%);
 }
+.industryVisual {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 216px;
+  padding: 25px 28px;
+  background: #e9edf0;
+}
+.industryVisualLabel { color: #5d6870; font: 650 10px/1.3 Inter, sans-serif; letter-spacing: 0.13em; text-transform: uppercase; }
+.industryVisual strong { max-width: 18ch; color: #152029; font: 700 clamp(24px, 2.5vw, 34px)/1.12 "Plus Jakarta Sans", Inter, sans-serif; letter-spacing: -0.04em; }
+.industryVisualLines { display: flex; gap: 7px; flex-wrap: wrap; }
+.industryVisualLines span { display: inline-flex; align-items: center; gap: 6px; padding: 6px 9px; border: 1px solid rgb(21 32 41 / 14%); border-radius: 6px; color: #34414b; background: rgb(255 255 255 / 65%); font: 600 10px/1 Inter, sans-serif; }
+.industryVisualLines i { width: 5px; height: 5px; border-radius: 50%; background: #34414b; }
 
 .viz {
   display: flex;

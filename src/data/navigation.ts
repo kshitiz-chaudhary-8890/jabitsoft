@@ -1,6 +1,6 @@
 export const headerNavigation = [
   { label: "About", href: "/about-us" },
-  { label: "Industries", href: "/services", menu: "industries" },
+  { label: "Industries", menu: "industries" },
   { label: "Services", href: "/services", menu: "services" },
   { label: "Case Studies", href: "/case-studies" },
   { label: "Blog", href: "/blogs" },
@@ -20,7 +20,7 @@ export const industryNavigation = [
   },
   {
     label: "Government",
-    href: "/services?industry=government",
+    href: "/industries/government",
     description: "Secure, accessible digital services for public-sector teams and citizens.",
   },
   {
@@ -29,7 +29,7 @@ export const industryNavigation = [
     description: "Search, inventory, and checkout systems that hold up in season.",
   },
   {
-    label: "Manufacturing & Logistics",
+    label: "Transportation & Logistics",
     href: "/industries/manufacturing",
     description: "Production, dispatch, and tracking systems for operations teams.",
   },

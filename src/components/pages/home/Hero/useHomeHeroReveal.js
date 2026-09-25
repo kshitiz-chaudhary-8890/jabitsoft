@@ -25,6 +25,7 @@ export function useHomeHeroReveal(sectionRef, shellRef) {
     if (!rises.length) return undefined;
 
     let cancelled = false;
+    let loaderObserver;
 
     const ctx = gsap.context(() => {
       // Hidden start states, applied before paint.
@@ -38,7 +39,7 @@ export function useHomeHeroReveal(sectionRef, shellRef) {
           yPercent: 0,
           autoAlpha: 1,
           duration: 0.6,
-          stagger: 0.09,
+          stagger: 0.04,
           ease: "power2.out",
           clearProps: "transform",
         },
@@ -46,7 +47,21 @@ export function useHomeHeroReveal(sectionRef, shellRef) {
       );
 
       const play = () => {
-        if (!cancelled && tl.progress() === 0) tl.play();
+        if (cancelled || tl.progress() !== 0) return;
+        if (document.querySelector(".site-loader-veil")) {
+          if (!loaderObserver) {
+            loaderObserver = new MutationObserver(() => {
+              if (!document.querySelector(".site-loader-veil")) {
+                loaderObserver.disconnect();
+                loaderObserver = undefined;
+                play();
+              }
+            });
+            loaderObserver.observe(document.body, { childList: true, subtree: true });
+          }
+          return;
+        }
+        tl.play();
       };
 
       // Play once webfonts settle; fallback timer covers hanging fonts.ready.
@@ -60,6 +75,7 @@ export function useHomeHeroReveal(sectionRef, shellRef) {
 
     return () => {
       cancelled = true;
+      loaderObserver?.disconnect();
       ctx.revert();
     };
   }, [sectionRef, shellRef]);

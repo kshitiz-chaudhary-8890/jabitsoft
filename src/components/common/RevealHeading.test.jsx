@@ -22,6 +22,7 @@ describe("RevealHeading", () => {
       .toHaveAttribute("aria-hidden", "true");
     expect(heading.querySelectorAll("[data-reveal-word]")).toHaveLength(2);
     expect(heading.querySelectorAll("[data-reveal-char]")).toHaveLength(11);
+    expect(heading.querySelectorAll("[data-reveal-char-mask]")).toHaveLength(11);
   });
 
   it("preserves nested hero structure and void elements", () => {

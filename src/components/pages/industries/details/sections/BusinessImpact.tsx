@@ -1,13 +1,26 @@
 "use client";
 
 import { useRef } from "react";
-import { BarChart3, CircleDollarSign, Cog, Expand, Rocket, Sparkles } from "lucide-react";
+import {
+  BellRing, Blocks, CalendarDays, ChartNoAxesCombined, ClipboardCheck,
+  CreditCard, LayoutDashboard, Link2, MapPinned, PackageCheck, Radar,
+  Rocket, Route, Search, Truck, UsersRound, Workflow, type LucideIcon,
+} from "lucide-react";
 
 import { useIndustryReveal } from "../useIndustryReveal";
 import type { IndustryDetailData } from "../types";
 import styles from "./BusinessImpact.module.css";
 
-const icons = [Rocket, Cog, Expand, Sparkles, BarChart3, CircleDollarSign];
+const impactIcons: Record<string, LucideIcon> = {
+  Intake: ClipboardCheck, Scheduling: CalendarDays, Operations: LayoutDashboard,
+  "Follow-up": BellRing, Search, Inventory: Blocks, Orders: PackageCheck,
+  Channels: Link2, Automation: Workflow, Data: ChartNoAxesCombined,
+  Visibility: Radar, Alerts: BellRing, Workflows: Workflow,
+  Integrations: Link2, Dispatch: Route, Tracking: MapPinned,
+  Drivers: Truck, Exceptions: BellRing, Delivery: Rocket,
+  Scale: Blocks, Experience: UsersRound, Insight: ChartNoAxesCombined,
+  Billing: CreditCard,
+};
 
 export function BusinessImpact({ data }: { data: IndustryDetailData }) {
   const ref = useRef<HTMLElement>(null);
@@ -31,7 +44,7 @@ export function BusinessImpact({ data }: { data: IndustryDetailData }) {
 
         <div className={styles.wall}>
           {businessImpact.dimensions.map((dimension, index) => {
-            const Icon = icons[index % icons.length];
+            const Icon = impactIcons[dimension.tag ?? ""] ?? ChartNoAxesCombined;
             return (
               <article data-ind-item key={dimension.name} className={styles.line}>
                 <span data-ind-rule className={styles.rule} aria-hidden="true" />
